@@ -1,0 +1,8 @@
+{
+  "name": "兰台云数智档案",
+  "description": "A professional construction engineering archive management system featuring a dashboard, cloud drive, enterprise management, and archival workflow.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

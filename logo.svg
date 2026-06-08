@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Definitions for styled person segments of Lantai Cloud -->
+  <defs>
+    <!-- Base person path centered horizontally, pointing up -->
+    <g id="member">
+      <!-- Head -->
+      <circle cx="0" cy="-36" r="6" />
+      <!-- Body / Arms interlinking -->
+      <path d="M -11.5,-24 C -11,-30 -5,-31 0,-31 C 5,-31 11,-30 11.5,-24 C 8,-17 4,-15 0,-15 C -4,-15 -8,-17 -11.5,-24 Z" />
+    </g>
+  </defs>
+
+  <!-- Background container, transparent -->
+  <rect width="100%" height="100%" fill="none" />
+
+  <!-- Main emblem group -->
+  <g transform="translate(50, 50) rotate(-22.5)">
+    <!-- 8 interlocking members in the requested exact color gradient loop -->
+    <!-- 1. Top (Mid Blue) -->
+    <use href="#member" transform="rotate(0)" fill="#2a81bf" />
+    
+    <!-- 2. Top Right (Light Teal-Blue) -->
+    <use href="#member" transform="rotate(45)" fill="#2fb2c5" />
+    
+    <!-- 3. Right (Aqua Teal) -->
+    <use href="#member" transform="rotate(90)" fill="#3dc1b0" />
+    
+    <!-- 4. Bottom Right (Mint Green) -->
+    <use href="#member" transform="rotate(135)" fill="#1eab92" />
+    
+    <!-- 5. Bottom (Teal-Forest Green) -->
+    <use href="#member" transform="rotate(180)" fill="#129180" />
+    
+    <!-- 6. Bottom Left (Dark Emerald) -->
+    <use href="#member" transform="rotate(225)" fill="#1c8578" />
+    
+    <!-- 7. Left (Ocean Blue) -->
+    <use href="#member" transform="rotate(270)" fill="#29749c" />
+    
+    <!-- 8. Top Left (Cobalt Blue / Dark Indigo) -->
+    <use href="#member" transform="rotate(315)" fill="#234b9b" />
+  </g>
+</svg>
