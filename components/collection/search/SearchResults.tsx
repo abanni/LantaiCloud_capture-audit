@@ -8,6 +8,9 @@ export type SearchResultItem = {
   projectName?: string;
   unitName?: string;
   title?: string;
+  fileLabel?: string;
+  parentVolume?: string;
+  parentProject?: string;
   constructionUnit?: string;
   participantUnit?: string;
   projectType?: string;
@@ -17,12 +20,13 @@ export type SearchResultItem = {
   securityLevel?: string;
   summary?: string;
   type?: string;
+  _level?: '项目级' | '工程级' | '案卷级' | '文件级';
   [key: string]: any;
 };
 
 interface SearchResultsProps {
   results: SearchResultItem[];
-  comprehensiveTab: 'PROJECT' | 'UNIT' | 'VOLUME';
+  comprehensiveTab: 'PROJECT' | 'UNIT' | 'VOLUME' | 'FILE';
   basket: SelectionItem[];
   onToggleBasket: (item: SearchResultItem) => void;
   onViewDetail: (item: SearchResultItem) => void;
@@ -78,8 +82,19 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                   {/* Item card */}
                   <div className="flex-1 space-y-2">
                     <div className="flex justify-between items-start">
-                      <h4 className="text-xs font-bold text-slate-800 line-clamp-1 truncate block max-w-[240px]" title={item.projectName || item.title || item.unitName}>
-                        {item.projectName || item.unitName || item.title}
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {item._level && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                            item._level === '项目级' ? 'bg-blue-50 text-blue-700' :
+                            item._level === '工程级' ? 'bg-orange-50 text-orange-700' :
+                            item._level === '案卷级' ? 'bg-indigo-50 text-indigo-700' :
+                            'bg-emerald-50 text-emerald-700'
+                          }`}>
+                            {item._level}
+                          </span>
+                        )}
+                        <h4 className="text-xs font-bold text-slate-800 line-clamp-1 truncate" title={item.projectName || item.title || item.unitName || item.fileLabel}>
+                        {item.projectName || item.unitName || item.title || item.fileLabel}
                       </h4>
                       <span className={`px-1.5 py-0.5 border rounded text-[9px] font-bold shrink-0 ${
                         item.securityLevel === '公开' 
@@ -95,19 +110,26 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                     </p>
 
                     <div className="grid grid-cols-2 gap-x-2 gap-y-1 font-mono text-[10px] text-slate-500 border-t border-slate-100 pt-2 shrink-0">
-                      {comprehensiveTab === 'PROJECT' ? (
+                      {comprehensiveTab === 'PROJECT' || item._level === '项目级' ? (
                         <>
                           <span className="truncate">项目档号: {item.archiveCode}</span>
                           <span className="truncate">项目类型: {item.projectType}</span>
                           <span className="truncate">编制单位: {item.constructionUnit}</span>
                           <span className="truncate">许可证号: {item.workPermitNo}</span>
                         </>
-                      ) : comprehensiveTab === 'UNIT' ? (
+                      ) : comprehensiveTab === 'UNIT' || item._level === '工程级' ? (
                         <>
                           <span className="truncate">关联项目: {item.projectName}</span>
                           <span className="truncate">参建单位: {item.participantUnit}</span>
                           <span className="truncate">造价: ¥{(item.cost / 10000).toFixed(2)}万</span>
                           <span className="truncate">监督号: {item.qualitySupervisionNo}</span>
+                        </>
+                      ) : comprehensiveTab === 'FILE' || item._level === '文件级' ? (
+                        <>
+                          <span className="truncate">所属案卷: {item.parentVolume}</span>
+                          <span className="truncate">所属项目: {item.parentProject}</span>
+                          <span className="truncate">档号: {item.archiveCode}</span>
+                          <span className="truncate">密级: {item.securityLevel || '公开'}</span>
                         </>
                       ) : (
                         <>

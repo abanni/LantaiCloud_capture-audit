@@ -199,7 +199,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                     </div>
                                     <div>
                                         <h2 className="text-base font-extrabold text-slate-800 tracking-tight">
-                                            {identity.organization.name} · 数智档案协同网络
+                                            {identity.organization.name} · 档案工作台
                                         </h2>
                                         <div className="flex items-center gap-2 mt-0.5">
                                             <span className="text-[9.5px] bg-primary/10 text-primary border border-primary/20 rounded-md py-0.5 px-2 font-bold tracking-wider uppercase">
@@ -207,7 +207,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                             </span>
                                             <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.2 font-mono flex items-center gap-1">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                兰台云多端已存证
+                                                兰台云已存证
                                             </span>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                     <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
                                         <Archive className="w-4 h-4" />
                                     </div>
-                                    <h3 className="font-bold text-slate-800 text-base">我管理的项目</h3>
+                                    <h3 className="font-bold text-slate-800 text-base">我的项目</h3>
                                     <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">{managedProjects.length}</span>
                                 </div>
                                 <button onClick={() => navigate('/projects')} className="text-xs text-primary hover:text-primary/80 font-bold flex items-center gap-0.5 bg-primary/5 hover:bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20 transition-all cursor-pointer">
@@ -239,7 +239,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                 </div>
                             ) : (
                                 <div className="bg-white rounded-xl py-8 px-6 text-center border border-dashed border-slate-300">
-                                    <p className="text-xs text-slate-400">暂无您管理的项目。点击左侧菜单【新建档案】进行创建。</p>
+                                    <p className="text-xs text-slate-400">暂无管理的项目，请新建档案</p>
                                 </div>
                             )}
                         </div>

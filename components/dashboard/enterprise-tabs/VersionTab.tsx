@@ -18,9 +18,10 @@ interface VersionTabProps {
     onChangeVersion: (newVersion: 'free' | 'team' | 'pro' | 'enterprise', price: number, desc: string) => void;
     orders: Order[];
     teamMemberCount?: number;
+    showOrdersOnly?: boolean;
 }
 
-const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion, orders, teamMemberCount = 0 }) => {
+const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion, orders, teamMemberCount = 0, showOrdersOnly = false }) => {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentPayer, setPaymentPayer] = useState('张三');
     const [paymentDetails, setPaymentDetails] = useState<{
@@ -37,6 +38,7 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
 
     return (
         <>
+            {!showOrdersOnly && (<>
             {/* Sub 1: Current usage monitoring */}
             <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
                 <div className="flex justify-between items-start border-b border-slate-100 pb-4 mb-4 flex-wrap gap-4">
@@ -132,8 +134,7 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
 
             {/* Sub 2: Plan matrix */}
             <div>
-                <div className="text-base font-bold text-slate-800 mb-2">兰台档案云系统 - 企业版本治理选择</div>
-                <p className="text-xs text-slate-500 mb-4">根据大中型工程与企业实际档案留存规范，由浅入深灵活随心订购合适的企业环境：</p>
+                <div className="text-base font-bold text-slate-800 mb-4">兰台云数智档案系统 - 版本选择</div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
                     {/* FREE PLAN */}
@@ -178,7 +179,6 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
                         ]}
                         buttonLabel={currentVersion === 'team' ? '续费团队版' : '选择团队版'}
                         onClick={() => handlePaymentClick('team', 1080, '团队版授权激活 (年付)')}
-                        isDark={false}
                     />
 
                     {/* PRO PLAN */}
@@ -201,7 +201,6 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
                         ]}
                         buttonLabel={currentVersion === 'pro' ? '续费专业版' : '升级至专业版'}
                         onClick={() => handlePaymentClick('pro', 2980, '专业版年度订阅续费')}
-                        isDark={false}
                     />
 
                     {/* ENTERPRISE PLAN */}
@@ -223,10 +222,10 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
                         ]}
                         buttonLabel={currentVersion === 'enterprise' ? '当前使用中' : '特订企业版'}
                         onClick={() => handlePaymentClick('enterprise', 12800, '旗舰企业版年度开通授权')}
-                        isDark={true}
                     />
                 </div>
             </div>
+            </>)} {/* end !showOrdersOnly */}
 
             {/* Tab: Order History */}
             <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
@@ -234,12 +233,12 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
                     <div>
                         <h3 className="text-base font-bold text-slate-800 flex items-center gap-1.5">
                             <ClipboardList className="w-5 h-5 text-primary" />
-                            <span>企业中心扫码缴费账单</span>
+                            <span>我的订单</span>
                         </h3>
-                        <p className="text-xs text-slate-400 mt-1">由于组织下有多个二级账号，系统列出所有产生的企业升级与CA附加服务等付款记录。</p>
+                        <p className="text-xs text-slate-400 mt-1">组织下的所有版本升级与CA附加服务付款记录。</p>
                     </div>
                     <div className="text-xs text-slate-500">
-                        企业组织累计付费总额: <strong className="text-primary font-mono text-sm">¥ {orders.filter(o => o.status === '已支付').reduce((sum, o) => sum + o.amount, 0)}</strong> 元
+                        累计付费总额: <strong className="text-primary font-mono text-sm">¥ {orders.filter(o => o.status === '已支付').reduce((sum, o) => sum + o.amount, 0)}</strong> 元
                     </div>
                 </div>
 
@@ -416,7 +415,6 @@ interface PlanCardProps {
     buttonLabel: string;
     disabled?: boolean;
     onClick: () => void;
-    isDark: boolean;
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
@@ -424,58 +422,119 @@ const PlanCard: React.FC<PlanCardProps> = ({
     features, buttonLabel, disabled, onClick, isDark
 }) => {
     const isActive = version === tier;
+
+    // Distinct tier styling
+    const tierStyles: Record<string, {
+        border: string; accent: string; bg: string; headerBg: string;
+        ring: string; badgeColor: string; btnBg: string; btnHover: string;
+    }> = {
+        free: {
+            border: 'border-slate-200', accent: 'text-slate-400', bg: 'bg-white',
+            headerBg: 'bg-slate-50', ring: '',
+            badgeColor: 'text-slate-400', btnBg: 'bg-slate-100', btnHover: 'hover:bg-slate-200'
+        },
+        team: {
+            border: 'border-sky-200', accent: 'text-sky-600', bg: 'bg-white',
+            headerBg: 'bg-sky-50', ring: 'ring-2 ring-sky-200/50',
+            badgeColor: 'text-sky-500', btnBg: 'bg-sky-600', btnHover: 'hover:bg-sky-700'
+        },
+        pro: {
+            border: 'border-violet-200', accent: 'text-violet-600', bg: 'bg-white',
+            headerBg: 'bg-violet-50', ring: 'ring-2 ring-violet-200/50',
+            badgeColor: 'text-violet-500', btnBg: 'bg-violet-600', btnHover: 'hover:bg-violet-700'
+        },
+        enterprise: {
+            border: 'border-amber-400', accent: 'text-amber-500', bg: 'bg-gradient-to-b from-amber-50 to-white',
+            headerBg: 'bg-amber-100', ring: 'ring-2 ring-amber-300/60',
+            badgeColor: 'text-amber-600', btnBg: 'bg-gradient-to-r from-amber-500 to-orange-500', btnHover: 'hover:from-amber-600 hover:to-orange-600'
+        },
+    };
+
+    const s = tierStyles[tier] || tierStyles.free;
+
     return (
-        <div className={`bg-white border rounded-xl overflow-hidden p-5 flex flex-col justify-between transition-all ${
-            isActive
-                ? 'border-primary ring-2 ring-primary/20 shadow-md'
-                : 'border-slate-200 hover:border-slate-200'
-        } ${isDark ? 'bg-slate-900 text-white' : ''}`}>
-            <div>
-                {badge && (
-                    <div className="absolute -top-1 right-2 bg-orange-500 text-white font-bold text-[8px] px-1.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
-                        {badge}
-                    </div>
-                )}
-                <div className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-amber-400' : tier === 'free' ? 'text-slate-400' : tier === 'team' ? 'text-blue-500' : 'text-orange-500'}`}>
-                    {tier === 'free' ? 'FREE' : tier === 'team' ? 'TEAM' : tier === 'pro' ? 'PROFESSIONAL' : 'ENTERPRISE'}
+        <div className={`relative rounded-xl overflow-hidden p-5 flex flex-col justify-between transition-all border ${s.border} ${s.bg} ${
+            isActive ? `${s.ring} shadow-lg scale-[1.02]` : 'hover:shadow-md hover:-translate-y-0.5'
+        }`}>
+            {/* Enterprise highlight bar */}
+            {tier === 'enterprise' && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500" />
+            )}
+
+            {/* Badge */}
+            {badge && (
+                <div className="absolute top-3 right-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-[8px] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm z-10">
+                    {badge}
                 </div>
-                <h4 className={`text-lg font-black mt-1 mb-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>{name}</h4>
-                <div className="flex items-baseline mb-4">
-                    <span className={`text-2xl font-extrabold ${isDark ? 'text-amber-400' : 'text-slate-800'}`}>{price}</span>
+            )}
+
+            <div>
+                {/* Tier label */}
+                <div className={`text-[10px] font-bold uppercase tracking-[0.2em] ${s.accent} mb-1`}>
+                    {tier === 'free' ? '免费体验' : tier === 'team' ? '团队协作' : tier === 'pro' ? '专业效能' : '★ 旗舰推荐 ★'}
+                </div>
+
+                {/* Name */}
+                <h4 className={`text-lg font-black mt-0.5 mb-1.5 ${tier === 'enterprise' ? 'text-amber-900' : 'text-slate-800'}`}>
+                    {name}
+                    {tier === 'enterprise' && <span className="ml-1.5 text-[10px] font-bold text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full">热荐</span>}
+                </h4>
+
+                {/* Price */}
+                <div className="flex items-baseline mb-3">
+                    <span className={`text-2xl font-extrabold ${tier === 'enterprise' ? 'text-amber-700' : tier === 'pro' ? 'text-violet-700' : tier === 'team' ? 'text-sky-700' : 'text-slate-600'}`}>
+                        {price}
+                    </span>
                     <span className="text-xs text-slate-400 ml-1">{period}</span>
                 </div>
-                <div className={`text-xs mb-4 border-b ${isDark ? 'text-slate-300 border-gray-800' : 'text-slate-500 border-slate-100'} pb-3`}>{subtitle}</div>
 
-                <ul className={`text-xs space-y-2 mb-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {/* Subtitle */}
+                <div className={`text-xs mb-3 border-b pb-3 ${tier === 'enterprise' ? 'text-amber-800/70 border-amber-200' : 'text-slate-500 border-slate-100'}`}>
+                    {subtitle}
+                </div>
+
+                {/* Features */}
+                <ul className="text-xs space-y-2 mb-5 text-slate-600">
                     {features.map((f, i) => (
                         <li key={i} className="flex items-center gap-1.5">
                             {f.included === true ? (
-                                <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-amber-400' : 'text-green-500'}`} />
+                                <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${
+                                    tier === 'enterprise' ? 'text-amber-500' : tier === 'pro' ? 'text-violet-500' : tier === 'team' ? 'text-sky-500' : 'text-green-500'
+                                }`} />
                             ) : f.included === 'limited' ? (
                                 <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-amber-500" />
                             ) : (
-                                <X className="w-3.5 h-3.5 mr-0.5 shrink-0 text-slate-400" />
+                                <X className="w-3.5 h-3.5 mr-0.5 shrink-0 text-slate-300" />
                             )}
                             <span className={f.included === false ? 'text-slate-400' : ''}>{f.text}</span>
                         </li>
                     ))}
                 </ul>
             </div>
+
+            {/* Button */}
             <button
                 onClick={onClick}
                 disabled={disabled}
-                className={`w-full py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     disabled
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : isActive
-                            ? isDark
-                                ? 'bg-amber-400 text-slate-900 hover:bg-amber-500 font-black'
-                                : 'bg-primary text-white hover:bg-primary-hover shadow-sm'
-                            : 'bg-slate-50 border border-slate-200 hover:bg-slate-100'
+                        : tier === 'enterprise'
+                            ? `${s.btnBg} text-white shadow-md ${s.btnHover} scale-100 hover:scale-[1.02]`
+                            : tier === 'pro'
+                                ? `${s.btnBg} text-white shadow-sm ${s.btnHover}`
+                                : tier === 'team'
+                                    ? `${s.btnBg} text-white shadow-sm ${s.btnHover}`
+                                    : 'bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600'
                 }`}
             >
                 {buttonLabel}
             </button>
+
+            {/* Enterprise shine effect */}
+            {tier === 'enterprise' && !disabled && (
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-amber-200/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+            )}
         </div>
     );
 };

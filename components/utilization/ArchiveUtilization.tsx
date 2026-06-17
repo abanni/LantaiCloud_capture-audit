@@ -214,31 +214,31 @@ const ArchiveUtilization: React.FC<ArchiveUtilizationProps> = ({ mode = 'apply' 
             />
 
             {/* REGISTRATIONS QUEUE & HISTORY DISPLAY */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 space-y-4">
-              <div className="flex justify-between items-center border-b pb-3 border-slate-100">
+            <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
+              <div className="flex justify-between items-center pb-3">
                 <div className="flex items-center gap-2">
                   <KeyRound className="w-4 h-4 text-primary animate-pulse" />
                   <h4 className="font-bold text-xs text-slate-800">
-                    我的档案借阅、离线出证及流转审批追溯记录
+                    我的借阅与审批记录
                   </h4>
                 </div>
               </div>
 
-              <div className="border border-slate-150 rounded-xl overflow-hidden mt-4 bg-white">
+              <div className="rounded-xl overflow-hidden mt-4 bg-white">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border-collapse font-semibold whitespace-nowrap">
-                    <thead className="bg-slate-50 border-b border-slate-150 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    <thead className="bg-slate-50 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
                       <tr>
-                        <th className="py-3 px-4">流转编号</th>
+                        <th className="py-3 px-4">编号</th>
                         <th className="py-3 px-4">提报日期</th>
-                        <th className="py-3 px-4">申请人 & 部门单位</th>
-                        <th className="py-3 px-4 text-center">利用授权形式</th>
-                        <th className="py-3 px-4">关联馆藏实物/副本</th>
-                        <th className="py-3 px-4">详细用途事由</th>
-                        <th className="py-3 px-4 text-center">审批流利用状态</th>
+                        <th className="py-3 px-4">申请人</th>
+                        <th className="py-3 px-4 text-center">利用形式</th>
+                        <th className="py-3 px-4">关联档案</th>
+                        <th className="py-3 px-4">用途事由</th>
+                        <th className="py-3 px-4 text-center">审批状态</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody>
                       {registrations.length === 0 ? (
                         <tr>
                           <td colSpan={7} className="py-8 text-center text-slate-400 font-medium font-sans">

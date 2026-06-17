@@ -69,13 +69,13 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
   return (
     <>
       {/* Action header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-xs gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl shadow-xs gap-4">
         <div>
           <h3 className="font-bold text-sm text-slate-800 font-sans">
-            1. 起草新的档案借阅或用印申请
+            1. 新建借阅或用印申请
           </h3>
           <p className="text-[10px] text-slate-450 font-medium">
-            查看您已提交的案卷借阅和加星出证清单，随时获取安全合规防伪的水印数字证照副本。
+            查看已提交的借阅和出证清单，获取水印数字证照副本。
           </p>
         </div>
 
@@ -104,13 +104,13 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="bg-white p-8 rounded-2xl border-2 border-slate-800 shadow-xl space-y-6">
+            <div className="bg-white p-8 rounded-2xl shadow-xl space-y-6">
               {/* Header info bar */}
-              <div className="flex flex-col sm:flex-row justify-between items-center pb-4 border-b border-dashed border-slate-350 gap-2 text-xs font-semibold">
+              <div className="flex flex-col sm:flex-row justify-between items-center pb-4 gap-2 text-xs font-semibold">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">🏢</span>
                   <h2 className="text-sm font-black text-slate-900 tracking-wide">
-                    档案借阅及用印申请表
+                    档案借阅及用印申请
                   </h2>
                 </div>
                 <div className="text-right font-mono text-slate-400">
@@ -123,13 +123,13 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
               {/* Paper table style inputs */}
               <form onSubmit={handleRegisterSubmit} className="space-y-4 text-xs font-bold">
-                <div className="border border-slate-450 rounded-lg overflow-hidden divide-y divide-slate-350">
+                <div className="rounded-lg overflow-hidden">
                   {/* Box 1 */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       借阅人 *
                     </div>
-                    <div className="p-2 border-b md:border-b-0 md:border-r border-slate-350">
+                    <div className="p-2">
                       <input
                         type="text"
                         required
@@ -139,7 +139,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                         onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
                       />
                     </div>
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       员工工号或身份证 *
                     </div>
                     <div className="p-2">
@@ -156,10 +156,10 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
                   {/* Box 2 */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       申请部门或分公司 *
                     </div>
-                    <div className="p-2 border-b md:border-b-0 md:border-r border-slate-350 col-span-2">
+                    <div className="p-2 col-span-2">
                       <input
                         type="text"
                         required
@@ -168,7 +168,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                         onChange={(e) => setRegisterForm({ ...registerForm, company: e.target.value })}
                       />
                     </div>
-                    <div className="p-2 md:col-span-1 border-t md:border-t-0">
+                    <div className="p-2 md:col-span-1">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] text-slate-500 shrink-0">联络电话:</span>
                         <input
@@ -184,10 +184,10 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
                   {/* Box 3 */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       申请调阅者身份 *
                     </div>
-                    <div className="p-2 border-b md:border-b-0 md:border-r border-slate-350">
+                    <div className="p-2">
                       <select
                         title="申请调阅者身份"
                         className="w-full bg-transparent outline-none text-slate-800 font-bold"
@@ -200,7 +200,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                         <option value="政府驻厂检查组">政府驻厂代表 / 安全应急监察组</option>
                       </select>
                     </div>
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       利用方式 *
                     </div>
                     <div className="p-2">
@@ -219,10 +219,10 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
                   {/* Box 4 */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       授权凭证 *
                     </div>
-                    <div className="p-2 border-b md:border-b-0 md:border-r border-slate-350">
+                    <div className="p-2">
                       <select
                         title="利用控制凭证"
                         className="w-full bg-transparent outline-none text-slate-800 font-bold"
@@ -235,7 +235,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                         <option value="外部协查函">外部协查公函 / 联席会审公文</option>
                       </select>
                     </div>
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       调阅用途大类 *
                     </div>
                     <div className="p-2">
@@ -255,7 +255,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
                   {/* Box 5 (utilization purpose) */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       调阅事由 *
                     </div>
                     <div className="p-2 col-span-3">
@@ -272,7 +272,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
 
                   {/* Box 6 (sign and remarks) */}
                   <div className="grid grid-cols-1 md:grid-cols-4 align-middle">
-                    <div className="bg-slate-50 p-3 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-350 shrink-0 text-slate-700 text-center">
+                    <div className="bg-slate-50 p-3 flex items-center justify-center shrink-0 text-slate-700 text-center">
                       安全声明
                     </div>
                     <div className="p-2 col-span-3 text-slate-500 font-medium">
@@ -280,7 +280,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                         <span className="text-[10px] leading-relaxed text-left text-slate-450">
                           🔒 安全声明：下载及打印的档案副本受加密保护，请妥善保管。所有副本均已加密处理，防止篡改。
                         </span>
-                        <span className="text-[10px] font-mono shrink-0 bg-slate-100 px-2 py-0.5 rounded text-slate-600 border border-slate-200">
+                        <span className="text-[10px] font-mono shrink-0 bg-slate-100 px-2 py-0.5 rounded text-slate-600">
                           防伪证件: LANTAICLOUD-SECURE-VAULT
                         </span>
                       </div>
@@ -293,7 +293,7 @@ const ApplyPanel: React.FC<ApplyPanelProps> = ({
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="px-4 py-2 border border-slate-200 rounded-xl hover:bg-slate-100 cursor-pointer text-slate-600 font-semibold"
+                    className="px-4 py-2 rounded-xl hover:bg-slate-100 cursor-pointer text-slate-600 font-semibold"
                   >
                     清空并取消
                   </button>

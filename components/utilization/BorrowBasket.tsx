@@ -12,7 +12,7 @@ const BorrowBasket: React.FC<BorrowBasketProps> = ({ basket }) => {
 
   if (basket.length === 0) {
     return (
-      <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-3">
+      <div className="p-4 bg-amber-50 rounded-xl flex items-center gap-3">
         <Info className="w-5 h-5 text-amber-600 shrink-0" />
         <div className="text-xs font-bold leading-normal text-amber-950">
           利用档案清单目前为空！
@@ -25,9 +25,9 @@ const BorrowBasket: React.FC<BorrowBasketProps> = ({ basket }) => {
   }
 
   return (
-    <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2 leading-relaxed">
+    <div className="p-4 bg-primary/5 rounded-xl space-y-2 leading-relaxed">
       <span className="font-bold block text-indigo-950 text-xs">📦 已自动关联导入的待申请利用清单 ({basket.length}) :</span>
-      <div className="max-h-24 overflow-y-auto space-y-1 bg-white p-2.5 rounded-lg border border-primary/20 font-mono text-[11px] text-slate-700">
+      <div className="max-h-24 overflow-y-auto space-y-1 bg-white p-2.5 rounded-lg font-mono text-[11px] text-slate-700">
         {basket.map((item) => (
           <div key={item.id} className="flex justify-between">
             <span className="truncate max-w-[500px]">🔹 [{item.code}] - {item.title}</span>

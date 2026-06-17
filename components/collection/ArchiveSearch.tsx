@@ -8,10 +8,6 @@ import {
   CheckSquare, 
   Square, 
   Eye,
-  FileSearch,
-  Compass,
-  ArrowRight,
-  Briefcase,
   Building,
   HardHat,
   FileText
@@ -27,6 +23,18 @@ import {
   getStoredBasket,
   setStoredBasket 
 } from '../integrator/archiveData';
+import { FILE_FIELDS, MOCK_SEARCH_FILES } from './search/searchData';
+
+// --- COMBINED FIELDS FOR ALL LEVELS (综合查询联合检索) ---
+type Level = 'PROJECT' | 'UNIT' | 'VOLUME' | 'FILE';
+const ALL_LEVELS: Level[] = ['PROJECT', 'UNIT', 'VOLUME', 'FILE'];
+
+const LEVEL_CONFIG: Record<Level, { label: string; icon: React.ReactNode; color: string }> = {
+  PROJECT: { label: '项目级', icon: <Building className="w-3.5 h-3.5" />, color: 'blue' },
+  UNIT: { label: '工程级', icon: <HardHat className="w-3.5 h-3.5" />, color: 'orange' },
+  VOLUME: { label: '案卷级', icon: <Layers className="w-3.5 h-3.5" />, color: 'indigo' },
+  FILE: { label: '文件级', icon: <FileText className="w-3.5 h-3.5" />, color: 'emerald' },
+};
 
 interface ArchiveSearchProps {
   initialMode?: 'FULL_TEXT' | 'COMPREHENSIVE';
@@ -65,6 +73,13 @@ const VOLUME_FIELDS = [
   { label: '密级', value: 'securityLevel', type: 'select', options: ['公开', '限阅', '机密'] },
   { label: '主题词', value: 'keywords' },
   { label: '进馆日期', value: 'date' }
+];
+
+const COMBINED_FIELDS = [
+  ...PROJECT_FIELDS.map(f => ({ ...f, level: 'PROJECT' as const, label: `[项目] ${f.label}` })),
+  ...UNIT_FIELDS.map(f => ({ ...f, level: 'UNIT' as const, label: `[工程] ${f.label}` })),
+  ...VOLUME_FIELDS.map(f => ({ ...f, level: 'VOLUME' as const, label: `[案卷] ${f.label}` })),
+  ...FILE_FIELDS.map(f => ({ ...f, level: 'FILE' as const, label: `[文件] ${f.label}` })),
 ];
 
 // --- MOCK PROJECT-LEVEL DATA FOR 建设档案 ---
@@ -200,35 +215,32 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
 
   // --- COMPREHENSIVE TABS AND CONFIGS ---
   const [selectedArchiveType, setSelectedArchiveType] = useState<'建设档案' | '司法档案' | '文书档案'>('建设档案');
-  const [comprehensiveTab, setComprehensiveTab] = useState<'PROJECT' | 'UNIT' | 'VOLUME'>('VOLUME');
+  // Multi-select active levels for combined query across all tiers
+  const [activeLevels, setActiveLevels] = useState<Level[]>(['PROJECT', 'UNIT', 'VOLUME', 'FILE']);
 
   // Full-text search key (used only in full text mode passed from main entry point)
   const [fullTextKey, setFullTextKey] = useState('');
 
-  // Auto-switch back to VOLUME level if selected archive type is not '建设档案'
-  useEffect(() => {
-    if (selectedArchiveType !== '建设档案') {
-      setComprehensiveTab('VOLUME');
-    }
-  }, [selectedArchiveType]);
+  const toggleLevel = (level: Level) => {
+    setActiveLevels(prev =>
+      prev.includes(level)
+        ? prev.filter(l => l !== level)
+        : [...prev, level]
+    );
+  };
 
   // Comprehensive query conditions state
   const [queryConditions, setQueryConditions] = useState<QueryCondition[]>([
-    { id: '1', field: 'title', operator: 'includes', value: '' }
+    { id: '1', field: 'title', operator: 'includes', value: '', level: 'VOLUME' }
   ]);
 
-  // Whenever the tab or type changes, sync default condition field
+  // Whenever the level toggles or type changes, ensure at least one level is active
   useEffect(() => {
-    if (initialMode === 'COMPREHENSIVE') {
-      if (comprehensiveTab === 'PROJECT') {
-        setQueryConditions([{ id: '1', field: 'projectName', operator: 'includes', value: '' }]);
-      } else if (comprehensiveTab === 'UNIT') {
-        setQueryConditions([{ id: '1', field: 'unitName', operator: 'includes', value: '' }]);
-      } else {
-        setQueryConditions([{ id: '1', field: 'title', operator: 'includes', value: '' }]);
-      }
+    if (selectedArchiveType !== '建设档案') {
+      // Non-建设档案 types only have volume-level data
+      setActiveLevels(['VOLUME']);
     }
-  }, [comprehensiveTab, selectedArchiveType, initialMode]);
+  }, [selectedArchiveType]);
 
   // Sync basket to localStorage on state change
   useEffect(() => {
@@ -274,61 +286,114 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
   };
 
   const getFieldsForCurrentTab = () => {
-    if (comprehensiveTab === 'PROJECT') return PROJECT_FIELDS;
-    if (comprehensiveTab === 'UNIT') return UNIT_FIELDS;
-    return VOLUME_FIELDS;
+    return COMBINED_FIELDS;
+  };
+
+  // Get the level for a given field from COMBINED_FIELDS
+  const getLevelForField = (fieldValue: string): Level | undefined => {
+    return COMBINED_FIELDS.find(f => f.value === fieldValue)?.level;
   };
 
   // --- QUERY ENGINE ---
   const applyFilters = () => {
     if (initialMode === 'FULL_TEXT') {
-      if (!fullTextKey.trim()) return archives;
+      if (!fullTextKey.trim()) return [];
       const key = fullTextKey.toLowerCase();
-      return archives.filter(item => 
+
+      // Search across ALL levels: 项目级 + 工程级 + 案卷级 + 文件级
+      const matchedProjects = MOCK_SEARCH_PROJECTS.filter(item =>
         item.projectName.toLowerCase().includes(key) ||
         item.constructionUnit.toLowerCase().includes(key) ||
         item.archiveCode.toLowerCase().includes(key) ||
-        item.originalCode.toLowerCase().includes(key) ||
-        item.summary.toLowerCase().includes(key) ||
-        item.location.toLowerCase().includes(key)
-      );
+        item.location.toLowerCase().includes(key) ||
+        item.workPermitNo.toLowerCase().includes(key) ||
+        item.summary.toLowerCase().includes(key)
+      ).map(item => ({ ...item, _level: '项目级' as const }));
+
+      const matchedUnits = MOCK_SEARCH_UNITS.filter(item =>
+        item.unitName.toLowerCase().includes(key) ||
+        item.projectName.toLowerCase().includes(key) ||
+        item.participantUnit.toLowerCase().includes(key) ||
+        item.archiveCode.toLowerCase().includes(key) ||
+        item.qualitySupervisionNo.toLowerCase().includes(key) ||
+        item.summary.toLowerCase().includes(key)
+      ).map(item => ({ ...item, _level: '工程级' as const }));
+
+      const matchedVolumes = getVolumeDataList('建设档案').filter(item =>
+        item.title.toLowerCase().includes(key) ||
+        item.projectName.toLowerCase().includes(key) ||
+        item.archiveCode.toLowerCase().includes(key) ||
+        item.originalCode?.toLowerCase().includes(key) ||
+        item.keywords?.toLowerCase().includes(key) ||
+        item.project?.toLowerCase().includes(key)
+      ).map(item => ({ ...item, _level: '案卷级' as const }));
+
+      const matchedFiles = MOCK_SEARCH_FILES.filter(item =>
+        item.fileLabel.toLowerCase().includes(key) ||
+        item.parentVolume.toLowerCase().includes(key) ||
+        item.parentProject.toLowerCase().includes(key) ||
+        item.archiveCode.toLowerCase().includes(key) ||
+        item.keywords.toLowerCase().includes(key) ||
+        item.summary.toLowerCase().includes(key)
+      ).map(item => ({ ...item, _level: '文件级' as const }));
+
+      // Combine all results with unique IDs
+      return [
+        ...matchedProjects,
+        ...matchedUnits,
+        ...matchedVolumes,
+        ...matchedFiles,
+      ];
     }
 
-    // Comprehensive query based on selected Archive Type & Tab Level
-    let source: any[] = [];
+    // --- COMPREHENSIVE: Search across ALL active levels with combined conditions ---
+    let allResults: any[] = [];
+    const sourceMap: Record<string, { data: any[]; levelField: string }> = {};
+
     if (selectedArchiveType === '建设档案') {
-      if (comprehensiveTab === 'PROJECT') {
-        source = MOCK_SEARCH_PROJECTS;
-      } else if (comprehensiveTab === 'UNIT') {
-        source = MOCK_SEARCH_UNITS;
-      } else {
-        source = getVolumeDataList('建设档案');
-      }
+      sourceMap['PROJECT'] = { data: MOCK_SEARCH_PROJECTS, levelField: 'PROJECT' };
+      sourceMap['UNIT'] = { data: MOCK_SEARCH_UNITS, levelField: 'UNIT' };
+      sourceMap['VOLUME'] = { data: getVolumeDataList('建设档案'), levelField: 'VOLUME' };
+      sourceMap['FILE'] = { data: MOCK_SEARCH_FILES, levelField: 'FILE' };
     } else {
-      source = getVolumeDataList(selectedArchiveType);
+      sourceMap['VOLUME'] = { data: getVolumeDataList(selectedArchiveType), levelField: 'VOLUME' };
     }
 
-    return source.filter(item => {
-      return queryConditions.every(cond => {
-        if (!cond.value.trim()) return true; // ignore empty conditions
-        const recordValue = (item as any)[cond.field]?.toString().toLowerCase() || '';
-        const searchVal = cond.value.toLowerCase();
-
-        switch (cond.operator) {
-          case 'equals':
-            return recordValue === searchVal;
-          case 'excludes':
-            return !recordValue.includes(searchVal);
-          case 'gt':
-            return parseFloat(recordValue) > parseFloat(searchVal);
-          case 'lt':
-            return parseFloat(recordValue) < parseFloat(searchVal);
-          case 'includes':
-          default:
-            return recordValue.includes(searchVal);
-        }
-      });
+    // Group conditions by level
+    const conditionsByLevel: Record<string, QueryCondition[]> = {};
+    queryConditions.forEach(cond => {
+      const lvl = cond.level || getLevelForField(cond.field) || 'VOLUME';
+      if (!conditionsByLevel[lvl]) conditionsByLevel[lvl] = [];
+      conditionsByLevel[lvl].push(cond);
     });
+
+    // For each active level, apply its relevant conditions
+    activeLevels.forEach(lvl => {
+      const source = sourceMap[lvl];
+      if (!source) return;
+      const levelConditions = conditionsByLevel[lvl] || [];
+      
+      // Filter data with conditions for this level
+      const filtered = source.data.filter((item: any) => {
+        return levelConditions.every((cond: QueryCondition) => {
+          if (!cond.value.trim()) return true;
+          const recordValue = (item as any)[cond.field]?.toString().toLowerCase() || '';
+          const searchVal = cond.value.toLowerCase();
+          switch (cond.operator) {
+            case 'equals': return recordValue === searchVal;
+            case 'excludes': return !recordValue.includes(searchVal);
+            case 'gt': return parseFloat(recordValue) > parseFloat(searchVal);
+            case 'lt': return parseFloat(recordValue) < parseFloat(searchVal);
+            case 'includes': default: return recordValue.includes(searchVal);
+          }
+        });
+      });
+
+      // Tag with level and add to results
+      allResults.push(...filtered.map((d: any) => ({ ...d, _level: LEVEL_CONFIG[lvl as Level].label })));
+    });
+
+    return allResults;
   };
 
   const filteredSearchResults = applyFilters();
@@ -354,14 +419,14 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
       <div className="space-y-6 flex-1 flex flex-col animate-in fade-in slide-in-from-top-4 duration-300 w-full">
         
         {/* Conditions Console */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-white p-5 rounded-2xl shadow-xs space-y-4">
           
           {/* Header Title */}
-          <div className="flex items-center justify-between border-b pb-3 border-slate-100">
+          <div className="flex items-center justify-between pb-3">
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-blue-600" />
               <span className="text-xs font-bold text-slate-800">
-                {initialMode === 'FULL_TEXT' ? '全文穿透输入检索' : '综合多条件智能检索控制台'}
+                {initialMode === 'FULL_TEXT' ? '全文检索' : '智能检索'}
               </span>
             </div>
           </div>
@@ -373,7 +438,7 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                 <input 
                   type="text" 
-                  placeholder="输入关键字进行无纸化全文穿透检索 (如：钢结构, 人防掩蔽, 项目地点, 原档号, 备注等)..."
+                  placeholder="输入关键字检索（如：钢结构、项目地点、档号等）..."
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs font-semibold placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition"
                   value={fullTextKey}
                   onChange={(e) => setFullTextKey(e.target.value)}
@@ -392,10 +457,10 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
             <div className="space-y-4">
               
               {/* Dynamic Archive Type Switcher (1. No longer has full-text switch in /archive-search) */}
-              <div className="flex flex-col md:flex-row md:items-center gap-3 bg-slate-50/60 p-3 rounded-xl border border-slate-150">
+              <div className="flex flex-col md:flex-row md:items-center gap-3 bg-slate-50/60 p-3 rounded-xl">
                 <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5 shrink-0">
                   <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                  档案门类类型:
+                  档案门类:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {(['建设档案', '司法档案', '文书档案'] as const).map((t) => (
@@ -414,47 +479,35 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                 </div>
               </div>
 
-              {/* Dynamic level tabs for 建设档案 (PROJECT, UNIT, VOLUME) */}
+              {/* Dynamic level tabs for 建设档案 (multi-select toggle) */}
               {selectedArchiveType === '建设档案' ? (
-                <div className="flex border-b border-slate-150 pb-2 gap-2">
-                  <button 
-                    onClick={() => setComprehensiveTab('PROJECT')}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all flex items-center ${
-                      comprehensiveTab === 'PROJECT' 
-                        ? 'bg-blue-50 text-blue-600 border-blue-200' 
-                        : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    <Building className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
-                    项目级查询
-                  </button>
-                  <button 
-                    onClick={() => setComprehensiveTab('UNIT')}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all flex items-center ${
-                      comprehensiveTab === 'UNIT' 
-                        ? 'bg-blue-50 text-blue-600 border-blue-200' 
-                        : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    <HardHat className="w-3.5 h-3.5 mr-1.5 text-orange-500" />
-                    工程级查询
-                  </button>
-                  <button 
-                    onClick={() => setComprehensiveTab('VOLUME')}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all flex items-center ${
-                      comprehensiveTab === 'VOLUME' 
-                        ? 'bg-blue-50 text-blue-600 border-blue-200' 
-                        : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5 mr-1.5 text-primary" />
-                    案卷级查询
-                  </button>
+                <div className="flex flex-wrap pb-2 gap-2">
+                  {ALL_LEVELS.map(level => {
+                    const cfg = LEVEL_CONFIG[level];
+                    const isActive = activeLevels.includes(level);
+                    return (
+                      <button
+                        key={level}
+                        onClick={() => toggleLevel(level)}
+                        className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-600 border-blue-200 shadow-2xs'
+                            : 'bg-white text-slate-400 border-slate-200 hover:bg-slate-50 opacity-60'
+                        }`}
+                      >
+                        {cfg.icon}
+                        {cfg.label}查询
+                      </button>
+                    );
+                  })}
+                  {activeLevels.length === 0 && (
+                    <span className="text-xs text-amber-600 font-bold px-2 py-1">请至少选择一个查询级别</span>
+                  )}
                 </div>
               ) : (
-                <div className="text-xs text-slate-500 font-bold bg-slate-50 px-4 py-2 rounded-lg border flex items-center justify-between">
+                <div className="text-xs text-slate-500 font-bold bg-slate-50 px-4 py-2 rounded-lg flex items-center justify-between">
                   <span>ℹ️ 当前门类档案已自动激活【案卷级查询】进行穿透过滤</span>
-                  <span className="text-[10px] bg-slate-150 border px-1.5 rounded text-slate-500">仅有案卷层实体</span>
+                  <span className="text-[10px] bg-slate-150 px-1.5 rounded text-slate-500">仅有案卷层实体</span>
                 </div>
               )}
 
@@ -463,21 +516,25 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                 {queryConditions.map((cond, index) => (
                   <div key={cond.id} className="flex flex-col sm:flex-row items-center gap-2.5">
                     
-                    {/* Select Fields */}
-                    <div className="w-full sm:w-[150px]">
+                    {/* Select Fields - Combined from all levels */}
+                    <div className="w-full sm:w-[180px]">
                       <select 
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-1 focus:ring-blue-600 text-slate-700"
                         value={cond.field}
                         title="查询字段"
                         onChange={(e) => {
                           const next = [...queryConditions];
-                          next[index].field = e.target.value;
+                          const newField = e.target.value;
+                          next[index].field = newField;
                           next[index].value = ''; // Reset value on field change
+                          // Auto-set level based on field selection
+                          const fieldLevel = getLevelForField(newField);
+                          if (fieldLevel) next[index].level = fieldLevel;
                           setQueryConditions(next);
                         }}
                       >
-                        {getFieldsForCurrentTab().map(f => (
-                          <option key={f.value} value={f.value}>{f.label}</option>
+                        {COMBINED_FIELDS.map(f => (
+                          <option key={`${f.level}-${f.value}`} value={f.value}>{f.label}</option>
                         ))}
                       </select>
                     </div>
@@ -503,7 +560,7 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                     {/* Value Field */}
                     <div className="flex-1 w-full relative">
                       {(() => {
-                        const matchedField = getFieldsForCurrentTab().find(f => f.value === cond.field);
+                        const matchedField = COMBINED_FIELDS.find(f => f.value === cond.field);
                         if (matchedField?.type === 'select') {
                           return (
                             <select
@@ -525,7 +582,7 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                             <input 
                               type="text"
                               placeholder={`输入进行${matchedField?.label || '属性'}匹配...`}
-                              className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold focus:outline-none focus:ring-1 focus:ring-blue-650"
+                              className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-1 focus:ring-blue-650"
                               value={cond.value}
                               onChange={(e) => {
                                 const next = [...queryConditions];
@@ -549,15 +606,16 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                   </div>
                 ))}
 
-                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                <div className="flex justify-between items-center pt-2">
                   <button 
                     onClick={() => {
-                      const fields = getFieldsForCurrentTab();
+                      const firstField = COMBINED_FIELDS[0];
                       setQueryConditions([...queryConditions, { 
                         id: Date.now().toString(), 
-                        field: fields[0].value, 
+                        field: firstField.value, 
                         operator: 'includes', 
-                        value: '' 
+                        value: '',
+                        level: firstField.level
                       }]);
                     }}
                     className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 hover:border-blue-200 rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition"
@@ -569,8 +627,8 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                   <div className="flex gap-2">
                     <button 
                       onClick={() => {
-                        const fields = getFieldsForCurrentTab();
-                        setQueryConditions([{ id: '1', field: fields[0].value, operator: 'includes', value: '' }]);
+                        const firstField = COMBINED_FIELDS[0];
+                        setQueryConditions([{ id: '1', field: firstField.value, operator: 'includes', value: '', level: firstField.level }]);
                       }}
                       className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl text-xs font-bold cursor-pointer"
                     >
@@ -584,13 +642,13 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
         </div>
 
         {/* Results Grid inside search tab */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-md divide-y divide-slate-100 min-h-[300px] flex flex-col justify-between">
+        <div className="bg-white rounded-2xl shadow-md min-h-[300px] flex flex-col justify-between">
           <div>
-            <div className="px-6 py-4.5 bg-slate-50 border-b border-slate-150 flex justify-between items-center">
+            <div className="px-6 py-4.5 bg-slate-50 flex justify-between items-center">
               <span className="text-xs font-bold text-slate-700">
-                🔍 检索匹配过滤结果列表 ({filteredSearchResults.length} 个记录)
+                🔍 检索结果 ({filteredSearchResults.length} 条)
               </span>
-              <p className="text-[10px] text-slate-400 font-medium">支持直接点选多项目加到“利用清单”，一并提请借阅审批</p>
+              <p className="text-[10px] text-slate-400 font-medium">可勾选项目加入利用清单，统一提交借阅申请</p>
             </div>
 
             <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -600,8 +658,8 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                   return (
                     <div 
                       key={item.id}
-                      className={`p-4 border rounded-2xl transition hover:shadow-xs flex gap-3 ${
-                        contains ? 'bg-primary/5 border-primary/20' : 'bg-white border-slate-200'
+                      className={`p-4 rounded-2xl transition hover:shadow-xs flex gap-3 ${
+                        contains ? 'bg-primary/5' : 'bg-white'
                       }`}
                     >
                       {/* Left Basket toggle checkbox */}
@@ -622,9 +680,21 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                       {/* Item card */}
                       <div className="flex-1 space-y-2">
                         <div className="flex justify-between items-start">
-                          <h4 className="text-xs font-bold text-slate-800 line-clamp-1 truncate block max-w-[240px]" title={item.projectName || item.title || item.unitName}>
-                            {item.projectName || item.unitName || item.title}
-                          </h4>
+                          <div className="flex items-center gap-1.5">
+                            {item._level && (
+                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                                item._level === '项目级' ? 'bg-blue-50 text-blue-700' :
+                                item._level === '工程级' ? 'bg-orange-50 text-orange-700' :
+                                item._level === '案卷级' ? 'bg-indigo-50 text-indigo-700' :
+                                'bg-emerald-50 text-emerald-700'
+                              }`}>
+                                {item._level}
+                              </span>
+                            )}
+                            <h4 className="text-xs font-bold text-slate-800 line-clamp-1 truncate" title={item.projectName || item.title || item.unitName || item.fileLabel}>
+                              {item.projectName || item.unitName || item.title || item.fileLabel}
+                            </h4>
+                          </div>
                           <span className={`px-1.5 py-0.5 border rounded text-[9px] font-bold shrink-0 ${
                             item.securityLevel === '公开' 
                               ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
@@ -638,20 +708,27 @@ const ArchiveSearch: React.FC<ArchiveSearchProps> = ({ initialMode = 'COMPREHENS
                           {item.summary}
                         </p>
 
-                        <div className="grid grid-cols-2 gap-x-2 gap-y-1 font-mono text-[10px] text-slate-500 border-t border-slate-100 pt-2 shrink-0">
-                          {comprehensiveTab === 'PROJECT' ? (
+                        <div className="grid grid-cols-2 gap-x-2 gap-y-1 font-mono text-[10px] text-slate-500 pt-2 shrink-0">
+                          {item._level === '项目级' ? (
                             <>
                               <span className="truncate">项目档号: {item.archiveCode}</span>
                               <span className="truncate">项目类型: {item.projectType}</span>
                               <span className="truncate">编制单位: {item.constructionUnit}</span>
                               <span className="truncate">许可证号: {item.workPermitNo}</span>
                             </>
-                          ) : comprehensiveTab === 'UNIT' ? (
+                          ) : item._level === '工程级' ? (
                             <>
                               <span className="truncate">关联项目: {item.projectName}</span>
                               <span className="truncate">参建单位: {item.participantUnit}</span>
                               <span className="truncate">造价: ¥{(item.cost / 10000).toFixed(2)}万</span>
                               <span className="truncate">监督号: {item.qualitySupervisionNo}</span>
+                            </>
+                          ) : item._level === '文件级' ? (
+                            <>
+                              <span className="truncate">所属案卷: {item.parentVolume}</span>
+                              <span className="truncate">所属项目: {item.parentProject}</span>
+                              <span className="truncate">档号: {item.archiveCode}</span>
+                              <span className="truncate">密级: {item.securityLevel || '公开'}</span>
                             </>
                           ) : (
                             <>

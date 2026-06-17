@@ -38,9 +38,9 @@ const IdentitySelector: React.FC<IdentitySelectorProps> = ({ identities, onSelec
                     <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/20">
                         <Building2 className="w-8 h-8" />
                     </div>
-                    <h1 className="text-2xl font-bold text-slate-800 mb-2">请选择登录身份</h1>
+                    <h1 className="text-2xl font-bold text-slate-800 mb-2">选择登录身份</h1>
                     <p className="text-slate-500 text-sm">
-                        检测到您的账号关联了多个组织，请选择本次工作的上下文环境。
+                        您的账号关联了多个组织，请选择本次操作的身份。
                     </p>
                 </div>
 
@@ -86,7 +86,7 @@ const IdentitySelector: React.FC<IdentitySelectorProps> = ({ identities, onSelec
                                     <div className="text-xs text-slate-500 flex items-center mt-1 gap-2">
                                         <span className="flex items-center">
                                             <UserCircle className="w-3.5 h-3.5 mr-1 text-slate-400" />
-                                            使用者：<strong>{identity.user.name}</strong> • {identity.department || '默认部门'}
+                                            使用者：<strong>{identity.user.name}</strong> · {identity.department || '默认部门'}
                                         </span>
                                         <span className={`text-[10px] uppercase px-1.5 py-0.2 rounded-full font-semibold ${badge.class}`}>
                                             {badge.label}

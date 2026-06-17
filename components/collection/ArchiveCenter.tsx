@@ -113,17 +113,17 @@ const ArchiveCenter: React.FC = () => {
         {/* Main Table view of repositories */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse whitespace-nowrap">
+            <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-150 text-xs font-bold text-slate-500 uppercase tracking-wider text-[11px]">
-                  <th className="py-4 px-6 w-[120px]">档号 / 编码</th>
-                  <th className="py-4 px-6 w-[100px]">档案类型</th>
-                  <th className="py-4 px-6">档案项目名称</th>
-                  <th className="py-4 px-6">编制单位</th>
-                  <th className="py-4 px-6 w-[120px]">入库日期</th>
-                  <th className="py-4 px-6 w-[100px]">密级</th>
-                  <th className="py-4 px-6 w-[100px]">保管期限</th>
-                  <th className="py-4 px-6 w-[100px] text-right">案卷操作</th>
+                  <th className="py-4 px-4 w-[100px]">档号 / 编码</th>
+                  <th className="py-4 px-4 w-[80px]">档案类型</th>
+                  <th className="py-4 px-4">档案项目名称</th>
+                  <th className="py-4 px-4 w-[140px]">编制单位</th>
+                  <th className="py-4 px-4 w-[100px]">入库日期</th>
+                  <th className="py-4 px-4 w-[70px]">密级</th>
+                  <th className="py-4 px-4 w-[80px]">保管期限</th>
+                  <th className="py-4 px-4 w-[120px] text-right">案卷操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs font-semibold">
@@ -152,42 +152,42 @@ const ArchiveCenter: React.FC = () => {
 
                     return (
                       <tr key={item.id} className="hover:bg-slate-50/50 transition-colors align-middle">
-                        <td className="py-4.5 px-6 font-mono text-[11px] text-slate-400 font-bold">
+                        <td className="py-4.5 px-4 font-mono text-[11px] text-slate-400 font-bold truncate" title={item.archiveCode}>
                           {item.archiveCode}
                         </td>
-                        <td className="py-4.5 px-6">
+                        <td className="py-4.5 px-4">
                           <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeBadge}`}>
                             {item.archiveType}
                           </span>
                         </td>
-                        <td className="py-4.5 px-6">
+                        <td className="py-4.5 px-4">
                           <div className="flex flex-col">
-                            <span className="text-slate-800 font-bold block max-w-[340px] truncate" title={item.projectName}>
+                            <span className="text-slate-800 font-bold block max-w-[260px] truncate" title={item.projectName}>
                               {item.projectName}
                             </span>
                             <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1 mt-0.5">
-                              <Layers className="w-3 h-3 text-slate-300" />
-                              详情: {item.totalVolumes}个案卷 / {item.totalFiles}份归档移交文件
+                              <Layers className="w-3 h-3 text-slate-300 shrink-0" />
+                              <span className="truncate">{item.totalVolumes}个案卷 / {item.totalFiles}份归档移交文件</span>
                             </span>
                           </div>
                         </td>
-                        <td className="py-4.5 px-6 font-medium text-slate-600 max-w-[200px] truncate" title={item.constructionUnit}>
+                        <td className="py-4.5 px-4 font-medium text-slate-600 max-w-[140px] truncate" title={item.constructionUnit}>
                           {item.constructionUnit}
                         </td>
-                        <td className="py-4.5 px-6 font-mono font-medium text-slate-500">
+                        <td className="py-4.5 px-4 font-mono font-medium text-slate-500 whitespace-nowrap">
                           {item.formationDate}
                         </td>
-                        <td className="py-4.5 px-6">
+                        <td className="py-4.5 px-4">
                           <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${securityBadge}`}>
                             {item.securityLevel}
                           </span>
                         </td>
-                        <td className="py-4.5 px-6">
+                        <td className="py-4.5 px-4">
                           <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${periodBadge}`}>
                             {item.retentionPeriod}
                           </span>
                         </td>
-                        <td className="py-4.5 px-6 text-right">
+                        <td className="py-4.5 px-4 text-right whitespace-nowrap">
                           <div className="flex justify-end gap-1 items-center">
                             <button 
                               onClick={() => handleToggleBasketDirect(item)}

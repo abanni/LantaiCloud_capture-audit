@@ -1,20 +1,21 @@
 import React from 'react';
-import { Plus, Building, HardHat, Layers } from 'lucide-react';
+import { Plus, Building, HardHat, Layers, FileText } from 'lucide-react';
 import { LOGIC_OPERATORS, QueryCondition } from '../../integrator/archiveData';
-import { PROJECT_FIELDS, UNIT_FIELDS, VOLUME_FIELDS } from './searchData';
+import { PROJECT_FIELDS, UNIT_FIELDS, VOLUME_FIELDS, FILE_FIELDS } from './searchData';
 
 interface SearchFiltersProps {
   selectedArchiveType: '建设档案' | '司法档案' | '文书档案';
   onArchiveTypeChange: (type: '建设档案' | '司法档案' | '文书档案') => void;
-  comprehensiveTab: 'PROJECT' | 'UNIT' | 'VOLUME';
-  onTabChange: (tab: 'PROJECT' | 'UNIT' | 'VOLUME') => void;
+  comprehensiveTab: 'PROJECT' | 'UNIT' | 'VOLUME' | 'FILE';
+  onTabChange: (tab: 'PROJECT' | 'UNIT' | 'VOLUME' | 'FILE') => void;
   queryConditions: QueryCondition[];
   onConditionChange: (conditions: QueryCondition[]) => void;
 }
 
-const getFieldsForCurrentTab = (tab: 'PROJECT' | 'UNIT' | 'VOLUME') => {
+const getFieldsForCurrentTab = (tab: 'PROJECT' | 'UNIT' | 'VOLUME' | 'FILE') => {
   if (tab === 'PROJECT') return PROJECT_FIELDS;
   if (tab === 'UNIT') return UNIT_FIELDS;
+  if (tab === 'FILE') return FILE_FIELDS;
   return VOLUME_FIELDS;
 };
 
@@ -86,6 +87,17 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           >
             <Layers className="w-3.5 h-3.5 mr-1.5 text-primary" />
             案卷级查询
+          </button>
+          <button 
+            onClick={() => onTabChange('FILE')}
+            className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all flex items-center ${
+              comprehensiveTab === 'FILE' 
+                ? 'bg-blue-50 text-blue-600 border-blue-200' 
+                : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
+            文件级查询
           </button>
         </div>
       ) : (
@@ -165,7 +177,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                       <input 
                         type="text"
                         placeholder={`输入进行${matchedField?.label || '属性'}匹配...`}
-                        className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold focus:outline-none focus:ring-1 focus:ring-blue-650"
+                        className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-1 focus:ring-blue-650"
                         value={cond.value}
                         onChange={(e) => {
                           const next = [...queryConditions];

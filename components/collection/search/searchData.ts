@@ -137,6 +137,69 @@ export const MOCK_SEARCH_UNITS = [
   }
 ];
 
+// --- FILE LEVEL SEARCH FIELDS ---
+export const FILE_FIELDS = [
+  { label: '文件题名', value: 'fileLabel' },
+  { label: '所属案卷', value: 'parentVolume' },
+  { label: '所属项目', value: 'parentProject' },
+  { label: '密级', value: 'securityLevel', type: 'select', options: ['公开', '限阅', '机密'] },
+  { label: '主题词', value: 'keywords' },
+];
+
+// --- MOCK FILE-LEVEL DATA ---
+export const MOCK_SEARCH_FILES = [
+  {
+    id: 'f-1',
+    fileLabel: '工程准备阶段文件清单',
+    parentVolume: '苏州吉丰新材料有限公司 生产车间 工程准备阶段',
+    parentProject: '苏州吉丰新材料有限公司 生产车间',
+    archiveCode: 'A.0.1-2024-001-F01',
+    securityLevel: '公开',
+    summary: '工程准备阶段形成的各类文件清单目录',
+    keywords: '准备阶段,文件清单',
+  },
+  {
+    id: 'f-2',
+    fileLabel: '立项申请书',
+    parentVolume: '苏州吉丰新材料有限公司 生产车间 工程准备阶段',
+    parentProject: '苏州吉丰新材料有限公司 生产车间',
+    archiveCode: 'A.0.1-2024-001-F02',
+    securityLevel: '公开',
+    summary: '项目立项申请书及相关批复文件',
+    keywords: '立项,申请书',
+  },
+  {
+    id: 'f-3',
+    fileLabel: '总监理工程师任命书及证书',
+    parentVolume: '苏州吉丰新材料有限公司 生产车间 监理文件',
+    parentProject: '苏州吉丰新材料有限公司 生产车间',
+    archiveCode: 'A.0.1-2024-001-F03',
+    securityLevel: '公开',
+    summary: '总监理工程师任命书及相关资质证书',
+    keywords: '监理,任命书,证书',
+  },
+  {
+    id: 'f-4',
+    fileLabel: '监理规划',
+    parentVolume: '苏州吉丰新材料有限公司 生产车间 监理文件',
+    parentProject: '苏州吉丰新材料有限公司 生产车间',
+    archiveCode: 'A.0.1-2024-001-F04',
+    securityLevel: '公开',
+    summary: '针对生产车间项目的监理工作规划方案',
+    keywords: '监理,规划',
+  },
+  {
+    id: 'f-5',
+    fileLabel: '监理实施细则',
+    parentVolume: '苏州吉丰新材料有限公司 生产车间 监理文件',
+    parentProject: '苏州吉丰新材料有限公司 生产车间',
+    archiveCode: 'A.0.1-2024-001-F05',
+    securityLevel: '限阅',
+    summary: '监理工作实施细则和操作规范',
+    keywords: '监理,实施细则',
+  },
+];
+
 // --- HELPER TO EXPAND ARCHIVES INTO VOLUME-LEVEL DATA ---
 export const getVolumeDataList = (archiveType: string) => {
   return ARCHIVES_DATA.filter(item => item.archiveType === archiveType).map(item => ({

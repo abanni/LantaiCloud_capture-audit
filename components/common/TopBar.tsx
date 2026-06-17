@@ -23,31 +23,27 @@ const TopBar: React.FC<TopBarProps> = ({
     onNotificationClick,
 }) => {
     return (
-        <div className="h-16 bg-white border-b border-slate-100 flex justify-between items-center px-6 shadow-sm shrink-0 sticky top-0 z-10">
+        <header className="h-14 bg-white border-b border-border flex items-center justify-between px-5 shrink-0 sticky top-0 z-10">
+            <h1 className="text-sm font-bold text-text-primary">{title}</h1>
             <div className="flex items-center gap-3">
-                <h1 className="text-base font-extrabold text-slate-800 tracking-tight">{title}</h1>
+                {showNotification && (
+                    <button
+                        onClick={onNotificationClick}
+                        className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-primary"
+                    >
+                        <Bell className="w-4.5 h-4.5" />
+                        {hasUnread && (
+                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full ring-2 ring-white" />
+                        )}
+                    </button>
+                )}
+                <UserSwitcher
+                    identity={identity}
+                    identities={identities || []}
+                    setCurrentIdentity={setCurrentIdentity || (() => {})}
+                />
             </div>
-            <div className="flex items-center gap-5">
-                <div className="flex items-center gap-4 text-gray-655">
-                    {showNotification && (
-                        <div
-                            className="flex items-center cursor-pointer hover:text-primary relative p-1.5 rounded-full hover:bg-slate-50 transition-colors"
-                            onClick={onNotificationClick}
-                        >
-                            <Bell className="w-5 h-5" />
-                            {hasUnread && (
-                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                            )}
-                        </div>
-                    )}
-                    <UserSwitcher
-                        identity={identity}
-                        identities={identities || []}
-                        setCurrentIdentity={setCurrentIdentity || (() => {})}
-                    />
-                </div>
-            </div>
-        </div>
+        </header>
     );
 };
 

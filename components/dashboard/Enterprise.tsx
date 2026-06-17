@@ -341,7 +341,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                                     <span>版本 & 订单</span>
                                 </div>
                                 <MenuLink active={activeTab === 'version'} onClick={() => setActiveTab('version')} label="版本管理" icon={<Zap className="w-4 h-4" />} />
-                                <MenuLink active={activeTab === 'orders'} onClick={() => setActiveTab('orders')} label="订单中心" icon={<ClipboardList className="w-4 h-4" />} />
+                                <MenuLink active={activeTab === 'orders'} onClick={() => setActiveTab('orders')} label="我的订单" icon={<ClipboardList className="w-4 h-4" />} />
                             </div>
                         </div>
 
@@ -364,6 +364,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                                     onChangeVersion={handleChangeVersion}
                                     orders={orders}
                                     teamMemberCount={teamMembers.length}
+                                    showOrdersOnly={true}
                                 />
                             )}
                             {activeTab === 'archives' && (

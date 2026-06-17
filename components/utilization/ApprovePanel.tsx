@@ -32,13 +32,13 @@ const ApprovePanel: React.FC<ApprovePanelProps> = ({
   return (
     <>
       {/* Action header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl border border-slate-200 shadow-xs gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-5 rounded-2xl shadow-xs gap-4">
         <div>
           <h3 className="font-bold text-sm text-slate-800 font-sans">
-            1. 待核审的集团企业与项目档案利用申请流
+            1. 待审核的档案利用申请
           </h3>
           <p className="text-[10px] text-slate-450 font-medium">
-            档案管理员对下方项目部、分子公司或第三方提交的保密调卷申请进行业务会审与授权盖章。
+            档案管理员对提交的保密调卷申请进行会审与授权盖章。
           </p>
         </div>
 
@@ -51,18 +51,18 @@ const ApprovePanel: React.FC<ApprovePanelProps> = ({
       </div>
 
       {/* Registrations queue table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 space-y-4">
-        <div className="flex justify-between items-center border-b pb-3 border-slate-100">
+      <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
+        <div className="flex justify-between items-center pb-3">
           <div className="flex items-center gap-2">
             <KeyRound className="w-4 h-4 text-primary animate-pulse" />
             <h4 className="font-bold text-xs text-slate-800">
-              企业数智综合馆档案利用审批与用印授权队列
+              档案利用审批队列
             </h4>
           </div>
 
           <button
             onClick={onReset}
-            className="text-[10px] text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-100 rounded px-2.5 py-1 cursor-pointer font-bold transition-colors"
+            className="text-[10px] text-slate-500 hover:text-blue-600 rounded px-2.5 py-1 cursor-pointer font-bold transition-colors"
             title="清除审计以及归集记录"
           >
             复位审批与审计底册
@@ -70,21 +70,21 @@ const ApprovePanel: React.FC<ApprovePanelProps> = ({
         </div>
 
         {/* Table list of registrations */}
-        <div className="border border-slate-150 rounded-xl overflow-hidden mt-4 bg-white">
+        <div className="rounded-xl overflow-hidden mt-4 bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse font-semibold whitespace-nowrap">
-              <thead className="bg-slate-50 border-b border-slate-150 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+              <thead className="bg-slate-50 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">流转编号</th>
+                  <th className="py-3 px-4">编号</th>
                   <th className="py-3 px-4">提报日期</th>
-                  <th className="py-3 px-4">申请人 & 部门单位</th>
-                  <th className="py-3 px-4 text-center">利用授权形式</th>
-                  <th className="py-3 px-4">关联馆藏实物/副本</th>
-                  <th className="py-3 px-4">详细用途事由</th>
-                  <th className="py-3 px-4 text-center">用印审批操作控制</th>
+                  <th className="py-3 px-4">申请人</th>
+                  <th className="py-3 px-4 text-center">利用形式</th>
+                  <th className="py-3 px-4">关联档案</th>
+                  <th className="py-3 px-4">用途事由</th>
+                  <th className="py-3 px-4 text-center">审批操作</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody>
                 {registrations.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-8 text-center text-slate-400 font-medium font-sans">
@@ -109,27 +109,27 @@ const ApprovePanel: React.FC<ApprovePanelProps> = ({
       </div>
 
       {/* Audit trail logs */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 space-y-4 animate-in fade-in duration-400">
-        <div className="flex items-center gap-2 border-b pb-3 border-slate-100">
+      <div className="bg-white rounded-2xl shadow-md p-6 space-y-4 animate-in fade-in duration-400">
+        <div className="flex items-center gap-2 pb-3">
           <KeyRound className="w-4 h-4 text-emerald-700" />
-          <h4 className="font-bold text-xs text-slate-800">档案馆底层分布式主权链保全安全审计记录/物理日志痕迹</h4>
+          <h4 className="font-bold text-xs text-slate-800">安全审计日志</h4>
         </div>
 
-        <div className="border border-slate-150 rounded-xl overflow-hidden mt-2 bg-white">
+        <div className="rounded-xl overflow-hidden mt-2 bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse font-semibold whitespace-nowrap">
-              <thead className="bg-slate-50 border-b border-slate-150 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+              <thead className="bg-slate-50 font-bold text-slate-500 uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">审计密码标识 (HASH-UID)</th>
+                  <th className="py-3 px-4">审计ID (HASH)</th>
                   <th className="py-3 px-4">出证/调用时间</th>
-                  <th className="py-3 px-4">调用人及角色类别</th>
-                  <th className="py-3 px-4 text-center">核发用印形式</th>
-                  <th className="py-3 px-4">出证调阅资源题名</th>
+                  <th className="py-3 px-4">调用人及角色</th>
+                  <th className="py-3 px-4 text-center">调用形式</th>
+                  <th className="py-3 px-4">调阅资源</th>
                   <th className="py-3 px-4">利用目的简述</th>
-                  <th className="py-3 px-4 text-center">物理审计安全评述</th>
+                  <th className="py-3 px-4 text-center">审计结果</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody>
                 {auditLogs.map(log => (
                   <tr key={log.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-3 px-4 font-mono text-slate-400">

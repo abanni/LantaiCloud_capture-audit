@@ -125,6 +125,7 @@ export interface QueryCondition {
   field: string;
   operator: string;
   value: string;
+  level?: string;
 }
 
 export interface RegistrationItem {
