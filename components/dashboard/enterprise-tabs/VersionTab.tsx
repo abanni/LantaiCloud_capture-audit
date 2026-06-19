@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Crown, Check, CreditCard, X, Zap, Headphones, Sparkles, AlertTriangle,
-    Database, Users, Award, CheckCircle2, ClipboardList, Clock, RefreshCw
+    Crown, Check, CreditCard, X, CheckCircle2, ClipboardList
 } from 'lucide-react';
 
 interface Order {
@@ -36,197 +35,147 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
         setShowPaymentModal(true);
     };
 
+    const VERSION_ORDER = ['free', 'team', 'pro', 'enterprise'] as const;
+    type Version = typeof VERSION_ORDER[number];
+    const currentIdx = VERSION_ORDER.indexOf(currentVersion);
+
+    const getButtonConfig = (tier: Version, price: number, desc: string) => {
+        const tierIdx = VERSION_ORDER.indexOf(tier);
+        if (tierIdx < currentIdx) {
+            return { label: '', disabled: true, onClick: () => {}, hideButton: true as const };
+        }
+        if (tierIdx === currentIdx) {
+            const labels: Record<string, string> = {
+                free: '当前正在使用', team: '续费团队版', pro: '续费专业版', enterprise: '当前使用中',
+            };
+            return { label: labels[tier], disabled: true, onClick: () => {}, hideButton: false as const };
+        }
+        const labels: Record<string, string> = {
+            team: '升级至团队版', pro: '升级至专业版', enterprise: '升级至企业版',
+        };
+        return { label: labels[tier], disabled: false, onClick: () => handlePaymentClick(tier, price, desc), hideButton: false as const };
+    };
+
     return (
         <>
             {!showOrdersOnly && (<>
-            {/* Sub 1: Current usage monitoring */}
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                <div className="flex justify-between items-start border-b border-slate-100 pb-4 mb-4 flex-wrap gap-4">
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <Crown className="w-5 h-5 text-amber-500 fill-amber-400" />
-                            <h3 className="text-base font-bold text-slate-800">当前运行版本及资源用量</h3>
-                        </div>
-                        <p className="text-xs text-slate-400 mt-1">您当前租户正在使用高等级的企业治理资源方案</p>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1 rounded-full text-xs font-bold shadow-xs">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                        <span>当前版本: {currentVersion === 'free' ? '免费版' : currentVersion === 'team' ? '团队版' : currentVersion === 'pro' ? '专业版' : '企业版'}</span>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Resource 1: Storage */}
-                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg relative overflow-hidden flex flex-col justify-between">
-                        <div className="absolute right-3 top-3 opacity-10">
-                            <Database className="w-16 h-16 text-slate-500" />
-                        </div>
-                        <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide">云端存储资源使用率</div>
-                            <div className="text-xl font-black text-slate-800 mt-2 font-mono">
-                                {currentVersion === 'free' ? '2.1 GB / 5 GB' : currentVersion === 'team' ? '18.6 GB / 50 GB' : currentVersion === 'pro' ? '214 GB / 500 GB' : '1.2 TB / 5 TB'}
-                            </div>
-                            <div className="w-full bg-slate-200 rounded-full h-1.5 mt-3">
-                                <div
-                                    className={`bg-primary h-1.5 rounded-full transition-all w-[${currentVersion === 'free' ? 42 : currentVersion === 'team' ? 37.2 : currentVersion === 'pro' ? 42.8 : 24}%]`}
-                                ></div>
-                            </div>
-                        </div>
-                        <div className="mt-4 border-t border-slate-100 pt-2 text-[11px] text-slate-500 space-y-1">
-                            <div className="flex justify-between"><span>存储介质:</span> <strong className="text-slate-700">{currentVersion === 'free' ? '腾讯云COS 归档存储' : '腾讯云COS 标准存储'}</strong></div>
-                            <div className="flex justify-between"><span>数据期效:</span> <strong className="text-slate-700">{currentVersion === 'free' ? '5年' : '服务期内长期留存'}</strong></div>
-                        </div>
-                    </div>
-
-                    {/* Resource 2: Team Accounts */}
-                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg relative overflow-hidden flex flex-col justify-between">
-                        <div className="absolute right-3 top-3 opacity-10">
-                            <Users className="w-16 h-16 text-slate-500" />
-                        </div>
-                        <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide">已拥有/最大协同账号数</div>
-                            <div className="text-xl font-black text-slate-800 mt-2 font-mono">
-                                {teamMemberCount} / {currentVersion === 'free' ? '1' : currentVersion === 'team' ? '3' : currentVersion === 'pro' ? '10' : '50'} 个
-                            </div>
-                            <div className="w-full bg-slate-200 rounded-full h-1.5 mt-3">
-                                <div
-                                    className={`bg-purple-600 h-1.5 rounded-full transition-all w-[${(teamMemberCount / (currentVersion === 'free' ? 1 : currentVersion === 'team' ? 3 : currentVersion === 'pro' ? 10 : 50)) * 100}%]`}
-                                ></div>
-                            </div>
-                        </div>
-                        <div className="mt-4 border-t border-slate-100 pt-2 text-[11px] text-slate-500 space-y-1">
-                            <div className="flex justify-between"><span>成员管理功能:</span> <strong className="text-slate-700">{currentVersion === 'free' ? '无' : '开启'}</strong></div>
-                            <div className="flex justify-between"><span>超额增购价格:</span> <strong className="text-slate-700">{currentVersion === 'free' ? '无法增购' : currentVersion === 'team' ? '按年不可加' : currentVersion === 'pro' ? '¥ 298/个/年' : '¥ 256/个/年'}</strong></div>
-                        </div>
-                    </div>
-
-                    {/* Resource 3: CA Seal and Support */}
-                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg relative overflow-hidden flex flex-col justify-between">
-                        <div className="absolute right-3 top-3 opacity-10">
-                            <Award className="w-16 h-16 text-slate-500" />
-                        </div>
-                        <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide">商事认证CA数字印章额度</div>
-                            <div className="text-[11px] text-slate-700 mt-2 leading-relaxed">
-                                <div className="flex justify-between py-1 border-b border-slate-200/55">
-                                    <span>企业CA印章赠送:</span>
-                                    <strong className="font-mono text-slate-800 font-bold">{currentVersion === 'free' ? '0 个' : '1 个 (已启用)'}</strong>
-                                </div>
-                                <div className="flex justify-between py-1 border-b border-slate-200/55">
-                                    <span>个人CA证书赠送:</span>
-                                    <strong className="font-mono text-slate-800 font-bold">
-                                        {currentVersion === 'free' ? '0 个' : currentVersion === 'team' ? '0 个' : currentVersion === 'pro' ? '2 个 (已启用1个)' : '9 个 (已启用4个)'}
-                                    </strong>
-                                </div>
-                                <div className="flex justify-between py-1">
-                                    <span>私有化部署选项:</span>
-                                    <strong className="text-slate-800 font-bold">{currentVersion === 'enterprise' ? '支持' : '不支持'}</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 border-t border-slate-100 pt-2 text-[11px] text-slate-500 space-y-0.5">
-                            <div className="flex justify-between"><span>专属在线客服:</span> <strong className="text-slate-700">常规组客</strong></div>
-                            <div className="flex justify-between"><span>业务技术顾问:</span> <strong className="text-slate-700">{currentVersion === 'enterprise' ? '软件工程师专配' : '常规标准'}</strong></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Sub 2: Plan matrix */}
             <div>
                 <div className="text-base font-bold text-slate-800 mb-4">兰台云数智档案系统 - 版本选择</div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                    {/* FREE PLAN */}
-                    <PlanCard
-                        name="免费版"
-                        tier="free"
-                        version={currentVersion}
-                        price="¥ 0"
-                        period="/ 永久免费"
-                        subtitle="适用于个人立档体验或极其微型的临时协作"
-                        features={[
-                            { text: '5GB 存储空间 (COS 归档)', included: true },
-                            { text: '1个 协同账号', included: true },
-                            { text: '无企业与个人CA赠送', included: false },
-                            { text: '文件限 10个/次 上传', included: false },
-                            { text: '不支持批量与归档包导出', included: false },
-                            { text: '无操作审计日志留存', included: false },
-                            { text: 'AI能力 仅支持限时特免', included: 'limited' as const },
-                        ]}
-                        buttonLabel={currentVersion === 'free' ? '当前正在使用' : '降低至免费版'}
-                        disabled={currentVersion === 'free'}
-                        onClick={() => handlePaymentClick('free', 0, '')}
-                        isDark={false}
-                    />
+                    {(() => {
+                        const cfg = getButtonConfig('free', 0, '');
+                        return (
+                            <PlanCard
+                                name="免费版"
+                                tier="free"
+                                version={currentVersion}
+                                price="¥ 0"
+                                period="/ 永久免费"
+                                subtitle="适用于个人立档体验或极其微型的临时协作"
+                                features={[
+                                    { text: '5GB 存储空间 (COS 归档)', included: true },
+                                    { text: '1个 协同账号', included: true },
+                                    { text: '无企业与个人CA赠送', included: false },
+                                    { text: '文件限 10个/次 上传', included: false },
+                                    { text: '不支持批量与归档包导出', included: false },
+                                    { text: '无操作审计日志留存', included: false },
+                                    { text: 'AI能力 仅支持限时特免', included: 'limited' as const },
+                                ]}
+                                buttonLabel={cfg.label}
+                                disabled={cfg.disabled}
+                                onClick={cfg.onClick}
+                                hideButton={cfg.hideButton}
+                            />
+                        );
+                    })()}
 
-                    {/* TEAM PLAN */}
-                    <PlanCard
-                        name="团队版"
-                        tier="team"
-                        version={currentVersion}
-                        price="¥ 1080"
-                        period="/ 年"
-                        subtitle="适合 3 人以下小型核心工程档案归档团队"
-                        features={[
-                            { text: '50GB 存储空间 (COS 标准型)', included: true },
-                            { text: '3个 多账号协同与部属管理', included: true },
-                            { text: '赠送 1个 企业CA专用在线证书', included: true },
-                            { text: '文件增至 20个/次 上传', included: true },
-                            { text: '不支持批量/扫描件批量入库', included: false },
-                            { text: '开启 操作完整追踪日志审计', included: true },
-                            { text: '无AI辅助支持与远程包恢复', included: false },
-                        ]}
-                        buttonLabel={currentVersion === 'team' ? '续费团队版' : '选择团队版'}
-                        onClick={() => handlePaymentClick('team', 1080, '团队版授权激活 (年付)')}
-                    />
+                    {(() => {
+                        const cfg = getButtonConfig('team', 1080, '团队版授权激活 (年付)');
+                        return (
+                            <PlanCard
+                                name="团队版"
+                                tier="team"
+                                version={currentVersion}
+                                price="¥ 1080"
+                                period="/ 年"
+                                subtitle="适合 3 人以下小型核心工程档案归档团队"
+                                features={[
+                                    { text: '50GB 存储空间 (COS 标准型)', included: true },
+                                    { text: '3个 多账号协同与部属管理', included: true },
+                                    { text: '赠送 1个 企业CA专用在线证书', included: true },
+                                    { text: '文件增至 20个/次 上传', included: true },
+                                    { text: '不支持批量/扫描件批量入库', included: false },
+                                    { text: '开启 操作完整追踪日志审计', included: true },
+                                    { text: '无AI辅助支持与远程包恢复', included: false },
+                                ]}
+                                buttonLabel={cfg.label}
+                                disabled={cfg.disabled}
+                                onClick={cfg.onClick}
+                                hideButton={cfg.hideButton}
+                            />
+                        );
+                    })()}
 
-                    {/* PRO PLAN */}
-                    <PlanCard
-                        name="专业版"
-                        tier="pro"
-                        version={currentVersion}
-                        price="¥ 2980"
-                        period="/ 年"
-                        subtitle="主流中大型建筑实体的档案系统推荐"
-                        badge="RECOMMENDED"
-                        features={[
-                            { text: '500GB 云存储容量 (COS标准)', included: true },
-                            { text: '10个 协作账号 (可¥298增购)', included: true },
-                            { text: '赠送 1个企业CA + 2个个人CA', included: true },
-                            { text: '上传无数量限制，支持文件夹', included: true },
-                            { text: '智能档案批注、高阶全文检索', included: true },
-                            { text: '扫描件上传、批量打包Zip下载', included: true },
-                            { text: '回收站增至30天 (支持人工恢复)', included: true },
-                        ]}
-                        buttonLabel={currentVersion === 'pro' ? '续费专业版' : '升级至专业版'}
-                        onClick={() => handlePaymentClick('pro', 2980, '专业版年度订阅续费')}
-                    />
+                    {(() => {
+                        const cfg = getButtonConfig('pro', 2980, '专业版年度订阅续费');
+                        return (
+                            <PlanCard
+                                name="专业版"
+                                tier="pro"
+                                version={currentVersion}
+                                price="¥ 2980"
+                                period="/ 年"
+                                subtitle="主流中大型建筑实体的档案系统推荐"
+                                badge="RECOMMENDED"
+                                features={[
+                                    { text: '500GB 云存储容量 (COS标准)', included: true },
+                                    { text: '10个 协作账号 (可¥298增购)', included: true },
+                                    { text: '赠送 1个企业CA + 2个个人CA', included: true },
+                                    { text: '上传无数量限制，支持文件夹', included: true },
+                                    { text: '智能档案批注、高阶全文检索', included: true },
+                                    { text: '扫描件上传、批量打包Zip下载', included: true },
+                                    { text: '回收站增至30天 (支持人工恢复)', included: true },
+                                ]}
+                                buttonLabel={cfg.label}
+                                disabled={cfg.disabled}
+                                onClick={cfg.onClick}
+                                hideButton={cfg.hideButton}
+                            />
+                        );
+                    })()}
 
-                    {/* ENTERPRISE PLAN */}
-                    <PlanCard
-                        name="企业版"
-                        tier="enterprise"
-                        version={currentVersion}
-                        price="¥ 12800"
-                        period="/ 年"
-                        subtitle="集团私有化或重大国家重点工程专用"
-                        features={[
-                            { text: '5TB 庞大存储 (支持私有化集成)', included: true },
-                            { text: '50个 专属协作员账号 (CA可自购)', included: true },
-                            { text: '赠送专享 1个企业CA + 9个个人CA', included: true },
-                            { text: '私有系统部署，不占用公有存储', included: true },
-                            { text: '支持人工数据误删底层恢复', included: true },
-                            { text: '30天回收期、极速专享CDN加速', included: true },
-                            { text: '配备技术顾问+资深系统工程师', included: true },
-                        ]}
-                        buttonLabel={currentVersion === 'enterprise' ? '当前使用中' : '特订企业版'}
-                        onClick={() => handlePaymentClick('enterprise', 12800, '旗舰企业版年度开通授权')}
-                    />
+                    {(() => {
+                        const cfg = getButtonConfig('enterprise', 12800, '旗舰企业版年度开通授权');
+                        return (
+                            <PlanCard
+                                name="企业版"
+                                tier="enterprise"
+                                version={currentVersion}
+                                price="¥ 12800"
+                                period="/ 年"
+                                subtitle="集团私有化或重大国家重点工程专用"
+                                features={[
+                                    { text: '5TB 庞大存储 (支持私有化集成)', included: true },
+                                    { text: '50个 专属协作员账号 (CA可自购)', included: true },
+                                    { text: '赠送专享 1个企业CA + 9个个人CA', included: true },
+                                    { text: '私有系统部署，不占用公有存储', included: true },
+                                    { text: '支持人工数据误删底层恢复', included: true },
+                                    { text: '30天回收期、极速专享CDN加速', included: true },
+                                    { text: '配备技术顾问+资深系统工程师', included: true },
+                                ]}
+                                buttonLabel={cfg.label}
+                                disabled={cfg.disabled}
+                                onClick={cfg.onClick}
+                                hideButton={cfg.hideButton}
+                            />
+                        );
+                    })()}
                 </div>
             </div>
             </>)} {/* end !showOrdersOnly */}
 
+            {showOrdersOnly && (<>
             {/* Tab: Order History */}
             <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
                 <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
@@ -298,6 +247,7 @@ const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion
                     </table>
                 </div>
             </div>
+            </>)} {/* end showOrdersOnly */}
 
             {/* Payment Modal */}
             {showPaymentModal && (
@@ -415,11 +365,12 @@ interface PlanCardProps {
     buttonLabel: string;
     disabled?: boolean;
     onClick: () => void;
+    hideButton?: boolean;
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
     name, tier, version, price, period, subtitle, badge,
-    features, buttonLabel, disabled, onClick, isDark
+    features, buttonLabel, disabled, onClick, hideButton
 }) => {
     const isActive = version === tier;
 
@@ -513,6 +464,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
             </div>
 
             {/* Button */}
+            {!hideButton && (
             <button
                 onClick={onClick}
                 disabled={disabled}
@@ -530,6 +482,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
             >
                 {buttonLabel}
             </button>
+            )}
 
             {/* Enterprise shine effect */}
             {tier === 'enterprise' && !disabled && (

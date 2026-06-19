@@ -59,7 +59,7 @@ const CloudDrive: React.FC = () => {
                     </span>
                 </div>
                 <div className="flex gap-6 text-sm text-slate-500">
-                    <span className="cursor-pointer hover:text-slate-800" onClick={() => navigate('/dashboard')}>返回项目主页</span>
+                    <span className="cursor-pointer hover:text-slate-800" onClick={() => navigate('/capture-dashboard')}>返回项目主页</span>
                     <span className="cursor-pointer text-primary font-medium">云盘 (资料收集)</span>
                     <span className="cursor-pointer hover:text-slate-800" onClick={() => navigate('/workspace')}>去归档</span>
                 </div>

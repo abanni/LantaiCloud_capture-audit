@@ -5,8 +5,8 @@ import {
 } from 'lucide-react';
 
 const EXTERNAL_ARCHIVES = [
-    { id: 'ks-urban', name: '昆山市城建档案馆', reviewer: '昆山/徐琴', region: '昆山', code: '320583' },
-    { id: 'cs-urban', name: '常熟市城市建设档案馆', reviewer: '常熟/袁翔', region: '常熟', code: '320581' },
+    { id: 'ks-urban', name: '昆山城建档案馆', reviewer: '昆山/徐琴', region: '昆山', code: '320583' },
+    { id: 'cs-urban', name: '常熟城建档案馆', reviewer: '常熟/袁翔', region: '常熟', code: '320581' },
 ];
 
 const FILE_TYPES_OPTIONS = [
@@ -113,10 +113,10 @@ const ExternalArchivesTab: React.FC<ExternalArchivesTabProps> = ({
                             <div className="p-2 bg-white/10 rounded-lg backdrop-blur-xs">
                                 <Database className="w-6 h-6 text-indigo-200" />
                             </div>
-                            <h3 className="text-lg font-black tracking-tight">外部档案馆关联数据管辖</h3>
+                            <h3 className="text-lg font-black tracking-tight">外部档案馆关联</h3>
                         </div>
                         <p className="text-xs text-indigo-100 leading-relaxed max-w-xl">
-                            将本地兰台云端系统中的特定工程文件和材料，根据国家标准接口协议直接关联申报至指定的外部档案馆。
+                            将本地兰台云系统（档案数据），通过标准接口协议关联申报至指定的外部档案馆。
                         </p>
                     </div>
                     {!isAddingArchive && (
@@ -338,7 +338,7 @@ const ExternalArchivesTab: React.FC<ExternalArchivesTabProps> = ({
                                 <div className="p-5 space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-y-3.5 gap-x-4 text-xs font-medium">
                                         <div><div className="text-slate-400">属地区划绑定</div><div className="font-bold text-slate-800 font-mono">{assoc.region} ({assoc.archiveCode})</div></div>
-                                        <div><div className="text-slate-400">指定首问对接专家</div><div className="font-bold text-slate-800">{assoc.liaison}</div></div>
+                                        <div><div className="text-slate-400">档案馆简称</div><div className="font-bold text-slate-800">{assoc.archiveName}</div></div>
                                         <div><div className="text-slate-400">物理传输同步频次</div><div className="font-bold text-teal-600">{assoc.syncFrequency}</div></div>
                                         <div><div className="text-slate-400">开通关联接入时间</div><div className="font-bold text-slate-800 font-mono">{assoc.associatedDate}</div></div>
                                         <div className="md:col-span-2"><div className="text-slate-400">数据关联申报协议</div><div className="font-bold text-slate-800 font-mono">{assoc.protocolVersion}</div></div>
@@ -409,7 +409,7 @@ const ExternalArchivesTab: React.FC<ExternalArchivesTabProps> = ({
                                 </div>
 
                                 <div className="px-5 py-2.5 bg-slate-50 border-t border-slate-100 flex justify-between items-center font-medium text-xs">
-                                    <span className="text-[11px] text-slate-400 font-mono">数字CA专属签名申报关联链</span>
+                                    
                                     <button onClick={() => handleDisconnect(assoc)}
                                         className="flex items-center gap-1 text-red-500 hover:text-red-700 font-bold transition-colors text-[11px] cursor-pointer">
                                         <Trash2 className="w-3.5 h-3.5" />断开取消关联

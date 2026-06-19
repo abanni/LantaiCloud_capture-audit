@@ -7,8 +7,7 @@ import {
     Building2
 } from 'lucide-react';
 import { Project, Identity } from '../types';
-import NewArchiveWizard from '../integrator/wizards/NewArchiveWizard';
-import { CollectionStatsCard, UtilizationStatsCard } from '../collection/ArchiveCenterStats';
+import NewProjectWizard from '../capture/wizards/NewProjectWizard';
 import ProjectCard from './ProjectCard';
 import OnboardingPanel from './OnboardingPanel';
 import UserMessageCenter from './UserMessageCenter';
@@ -171,13 +170,13 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 {activeModal === 'archive' ? (
                     <div className="h-full min-h-[580px]">
-                        <NewArchiveWizard 
-                            identity={identity}
-                            onClose={() => { setActiveModal('none'); setResumingProject(null); }} 
-                            onFinish={handleNewProjectCreated}
-                            isFullWorkspace={true}
-                            resumeProject={resumingProject || undefined}
-                        />
+<NewProjectWizard 
+            identity={identity}
+            onClose={() => { setActiveModal('none'); setResumingProject(null); }} 
+            onFinish={handleNewProjectCreated}
+            isFullWorkspace={true}
+            resumeProject={resumingProject || undefined}
+        />
                     </div>
                 ) : !identity.organization ? (
                     <OnboardingPanel
@@ -199,11 +198,11 @@ const Dashboard: React.FC<DashboardProps> = ({
                                     </div>
                                     <div>
                                         <h2 className="text-base font-extrabold text-slate-800 tracking-tight">
-                                            {identity.organization.name} · 档案工作台
+                                            昆山城建档案馆 · 著录工作台
                                         </h2>
                                         <div className="flex items-center gap-2 mt-0.5">
                                             <span className="text-[9.5px] bg-primary/10 text-primary border border-primary/20 rounded-md py-0.5 px-2 font-bold tracking-wider uppercase">
-                                                企业管理员中心 ({identity.role})
+                                                著录人员 ({identity.role})
                                             </span>
                                             <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.2 font-mono flex items-center gap-1">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -215,7 +214,28 @@ const Dashboard: React.FC<DashboardProps> = ({
                             </div>
                             <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-500 shrink-0">
                                 <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                                <span>{identity.organization.code || '已核验'}</span>
+                                <span>12320583MB1A12345X</span>
+                            </div>
+                        </div>
+
+                        {/* Color Legend */}
+                        <div className="flex items-center gap-6 px-1 py-2">
+                            <span className="text-[11px] font-semibold text-slate-400 tracking-wide">状态图例</span>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                                <span className="text-xs text-slate-500">创建中</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
+                                <span className="text-xs text-slate-500">著录中</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                                <span className="text-xs text-slate-500">审核中</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                                <span className="text-xs text-slate-500">已入库</span>
                             </div>
                         </div>
 
@@ -276,11 +296,6 @@ const Dashboard: React.FC<DashboardProps> = ({
                             onNavigateToWorkspace={() => navigate('/workspace', { state: { step: 1 } })}
                         />
 
-                        {/* Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <CollectionStatsCard />
-                            <UtilizationStatsCard />
-                        </div>
                     </div>
                 )}
             </div>

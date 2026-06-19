@@ -19,6 +19,7 @@ interface WizardProps {
     identity?: Identity;
     isFullWorkspace?: boolean;
     resumeProject?: Project;
+    currentArchiveId?: string;
 }
 
 interface ArchiveType {
@@ -85,8 +86,8 @@ const Label = ({ children, required }: any) => (
     </label>
 );
 
-const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, isFullWorkspace, resumeProject }) => {
-    const [step, setStep] = useState(resumeProject ? 4 : 0); 
+const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, isFullWorkspace, resumeProject, currentArchiveId }) => {
+    const [step, setStep] = useState(resumeProject ? 4 : 1); 
     const [isLoading, setIsLoading] = useState(false);
     const [selectedType, setSelectedType] = useState<string | null>(resumeProject ? 'construction' : null);
     const [selectedSubType, setSelectedSubType] = useState<string | null>(resumeProject ? 'housing' : null);
@@ -94,9 +95,11 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
     // --- Associated Archives Integration ---
     const [associatedArchives, setAssociatedArchives] = useState<any[]>([]);
     const [useExternalArchive, setUseExternalArchive] = useState<boolean>(
-        resumeProject ? (resumeProject.assignedReviewer !== '兰台本地直属区' && resumeProject.assignedReviewer !== '本地直管' && !resumeProject.assignedReviewer?.includes('本地')) : false
+        resumeProject 
+            ? (resumeProject.assignedReviewer !== '兰台本地直属区' && resumeProject.assignedReviewer !== '本地直管' && !resumeProject.assignedReviewer?.includes('本地'))
+            : currentArchiveId === 'kunshan'
     );
-    const [selectedAssociatedId, setSelectedAssociatedId] = useState<string>('');
+    const [selectedAssociatedId, setSelectedAssociatedId] = useState<string>(currentArchiveId === 'kunshan' ? 'ks-urban' : '');
 
     const getFilteredArchiveTypes = (): ArchiveType[] => {
         if (!useExternalArchive || !selectedAssociatedId) {
@@ -274,7 +277,7 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
     };
 
     const [isSigned, setIsSigned] = useState(false);
-    const [signMethod, setSignMethod] = useState<'esign' | 'upload'>('esign');
+    const [signMethod, setSignMethod] = useState<'online' | 'client' | 'upload'>('online');
     const [auditStatus, setAuditStatus] = useState<'pending' | 'approved'>('pending');
 
     const handleImport = () => {
@@ -303,10 +306,7 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
     const isConstruction = selectedType === 'construction';
 
     const handleNext = () => {
-        if (step === 0) {
-            // New Step 1: choosing external archive. Advance to Step 2: archive types selection
-            setStep(1);
-        } else if (step === 1) {
+        if (step === 1) {
             if (!selectedType) return alert("请选择档案类型");
             if (hasSubTypes) {
                 setStep(2); 
@@ -342,7 +342,6 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
             else setStep(1);
         }
         else if (step === 2) setStep(1);
-        else if (step === 1) setStep(0);
     };
 
     const finishCreation = () => {
@@ -406,17 +405,15 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                             新建档案项目
                         </h2>
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <StepDot number={1} label="选择档案馆" active={step >= 0} current={step === 0} />
-                            <div className={`w-5 h-[2px] ${step >= 1 ? 'bg-primary' : 'bg-slate-200'}`}></div>
-                            <StepDot number={2} label="档案分类" active={step >= 1} current={step === 1 || step === 2} />
+                            <StepDot number={1} label="档案分类" active={step >= 1} current={step === 1 || step === 2} />
                             <div className={`w-5 h-[2px] ${step >= 3 ? 'bg-primary' : 'bg-slate-200'}`}></div>
-                            <StepDot number={3} label="基本信息" active={step >= 3} current={step === 3} />
+                            <StepDot number={2} label="基本信息" active={step >= 3} current={step === 3} />
                             {isConstruction && useExternalArchive && (
                                 <>
                                     <div className={`w-5 h-[2px] ${step >= 4 ? 'bg-primary' : 'bg-slate-200'}`}></div>
-                                    <StepDot number={4} label="档案承诺书" active={step >= 4} current={step === 4} />
+                                    <StepDot number={3} label="签署档案承诺书" active={step >= 4} current={step === 4} />
                                     <div className={`w-5 h-[2px] ${step >= 5 ? 'bg-primary' : 'bg-slate-200'}`}></div>
-                                    <StepDot number={5} label="审核登记" active={step >= 5} current={step === 5} />
+                                    <StepDot number={4} label="审核登记" active={step >= 5} current={step === 5} />
                                 </>
                             )}
                         </div>
@@ -427,129 +424,10 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                 {/* Body */}
                 <div className="flex-1 p-8 overflow-y-auto bg-[#f8fafc]">
                     
-                    {/* STEP 0: External Association Selection */}
-                    {step === 0 && (
-                        <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                            <div className="text-center mb-6">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center justify-center gap-2">
-                                    <Database className="w-6 h-6 text-primary" />
-                                    选择档案馆
-                                </h3>
-                                <p className="text-slate-500 text-xs">
-                                    请选择是否将此档案项目关联至外部档案馆
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-6">
-                                {/* Option A: Local LanTai Only (DEFAULT) */}
-                                <div 
-                                    onClick={() => {
-                                        setUseExternalArchive(false);
-                                    }}
-                                    className={`bg-white p-6 rounded-2xl border-2 hover:shadow-md cursor-pointer transition-all flex flex-col relative ${
-                                        !useExternalArchive 
-                                            ? 'border-primary shadow-md bg-primary/5' 
-                                            : 'border-slate-200 hover:border-slate-200'
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className={`w-12 h-12 rounded-full ${!useExternalArchive ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-400'} flex items-center justify-center transition-colors`}>
-                                            <Lock className="w-6 h-6" />
-                                        </div>
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                                            !useExternalArchive ? 'border-primary bg-orange-500 text-white shadow-xs' : 'border-slate-200'
-                                        }`}>
-                                            {!useExternalArchive && <span className="text-xs font-bold">✓</span>}
-                                        </div>
-                                    </div>
-                                    <h4 className="font-bold text-slate-800 text-base mb-1.5">仅保存在兰台本地 (默认)</h4>
-                                    <p className="text-xs text-slate-400 leading-relaxed">
-                                        档案存储在兰台云本地
-                                    </p>
-                                </div>
-
-                                {/* Option B: External Sync with LanTai Guarantee */}
-                                <div 
-                                    onClick={() => {
-                                        setUseExternalArchive(true);
-                                    }}
-                                    className={`bg-white p-6 rounded-2xl border-2 hover:shadow-md cursor-pointer transition-all flex flex-col relative ${
-                                        useExternalArchive 
-                                            ? 'border-primary shadow-md bg-primary/5' 
-                                            : 'border-slate-200 hover:border-slate-200'
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className={`w-12 h-12 rounded-full ${useExternalArchive ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-400'} flex items-center justify-center transition-colors`}>
-                                            <Link className="w-6 h-6" />
-                                        </div>
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                                            useExternalArchive ? 'border-primary bg-orange-500 text-white shadow-xs' : 'border-slate-200'
-                                        }`}>
-                                            {useExternalArchive && <span className="text-xs font-bold">✓</span>}
-                                        </div>
-                                    </div>
-                                    <h4 className="font-bold text-slate-800 text-base mb-1.5">关联外部档案馆</h4>
-                                    <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                                        项目关联外部档案馆
-                                        <span className="text-primary block mt-1 font-bold">✓ 兰台云为您保存完整的档案副本</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* External Archive Selector - visible only when Option B is active */}
-                            {useExternalArchive && (
-                                <div className="bg-white border border-slate-200/80 p-5 rounded-xl shadow-sm space-y-3 animate-in fade-in duration-300">
-                                    <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
-                                        <Database className="w-4 h-4 text-primary animate-pulse" />
-                                        <span>请选择关联的外部档案馆</span>
-                                    </div>
-                                    <div className="relative">
-                                        <select
-                                            id="associated-archive-select"
-                                            title="选择关联的外部档案馆"
-                                            value={selectedAssociatedId}
-                                            onChange={(e) => setSelectedAssociatedId(e.target.value)}
-                                            className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-orange-500/20 font-bold text-slate-800 transition-all cursor-pointer shadow-xs appearance-none pr-8"
-                                        >
-                                            {associatedArchives.map((arc) => (
-                                                <option key={arc.archiveId} value={arc.archiveId}>
-                                                    🔒 {arc.archiveName} (ID: {arc.archiveId}) [企业已接入通道]
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
-                                            <ChevronRight className="w-4 h-4 rotate-90" />
-                                        </div>
-                                    </div>
-                                    <div className="text-[11px] text-slate-500 bg-primary/5 p-2.5 rounded-lg border border-primary/20">
-                                        <span>档案类型和分类标准以所选档案馆为准。可在企业管理中心的"外部档案馆"中扩展接入更多链路。</span>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* LanTai Security Trust Declaration */}
-                            <div className="bg-[#eff6ff] border border-blue-100 p-4 rounded-xl flex items-start gap-3 mt-4">
-                                <span className="text-lg mt-0.5 shrink-0">🛡️</span>
-                                <div className="space-y-1">
-                                    <h5 className="font-bold text-blue-900 text-xs">数据安全保护承诺</h5>
-                                    <p className="text-[11px] text-blue-700/95 leading-relaxed">
-                                        为保障您的数据安全，无论选择本地存储还是外部上报，兰台云都会<strong>为您保留一份完整的档案备份</strong>，多重加密保护，未经授权无法修改。
-                                    </p>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    )}
-
                     {/* STEP 1: Dynamic Primary Type Selection */}
                     {step === 1 && (
                         <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                             <div className="text-center mb-6">
-                                <div className="inline-flex items-center gap-1 mb-2 px-2.5 py-1 bg-slate-100 rounded-full text-xs text-slate-500 cursor-pointer hover:bg-slate-200" onClick={() => setStep(0)}>
-                                    <ArrowLeft className="w-3 h-3" /> 返回上级：选择关联
-                                </div>
                                 <h3 className="text-lg font-bold text-slate-800 mb-1.5">请选择档案大类</h3>
                                 <p className="text-slate-400 text-xs">
                                     {useExternalArchive ? `正在加载【${archiveName}】所允许的接收类别规范` : '正使用本地兰台全景目录（无类型受限）'}
@@ -617,20 +495,6 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                     {/* STEP 3: Basic Info */}
                     {step === 3 && (
                         <div className="space-y-6">
-                            <div className="flex items-center text-xs text-slate-500 mb-4 bg-slate-100/70 px-3 py-1.5 rounded-lg w-fit gap-1 font-medium select-none">
-                                <span className="cursor-pointer hover:text-primary hover:underline" onClick={() => setStep(0)}>选择关联</span>
-                                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                                <span className="cursor-pointer hover:text-primary hover:underline" onClick={() => setStep(1)}>分类：{activeTypeObj?.label}</span>
-                                {selectedSubType && (
-                                    <>
-                                        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                                        <span className="font-bold text-primary">
-                                            {activeTypeObj?.children?.find(c => c.id === selectedSubType)?.label}
-                                        </span>
-                                    </>
-                                )}
-                            </div>
-
                             {isConstruction && (
                                 <div className="flex justify-between items-center bg-orange-50 p-3 rounded border border-orange-100 mb-6">
                                     <span className="text-sm text-orange-850">💡 提示：本流程用于正式档案移交，数据结构将严格遵循GB50328标准。</span>
@@ -753,25 +617,37 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
 
                     {/* STEP 4: Commitment Letter (Construction Only) */}
                     {step === 4 && isConstruction && useExternalArchive && (
-                        <div className="h-full flex flex-col">
-                            <div className="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-slate-800">签署《建设工程档案报送责任承诺书》</h3>
-                                    <p className="text-sm text-slate-500 mt-1">
-                                        温馨提示：推荐使用“承诺书电子签章”，可实现秒级在线验证与自动审核。
-                                    </p>
+                        <div className="flex flex-col flex-1 min-h-0">
+                            <div className="mb-3 flex flex-row justify-between items-center gap-3">
+                                <div className="flex items-center gap-2">
+                                    <h3 className="text-sm font-bold text-slate-800">签署《建设工程档案报送责任承诺书》</h3>
+                                    <span className="text-xs text-primary font-semibold">推荐使用在线签章</span>
                                 </div>
                                 <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
                                     <button
                                         type="button"
-                                        onClick={() => { setSignMethod('esign'); setIsSigned(false); }}
-                                        className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                                            signMethod === 'esign'
+                                        onClick={() => { setSignMethod('online'); setIsSigned(false); }}
+                                        className={`relative px-4 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                                            signMethod === 'online'
                                                 ? 'bg-white text-primary shadow-sm'
                                                 : 'text-slate-500 hover:text-slate-700'
                                         }`}
                                     >
-                                        承诺书电子签章
+                                        在线签章
+                                        {signMethod === 'online' && (
+                                            <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[8px] px-1 rounded-full font-bold">荐</span>
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setSignMethod('client'); setIsSigned(false); }}
+                                        className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                                            signMethod === 'client'
+                                                ? 'bg-white text-primary shadow-sm'
+                                                : 'text-slate-500 hover:text-slate-700'
+                                        }`}
+                                    >
+                                        客户端签章
                                     </button>
                                     <button
                                         type="button"
@@ -782,78 +658,127 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                                                 : 'text-slate-500 hover:text-slate-700'
                                         }`}
                                     >
-                                        纸质承诺书签字盖章上传
+                                        纸质上传
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="flex-1 border rounded-lg bg-slate-50 p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                            <div className="flex-1 border rounded-lg bg-slate-50 p-3 flex flex-col items-center relative overflow-hidden min-h-0">
                                 {isSigned ? (
-                                    <div className="text-center animate-in fade-in zoom-in">
-                                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-4">
-                                            <ShieldCheck className="w-8 h-8" />
+                                    <div className="flex-1 flex items-center justify-center">
+                                        <div className="text-center animate-in fade-in zoom-in">
+                                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-4">
+                                                <ShieldCheck className="w-8 h-8" />
+                                            </div>
+                                            <h4 className="font-bold text-slate-800">已完成签署</h4>
+                                            <p className="text-sm text-slate-500 mb-4">
+                                                {signMethod === 'online' ? '在线签章已提交' : signMethod === 'client' ? '客户端签章已完成' : '承诺书扫描件已上传'}
+                                            </p>
+                                            <button 
+                                                onClick={() => setIsSigned(false)}
+                                                className="text-primary text-sm hover:underline"
+                                            >
+                                                重新签署/上传
+                                            </button>
                                         </div>
-                                        <h4 className="font-bold text-slate-800">已完成签署</h4>
-                                        <p className="text-sm text-slate-500 mb-4">{signMethod === 'esign' ? '电子签章验证通过' : '承诺书扫描件已上传'}</p>
-                                        <button 
-                                            onClick={() => setIsSigned(false)}
-                                            className="text-primary text-sm hover:underline"
-                                        >
-                                            重新签署/上传
-                                        </button>
                                     </div>
                                 ) : (
-                                    <>
-                                        {/* Document Preview Placeholder */}
-                                        <div className="w-[60%] h-full bg-white shadow-md border border-slate-200 p-8 mb-4 overflow-y-auto relative">
-                                            <div className="font-serif text-center font-bold text-lg mb-6">建设工程档案报送责任承诺书</div>
-                                            <div className="text-xs leading-relaxed text-slate-600 space-y-4 text-justify">
-                                                <p>本建设单位（{formData.constructionUnit || '____________'}）郑重承诺：</p>
-                                                <p>严格遵守《城市建设档案管理规定》及相关法律法规，对报送的工程档案真实性、完整性、有效性负责。</p>
-                                                <p>工程名称：{formData.name}</p>
-                                                <p>工程地点：{formData.address}</p>
-                                                <p>移交目标：{archiveName}</p>
-                                                <p className="mt-8">承诺单位（盖章）：</p>
-                                                <p>法定代表人（签字）：</p>
-                                                <p>日期：2025年03月04日</p>
+                                    <div className="w-full max-w-4xl flex flex-col items-center gap-3 flex-1 min-h-0">
+                                        {/* Archive Notification */}
+                                        <div className="w-full bg-white shadow-md border border-slate-200 p-4 rounded-lg">
+                                            <div className="font-serif text-center font-bold text-base mb-3">昆山市建设工程档案告知书</div>
+                                            <div className="text-[11px] leading-relaxed text-slate-600 space-y-2 text-justify">
+                                                <p>根据《建设工程质量管理条例》《江苏省工程建设管理条例》《江苏省村镇规划建设管理条例》《城市建设档案管理规定》《城市地下管线工程档案管理办法》等法规和江苏省城建档案管理的相关规定，现将下列事项告知你单位：</p>
+                                                <p>1 组织工程竣工验收前，应按《建设工程文件归档规范》GB/T 50328、《房屋建筑和市政基础设施工程档案资料管理规范》DGJ32/TJ 143的要求将全部文件材料收集齐全并完成工程档案组卷。</p>
+                                                <p>2 在组织竣工验收后，应提请城建档案管理机构对工程档案进行验收，办理验收手续。</p>
+                                                <p>3 在工程档案验收合格后，按规定向城建档案管理机构移交符合规定的工程档案，办理移交手续。</p>
                                             </div>
-                                            
-                                            {/* E-Sign Seal Placeholder */}
-                                            {signMethod === 'esign' && (
-                                                <div className="absolute bottom-10 right-10 opacity-20 rotate-[-15deg] pointer-events-none">
-                                                    <div className="w-24 h-24 border-4 border-red-500 rounded-full flex items-center justify-center text-red-500 font-bold text-xs p-2 text-center">
-                                                        {formData.constructionUnit || '电子签章'}
-                                                    </div>
-                                                </div>
-                                            )}
+                                            <div className="text-right text-[11px] text-slate-500 mt-4">昆山市城建档案馆</div>
                                         </div>
 
-                                        {/* Actions */}
-                                        <div className="flex gap-4">
-                                            {signMethod === 'esign' ? (
-                                                <button 
+                                        {/* 在线签章 */}
+                                        {signMethod === 'online' && (
+                                            <div className="flex items-center justify-center gap-3 w-full max-w-4xl">
+                                                <div className="flex items-center gap-2 bg-white border border-blue-100 rounded-lg py-2 px-3 shadow-xs">
+                                                    <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+                                                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-[11px] font-semibold text-slate-800 leading-tight">无需实体 UKey</div>
+                                                        <div className="text-[9px] text-slate-400 leading-tight">浏览器即可签署</div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 bg-white border border-blue-100 rounded-lg py-2 px-3 shadow-xs">
+                                                    <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+                                                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-[11px] font-semibold text-slate-800 leading-tight">多系统支持</div>
+                                                        <div className="text-[9px] text-slate-400 leading-tight">Windows / macOS / 信创</div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2 bg-white border border-blue-100 rounded-lg py-2 px-3 shadow-xs">
+                                                    <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+                                                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-[11px] font-semibold text-slate-800 leading-tight">零安装零驱动</div>
+                                                        <div className="text-[9px] text-slate-400 leading-tight">无需下载客户端软件</div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { alert('🖊️ 跳转至第三方签章平台完成在线签章。'); setIsSigned(true); }}
+                                                    className="flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover shadow-md transition-all cursor-pointer text-sm font-bold shrink-0"
+                                                >
+                                                    立刻签章
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* 客户端签章 */}
+                                        {signMethod === 'client' && (
+                                            <div className="flex items-center justify-center gap-3 w-full max-w-4xl">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { alert('已在 Windows 客户端中完成签章操作。'); setIsSigned(true); }}
+                                                    className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-semibold"
+                                                >
+                                                    🖥️ 启动客户端签章
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { alert('将下载签章客户端安装包（仅支持 Windows 系统）'); }}
+                                                    className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-semibold"
+                                                >
+                                                    ⬇️ 下载签章客户端工具
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { window.open('https://sign.qianyi.vip/ukey', '_blank'); }}
+                                                    className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-semibold"
+                                                >
+                                                    🛒 购买天威UKey签章
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* 纸质上传 */}
+                                        {signMethod === 'upload' && (
+                                            <div className="flex gap-4">
+                                                <button type="button" className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded hover:bg-slate-50 cursor-pointer text-xs font-semibold">
+                                                    <Download className="w-4 h-4 mr-2" /> 下载承诺书模板
+                                                </button>
+                                                <button
                                                     type="button"
                                                     onClick={() => setIsSigned(true)}
-                                                    className="flex items-center px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 shadow-md transition-colors cursor-pointer"
+                                                    className="flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover shadow-md cursor-pointer text-xs font-semibold"
                                                 >
-                                                    <PenTool className="w-4 h-4 mr-2" /> 发起电子签章
+                                                    <Upload className="w-4 h-4 mr-2" /> 上传盖章扫描件
                                                 </button>
-                                            ) : (
-                                                <>
-                                                    <button type="button" className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded hover:bg-slate-50 cursor-pointer">
-                                                        <Download className="w-4 h-4 mr-2" /> 下载承诺书模板
-                                                    </button>
-                                                    <button 
-                                                        type="button"
-                                                        onClick={() => setIsSigned(true)}
-                                                        className="flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover shadow-md cursor-pointer"
-                                                    >
-                                                        <Upload className="w-4 h-4 mr-2" /> 上传盖章扫描件
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
-                                    </>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -899,15 +824,14 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                 {/* Footer */}
                 <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
                     <div className="text-[11px] text-slate-400 select-none">
-                        {step === 0 && "① 正在选择档案馆"}
-                        {step === 1 && "② 正在分类主要档案项目类别"}
-                        {step === 2 && "③ 正在对元数据规范进行细化"}
-                        {step === 3 && "④ 请填写项目核心的要素登记"}
-                        {step === 4 && "⑤ 正在完成关联上报前置信用承诺"}
-                        {step === 5 && "⑥ 对接档案局一体化接收接口"}
+                        {step === 1 && "① 正在分类主要档案项目类别"}
+                        {step === 2 && "② 正在对元数据规范进行细化"}
+                        {step === 3 && "③ 请填写项目核心的要素登记"}
+                        {step === 4 && "④ 正在完成关联上报前置信用承诺"}
+                        {step === 5 && "⑤ 对接档案局一体化接收接口"}
                     </div>
                     <div className="flex gap-3 items-center">
-                        {step > 0 && ((useExternalArchive && step < 5) || (!useExternalArchive && step < 4)) && (
+                        {step > 1 && ((useExternalArchive && step < 5) || (!useExternalArchive && step < 4)) && (
                             <button 
                                 onClick={handleBack}
                                 className="px-4 py-2 border border-slate-200 rounded text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold cursor-pointer"
@@ -915,21 +839,14 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                                 上一步
                             </button>
                         )}
-                        {step === 0 ? (
-                            <button 
-                                onClick={handleNext}
-                                className="px-6 py-2 bg-primary text-white rounded hover:bg-primary-hover shadow-sm transition-colors text-xs font-bold cursor-pointer"
-                            >
-                                下一步：大类选择
-                            </button>
-                        ) : step === 1 || step === 2 ? (
+                        {step === 1 || step === 2 ? (
                             <span className="text-slate-400 text-xs select-none">请点击大类/子类卡片以继续</span>
                         ) : step === 3 ? (
                             <button 
                                 onClick={handleNext}
                                 className="px-6 py-2 bg-primary text-white rounded hover:bg-primary-hover shadow-sm transition-colors text-xs font-bold cursor-pointer"
                             >
-                                {(isConstruction && useExternalArchive) ? '提交并签署承诺书' : '确认并发起本地建库'}
+                                {(isConstruction && useExternalArchive) ? '签署承诺书' : '确认并发起本地建库'}
                             </button>
                         ) : step === 4 ? (
                             <button 
@@ -954,4 +871,4 @@ const NewArchiveWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
     );
 };
 
-export default NewArchiveWizard;
+export default NewProjectWizard;

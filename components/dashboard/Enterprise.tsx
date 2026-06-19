@@ -6,7 +6,7 @@ import {
     Info, AlertCircle, Trash2, KeyRound, CreditCard, FileText,
     Crown, Database, Award, QrCode, ClipboardList, CheckCircle2,
     Clock, RefreshCw, Zap, Headphones, Sparkles, AlertTriangle,
-    Eye, EyeOff, Link, Lock
+    Eye, EyeOff, Link, Lock, ArrowLeftRight, FolderTree, Layers, Settings, FileText as FileTextIcon
 } from 'lucide-react';
 import { TeamMember, Identity, Organization } from '../../types';
 import UserSwitcher from '../common/UserSwitcher';
@@ -14,7 +14,14 @@ import BasicInfoTab from './enterprise-tabs/BasicInfoTab';
 import TeamTab from './enterprise-tabs/TeamTab';
 import SecurityTab from './enterprise-tabs/SecurityTab';
 import VersionTab from './enterprise-tabs/VersionTab';
+import CurrentVersionTab from './enterprise-tabs/CurrentVersionTab';
 import ExternalArchivesTab from './enterprise-tabs/ExternalArchivesTab';
+import ArchiveInfoTab from './enterprise-tabs/ArchiveInfoTab';
+import ArchiveTemplateTab from './enterprise-tabs/ArchiveTemplateTab';
+import AuditFlowConfigTab from './enterprise-tabs/AuditFlowConfigTab';
+import ProjectTypeConfigTab from './enterprise-tabs/ProjectTypeConfigTab';
+import EngineeringTypeTab from './enterprise-tabs/EngineeringTypeTab';
+import ProjectTypeTreeTab from './enterprise-tabs/ProjectTypeTreeTab';
 
 interface EnterpriseProps {
     identity: Identity;
@@ -42,7 +49,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                         <p className="text-sm text-slate-500 leading-relaxed">
                             您目前作为 <strong>独立档案协作者 ({identity.user.name})</strong> 登录。
                         </p>
-                        <button onClick={() => navigate('/dashboard')}
+                        <button onClick={() => navigate('/capture-dashboard')}
                             className="w-full py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-indigo-750 shadow-sm text-sm transition-all">
                             返回首页使用向导
                         </button>
@@ -52,7 +59,10 @@ const Enterprise: React.FC<EnterpriseProps> = ({
         );
     }
 
-    const [activeTab, setActiveTab] = useState<'basic' | 'team' | 'security' | 'version' | 'orders' | 'archives'>('basic');
+    const isArchiveMode = identity.role === '审核人员';
+
+    const [activeTab, setActiveTab] = useState<'basic' | 'team' | 'security' | 'current-version' | 'version' | 'orders' | 'archives'>('basic');
+    const [activeArchiveTab, setActiveArchiveTab] = useState<'archive-info' | 'archive-template' | 'audit-flow' | 'project-type-config' | 'engineering-type' | 'project-type-tree'>('archive-info');
 
     // --- External Archives Feature State ---
     const [associatedArchives, setAssociatedArchives] = useState<any[]>([]);
@@ -303,80 +313,149 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                         
                         {/* Left Panel */}
                         <div className="space-y-4">
-                            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
-                                <div className="px-5 py-3 bg-slate-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                                    <span>企业基础治理</span>
-                                </div>
-                                <MenuLink active={activeTab === 'basic'} onClick={() => setActiveTab('basic')} label="基本信息" icon={<Building2 className="w-4 h-4" />} />
-                                <MenuLink active={activeTab === 'team'} onClick={() => setActiveTab('team')} label="团队成员" icon={<Users className="w-4 h-4" />} />
-                                <MenuLink active={activeTab === 'security'} onClick={() => setActiveTab('security')} label="安全管理" icon={<Shield className="w-4 h-4" />} />
-                            </div>
+                            {isArchiveMode ? (
+                                <>
+                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                                        <div className="px-5 py-3 bg-rose-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                                            <span>档案馆基础治理</span>
+                                        </div>
+                                        <MenuLink active={activeArchiveTab === 'archive-info'} onClick={() => setActiveArchiveTab('archive-info')} label="档案馆信息" icon={<Building2 className="w-4 h-4" />} />
+                                        <MenuLink active={activeArchiveTab === 'archive-template'} onClick={() => setActiveArchiveTab('archive-template')} label="档案馆模板" icon={<FileTextIcon className="w-4 h-4" />} />
+                                        <MenuLink active={activeArchiveTab === 'audit-flow'} onClick={() => setActiveArchiveTab('audit-flow')} label="审核流程配置" icon={<Settings className="w-4 h-4" />} />
+                                    </div>
 
-                            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200 p-3.5 space-y-3">
-                                <div className="px-1 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                    <span>关联外部档案馆</span>
-                                </div>
-                                <button onClick={() => { setActiveTab('archives'); setIsAddingArchive(true); }}
-                                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 border border-dashed border-slate-200 hover:border-primary text-slate-600 hover:text-primary text-xs font-bold rounded-lg transition-all cursor-pointer bg-slate-50 hover:bg-slate-50/20">
-                                    <Plus className="w-3.5 h-3.5 shrink-0" />新增关联档案馆
-                                </button>
-                                {associatedArchives.map((assoc) => {
-                                    const isSelected = activeTab === 'archives' && !isAddingArchive && selectedArchiveIdForDetails === assoc.associationId;
-                                    return (
-                                        <button key={assoc.associationId}
-                                            onClick={() => { setActiveTab('archives'); setIsAddingArchive(false); setSelectedArchiveIdForDetails(assoc.associationId); }}
-                                            className={`w-full text-left px-2 py-1.5 rounded text-xs font-semibold flex items-center gap-2 transition-all group ${isSelected ? 'bg-primary-light text-primary font-bold' : 'hover:bg-slate-100 text-slate-700'}`}>
-                                            <Database className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-primary' : 'text-slate-400 group-hover:text-primary transition'}`} />
-                                            <span className="truncate">{assoc.archiveName}</span>
+                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                                        <div className="px-5 py-3 bg-rose-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <FolderTree className="w-3.5 h-3.5 text-slate-400" />
+                                            <span>项目类型管理</span>
+                                        </div>
+                                        <MenuLink active={activeArchiveTab === 'project-type-config'} onClick={() => setActiveArchiveTab('project-type-config')} label="项目类型配置" icon={<FolderTree className="w-4 h-4" />} />
+                                        <MenuLink active={activeArchiveTab === 'engineering-type'} onClick={() => setActiveArchiveTab('engineering-type')} label="工程类型" icon={<Layers className="w-4 h-4" />} />
+                                        <MenuLink active={activeArchiveTab === 'project-type-tree'} onClick={() => setActiveArchiveTab('project-type-tree')} label="项目类型树" icon={<FileTextIcon className="w-4 h-4" />} />
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                                        <div className="px-5 py-3 bg-slate-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                                            <span>企业基础治理</span>
+                                        </div>
+                                        <MenuLink active={activeTab === 'basic'} onClick={() => setActiveTab('basic')} label="基本信息" icon={<Building2 className="w-4 h-4" />} />
+                                        <MenuLink active={activeTab === 'team'} onClick={() => setActiveTab('team')} label="团队成员" icon={<Users className="w-4 h-4" />} />
+                                        <MenuLink active={activeTab === 'security'} onClick={() => setActiveTab('security')} label="安全管理" icon={<Shield className="w-4 h-4" />} />
+                                    </div>
+
+                                    {!isArchiveMode && identity.organization?.type === 'ENTERPRISE' && (
+                                        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200 p-3.5 space-y-3">
+                                            <div className="px-1 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                                <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                <span>关联外部档案馆</span>
+                                            </div>
+                                            <button onClick={() => { setActiveTab('archives'); setIsAddingArchive(true); }}
+                                                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 border border-dashed border-slate-200 hover:border-primary text-slate-600 hover:text-primary text-xs font-bold rounded-lg transition-all cursor-pointer bg-slate-50 hover:bg-slate-50/20">
+                                                <Plus className="w-3.5 h-3.5 shrink-0" />新增关联档案馆
+                                            </button>
+                                            {associatedArchives.map((assoc) => {
+                                                const isSelected = activeTab === 'archives' && !isAddingArchive && selectedArchiveIdForDetails === assoc.associationId;
+                                                return (
+                                                    <button key={assoc.associationId}
+                                                        onClick={() => { setActiveTab('archives'); setIsAddingArchive(false); setSelectedArchiveIdForDetails(assoc.associationId); }}
+                                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-semibold flex items-center gap-2 transition-all group ${isSelected ? 'bg-primary-light text-primary font-bold' : 'hover:bg-slate-100 text-slate-700'}`}>
+                                                        <Database className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-primary' : 'text-slate-400 group-hover:text-primary transition'}`} />
+                                                        <span className="truncate">{assoc.archiveName}</span>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+
+                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                                        <div className="px-5 py-3 bg-slate-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <Crown className="w-3.5 h-3.5 text-slate-400" />
+                                            <span>版本 & 订单</span>
+                                        </div>
+                                        <MenuLink active={activeTab === 'current-version'} onClick={() => setActiveTab('current-version')} label="当前版本" icon={<Crown className="w-4 h-4" />} />
+                                        <MenuLink active={activeTab === 'version'} onClick={() => setActiveTab('version')} label="版本管理" icon={<Zap className="w-4 h-4" />} />
+                                        <MenuLink active={activeTab === 'orders'} onClick={() => setActiveTab('orders')} label="我的订单" icon={<ClipboardList className="w-4 h-4" />} />
+                                    </div>
+
+                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                                        <div className="px-5 py-3 bg-slate-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <ArrowLeftRight className="w-3.5 h-3.5 text-slate-400" />
+                                            <span>企业切换</span>
+                                        </div>
+                                        {identities.filter(id => id.organization && id.organization.id !== identity.organization?.id).slice(0, 3).map((idObj) => (
+                                            <button key={idObj.id} onClick={() => handleSelectCompanyContext(idObj)}
+                                                className="w-full text-left px-6 py-3 text-xs border-l-4 border-transparent hover:bg-slate-50 hover:border-primary hover:text-primary transition-all flex items-center gap-3 cursor-pointer">
+                                                <div className="w-7 h-7 bg-slate-100 rounded-md flex items-center justify-center text-xs shrink-0">🏢</div>
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="font-semibold text-slate-800 truncate">{idObj.organization?.shortName || idObj.organization?.name}</div>
+                                                    <div className="text-[10px] text-slate-400">{idObj.role}</div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                        <button onClick={() => setShowSwitchModal(true)}
+                                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 border-t border-slate-100 text-slate-500 hover:text-primary text-xs font-bold transition-all cursor-pointer hover:bg-slate-50">
+                                            <Shuffle className="w-3.5 h-3.5" />切换更多
                                         </button>
-                                    );
-                                })}
-                            </div>
-
-                            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
-                                <div className="px-5 py-3 bg-slate-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <Crown className="w-3.5 h-3.5 text-slate-400" />
-                                    <span>版本 & 订单</span>
-                                </div>
-                                <MenuLink active={activeTab === 'version'} onClick={() => setActiveTab('version')} label="版本管理" icon={<Zap className="w-4 h-4" />} />
-                                <MenuLink active={activeTab === 'orders'} onClick={() => setActiveTab('orders')} label="我的订单" icon={<ClipboardList className="w-4 h-4" />} />
-                            </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         {/* Right Details Panel */}
                         <div className="space-y-6">
-                            {activeTab === 'basic' && <BasicInfoTab identity={identity} />}
-                            {activeTab === 'team' && <TeamTab teamMembers={teamMembers} />}
-                            {activeTab === 'security' && <SecurityTab />}
-                            {activeTab === 'version' && (
-                                <VersionTab
-                                    currentVersion={currentVersion}
-                                    onChangeVersion={handleChangeVersion}
-                                    orders={orders}
-                                    teamMemberCount={teamMembers.length}
-                                />
-                            )}
-                            {activeTab === 'orders' && (
-                                <VersionTab
-                                    currentVersion={currentVersion}
-                                    onChangeVersion={handleChangeVersion}
-                                    orders={orders}
-                                    teamMemberCount={teamMembers.length}
-                                    showOrdersOnly={true}
-                                />
-                            )}
-                            {activeTab === 'archives' && (
-                                <ExternalArchivesTab
-                                    associatedArchives={associatedArchives}
-                                    isAddingArchive={isAddingArchive}
-                                    setIsAddingArchive={setIsAddingArchive}
-                                    selectedArchiveIdForDetails={selectedArchiveIdForDetails}
-                                    setSelectedArchiveIdForDetails={setSelectedArchiveIdForDetails}
-                                    onSaveArchives={saveArchives}
-                                    onToast={triggerToast}
-                                />
+                            {isArchiveMode ? (
+                                <>
+                                    {activeArchiveTab === 'archive-info' && <ArchiveInfoTab />}
+                                    {activeArchiveTab === 'archive-template' && <ArchiveTemplateTab />}
+                                    {activeArchiveTab === 'audit-flow' && <AuditFlowConfigTab />}
+                                    {activeArchiveTab === 'project-type-config' && <ProjectTypeConfigTab />}
+                                    {activeArchiveTab === 'engineering-type' && <EngineeringTypeTab />}
+                                    {activeArchiveTab === 'project-type-tree' && <ProjectTypeTreeTab />}
+                                </>
+                            ) : (
+                                <>
+                                    {activeTab === 'basic' && <BasicInfoTab identity={identity} />}
+                                    {activeTab === 'team' && <TeamTab teamMembers={teamMembers} />}
+                                    {activeTab === 'security' && <SecurityTab />}
+                                    {activeTab === 'current-version' && (
+                                        <CurrentVersionTab
+                                            currentVersion={currentVersion}
+                                            teamMemberCount={teamMembers.length}
+                                        />
+                                    )}
+                                    {activeTab === 'version' && (
+                                        <VersionTab
+                                            currentVersion={currentVersion}
+                                            onChangeVersion={handleChangeVersion}
+                                            orders={orders}
+                                            teamMemberCount={teamMembers.length}
+                                        />
+                                    )}
+                                    {activeTab === 'orders' && (
+                                        <VersionTab
+                                            currentVersion={currentVersion}
+                                            onChangeVersion={handleChangeVersion}
+                                            orders={orders}
+                                            teamMemberCount={teamMembers.length}
+                                            showOrdersOnly={true}
+                                        />
+                                    )}
+                                    {activeTab === 'archives' && identity.organization?.type === 'ENTERPRISE' && (
+                                        <ExternalArchivesTab
+                                            associatedArchives={associatedArchives}
+                                            isAddingArchive={isAddingArchive}
+                                            setIsAddingArchive={setIsAddingArchive}
+                                            selectedArchiveIdForDetails={selectedArchiveIdForDetails}
+                                            setSelectedArchiveIdForDetails={setSelectedArchiveIdForDetails}
+                                            onSaveArchives={saveArchives}
+                                            onToast={triggerToast}
+                                        />
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

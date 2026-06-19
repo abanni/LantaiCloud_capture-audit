@@ -1,7 +1,8 @@
 import React from 'react';
 import { Bell } from 'lucide-react';
-import { Identity } from '../../types';
+import { Identity, ArchiveTenant } from '../../types';
 import UserSwitcher from './UserSwitcher';
+import ArchiveSwitcher from './ArchiveSwitcher';
 
 interface TopBarProps {
     title: string;
@@ -11,6 +12,9 @@ interface TopBarProps {
     showNotification?: boolean;
     hasUnread?: boolean;
     onNotificationClick?: () => void;
+    archives?: ArchiveTenant[];
+    currentArchiveId?: string;
+    onArchiveSwitch?: (id: string) => void;
 }
 
 const TopBar: React.FC<TopBarProps> = ({
@@ -21,11 +25,19 @@ const TopBar: React.FC<TopBarProps> = ({
     showNotification = false,
     hasUnread = false,
     onNotificationClick,
+    archives = [],
+    currentArchiveId = 'default',
+    onArchiveSwitch,
 }) => {
     return (
         <header className="h-14 bg-white border-b border-border flex items-center justify-between px-5 shrink-0 sticky top-0 z-10">
             <h1 className="text-sm font-bold text-text-primary">{title}</h1>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+                <ArchiveSwitcher
+                    archives={archives}
+                    currentArchiveId={currentArchiveId}
+                    onSwitch={onArchiveSwitch || (() => {})}
+                />
                 {showNotification && (
                     <button
                         onClick={onNotificationClick}

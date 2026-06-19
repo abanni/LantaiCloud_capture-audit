@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
     requiresOrganization?: boolean;
     /** If set, user's role must match one of these */
     allowedRoles?: string[];
-    /** Fallback path when not authorized. Defaults to '/dashboard' */
+    /** Fallback path when not authorized. Defaults to '/capture-dashboard' */
     fallback?: string;
 }
 
@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     children,
     requiresOrganization = false,
     allowedRoles,
-    fallback = '/dashboard',
+    fallback = '/capture-dashboard',
 }) => {
     const { state } = useApp();
     const { isAuthenticated, currentIdentity } = state;

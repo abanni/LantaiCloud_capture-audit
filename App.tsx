@@ -2,17 +2,15 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import Enterprise from './components/dashboard/Enterprise';
-import Workspace from './components/integrator/Workspace';
+import Workspace from './components/capture/Workspace';
 import Sidebar from './components/common/Sidebar';
 import TopBar from './components/common/TopBar';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import Login from './components/dashboard/Login';
 import IdentitySelector from './components/dashboard/IdentitySelector';
-import ProjectsList from './components/integrator/ProjectsList';
+import ProjectsList from './components/capture/ProjectsList';
 import PersonalSettings from './components/dashboard/PersonalSettings';
-import ArchiveCenter from './components/collection/ArchiveCenter';
-import ArchiveSearch from './components/collection/ArchiveSearch';
-import ArchiveUtilization from './components/utilization/ArchiveUtilization';
+import NewProjectPage from './components/dashboard/NewProjectPage';
 import { Project, Identity } from './types';
 import { useApp, AppProvider } from './context/AppContext';
 
@@ -145,31 +143,26 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     handleUpdateNode,
     handleWorkflowAdvance,
 }) => {
-    const { state, setCurrentIdentity, setIdentities, setProjects } = useApp();
+    const { state, setCurrentIdentity, setIdentities, setProjects, setCurrentArchive } = useApp();
     const location = useLocation();
     const navigate = useNavigate();
-    const { currentIdentity, identities, projects } = state;
+    const { currentIdentity, identities, projects, availableArchives, currentArchiveId } = state;
 
     // Determine if we should show the main sidebar
     const isMainLayout = [
-        '/dashboard', '/enterprise', '/projects', '/settings',
-        '/archive-center', '/archive-search', '/archive-full-text',
-        '/archive-utilization', '/archive-apply', '/archive-approve',
+        '/dashboard', '/capture-dashboard', '/newproject', '/enterprise', '/projects', '/settings',
         '/audit-dashboard', '/audit-registration', '/audit-projects',
         '/audit-project-info', '/audit-guidance', '/audit-statistics'
     ].includes(location.pathname) || location.pathname === '/';
 
-    const getPageTitle = (pathname: string): string => {
+    const getPageTitle = (pathname: string, identity: Identity | null): string => {
         const titles: Record<string, string> = {
             '/dashboard': '数智档案云端工作台',
-            '/enterprise': '企业管理',
-            '/projects': '我的著录',
+            '/capture-dashboard': '著录工作台',
+            '/newproject': '新建档案',
+            '/enterprise': identity?.role === '审核人员' ? '档案馆管理' : '企业管理',
+            '/projects': '我的档案',
             '/settings': '个人设置',
-            '/archive-center': '我的档案馆',
-            '/archive-search': '综合查询',
-            '/archive-full-text': '全文检索',
-            '/archive-apply': '借阅申请',
-            '/archive-approve': '借阅审批',
             '/audit-dashboard': '审核工作台',
             '/audit-registration': '档案登记',
             '/audit-projects': '档案审核',
@@ -186,13 +179,24 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 <Sidebar identity={currentIdentity!} onSwitchIdentity={() => setCurrentIdentity(null as any)} />
                 <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f0f2f5]">
                     <TopBar
-                        title={getPageTitle(location.pathname)}
+                        title={getPageTitle(location.pathname, currentIdentity)}
                         identity={currentIdentity!}
                         identities={identities}
                         setCurrentIdentity={setCurrentIdentity}
+                        archives={availableArchives}
+                        currentArchiveId={currentArchiveId}
+                        onArchiveSwitch={setCurrentArchive}
                     />
                     <Routes>
-                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/" element={<Navigate to="/capture-dashboard" replace />} />
+                        <Route
+                            path="/capture-dashboard"
+                            element={<Dashboard identity={currentIdentity!} identities={identities} setIdentities={setIdentities} setCurrentIdentity={setCurrentIdentity} projects={projects} setProjects={setProjects} />}
+                        />
+                        <Route
+                            path="/newproject"
+                            element={<NewProjectPage />}
+                        />
                         <Route
                             path="/dashboard"
                             element={<Dashboard identity={currentIdentity!} identities={identities} setIdentities={setIdentities} setCurrentIdentity={setCurrentIdentity} projects={projects} setProjects={setProjects} />}
@@ -213,13 +217,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                             path="/settings"
                             element={<PersonalSettings identity={currentIdentity!} identities={identities} setCurrentIdentity={setCurrentIdentity} />}
                         />
-                        <Route path="/archive-center" element={<ArchiveCenter />} />
-                        <Route path="/archive-search" element={<ArchiveSearch initialMode="COMPREHENSIVE" />} />
-                        <Route path="/archive-full-text" element={<ArchiveSearch initialMode="FULL_TEXT" />} />
-                        <Route path="/archive-utilization" element={<Navigate to="/archive-apply" replace />} />
-                        <Route path="/archive-apply" element={<ArchiveUtilization mode="apply" />} />
-                        <Route path="/archive-approve" element={<ArchiveUtilization mode="approve" />} />
-
                         {/* Auditing subroutes */}
                         <Route path="/audit-dashboard" element={<AuditDashboard archives={archives} onNavigate={(tab, projectId) => {
                             if (tab === 'registration') navigate('/audit-registration');

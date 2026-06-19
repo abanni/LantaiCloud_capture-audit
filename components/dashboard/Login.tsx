@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShieldCheck, ArrowRight, Building2, User, UserPlus, Sparkles } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Building2, User, UserPlus, UserCheck, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Identity } from '../types';
 
@@ -11,14 +11,20 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'zs' | 'lj'>('zs');
+    const [activeTab, setActiveTab] = useState<'zs' | 'lj' | 'xq'>('zs');
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            onLoginSuccess(activeTab === 'zs' ? undefined : identities.find(id => id.user.name === '李进'));
+            if (activeTab === 'zs') {
+                onLoginSuccess(undefined);
+            } else if (activeTab === 'xq') {
+                onLoginSuccess(identities.find(id => id.user.name === '徐琴'));
+            } else {
+                onLoginSuccess(identities.find(id => id.user.name === '李进'));
+            }
         }, 600);
     };
 
@@ -65,9 +71,10 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                         </div>
 
                         {/* Persona selector */}
-                        <div className="grid grid-cols-2 gap-2.5">
+                        <div className="grid grid-cols-3 gap-2.5">
                             {[
                                 { key: 'zs' as const, label: '张三', desc: '多组织管理员', icon: User },
+                                { key: 'xq' as const, label: '徐琴', desc: '档案馆审核人员', icon: UserCheck },
                                 { key: 'lj' as const, label: '李进', desc: '个人体验用户', icon: UserPlus },
                             ].map(({ key, label, desc, icon: Icon }) => (
                                 <button
@@ -94,12 +101,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                         </div>
 
                         {/* Info card */}
-                        <div className={`p-3.5 rounded-xl text-xs leading-relaxed ${activeTab === 'zs' ? 'bg-blue-50' : 'bg-emerald-50'}`}>
+                        <div className={`p-3.5 rounded-xl text-xs leading-relaxed ${
+                            activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-rose-50' : 'bg-emerald-50'
+                        }`}>
                             <p className="text-slate-600">
-                                {activeTab === 'zs'
-                                    ? <><strong className="text-text-primary">张三</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>
-                                    : <><strong className="text-text-primary">李进</strong>（177****8899）是新注册个人用户，暂未挂靠组织，登录后可直接体验组织入驻流程。</>
-                                }
+                                {activeTab === 'zs' && <><strong className="text-text-primary">张三</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>}
+                                {activeTab === 'xq' && <><strong className="text-text-primary">徐琴</strong>（0512****5678）是<strong>昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
+                                {activeTab === 'lj' && <><strong className="text-text-primary">李进</strong>（177****8899）是新注册个人用户，暂未挂靠组织，登录后可直接体验组织入驻流程。</>}
                             </p>
                         </div>
 
@@ -111,7 +119,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                                     type="text"
                                     readOnly
                                     className="block w-full px-3 py-2.5 border border-border rounded-lg bg-slate-50 text-xs text-text-primary font-medium focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                                    value={activeTab === 'zs' ? 'zhangsan@wuwu.tech (13998881234)' : 'lijin@lantai.personal (17788888899)'}
+                                    value={activeTab === 'zs' ? 'zhangsan@wuwu.tech (13998881234)' : activeTab === 'xq' ? 'xuqin@kunshan-archives.cn (051256788888)' : 'lijin@lantai.personal (17788888899)'}
                                 />
                             </div>
                             <button

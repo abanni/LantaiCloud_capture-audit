@@ -61,7 +61,7 @@ const PersonalSettings: React.FC<PersonalSettingsProps> = ({
                 <div className="flex items-center text-sm text-slate-500 gap-1.5 font-medium">
                     <span 
                         className="cursor-pointer hover:text-primary transition-colors flex items-center gap-1"
-                        onClick={() => navigate('/dashboard')}
+                        onClick={() => navigate('/capture-dashboard')}
                     >
                         📂 首页
                     </span>

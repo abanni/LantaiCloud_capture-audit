@@ -170,7 +170,7 @@ const Workspace: React.FC = () => {
             <div className="h-[60px] bg-white border-b border-slate-200 flex items-center px-6 shadow-sm shrink-0 z-20">
                 <div 
                     className="flex items-center text-slate-500 hover:text-slate-800 cursor-pointer mr-8"
-                    onClick={() => navigate('/dashboard')}
+                    onClick={() => navigate('/capture-dashboard')}
                 >
                     <ArrowLeft className="w-4 h-4 mr-1" />
                     <span className="text-sm font-medium">返回主页</span>

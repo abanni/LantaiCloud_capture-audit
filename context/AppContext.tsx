@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Identity, Project } from '../types';
+import { Identity, Project, ArchiveTenant } from '../types';
 import { INITIAL_PROJECTS } from '../data/mockProjects';
 
 interface AppState {
@@ -7,6 +7,8 @@ interface AppState {
     identities: Identity[];
     currentIdentity: Identity | null;
     projects: Project[];
+    availableArchives: ArchiveTenant[];
+    currentArchiveId: string;
 }
 
 interface AppContextValue {
@@ -18,7 +20,13 @@ interface AppContextValue {
     setCurrentIdentity: (identity: Identity) => void;
     setIdentities: React.Dispatch<React.SetStateAction<Identity[]>>;
     setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+    setCurrentArchive: (id: string) => void;
 }
+
+const INITIAL_ARCHIVES: ArchiveTenant[] = [
+    { id: 'default', name: '兰台云SaaS档案馆', region: '通用' },
+    { id: 'kunshan', name: '昆山城建档案馆', region: '昆山' },
+];
 
 const INITIAL_IDENTITIES: Identity[] = [
     {
@@ -53,6 +61,15 @@ const INITIAL_IDENTITIES: Identity[] = [
         user: { id: 'u2', name: '李进', role: '个人档案员', email: '177****8899', avatarBg: 'bg-teal-600', joinDate: '2026-06-04', status: 'active' },
         organization: undefined,
         role: '新注册用户', department: '待定/个人独立'
+    },
+    {
+        id: 'id_5',
+        user: { id: 'u3', name: '徐琴', role: '审核人员', email: '0512****5678', avatarBg: 'bg-rose-600', joinDate: '2025-03-01', status: 'active' },
+        organization: {
+            id: 'org_ks', name: '昆山市城建档案馆', shortName: '昆山城建档案馆', type: 'GOVERNMENT',
+            code: '12320583MB1A12345X'
+        },
+        role: '审核人员', department: '档案审核科'
     }
 ];
 
@@ -64,6 +81,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         identities: INITIAL_IDENTITIES,
         currentIdentity: null,
         projects: INITIAL_PROJECTS,
+        availableArchives: INITIAL_ARCHIVES,
+        currentArchiveId: 'default',
     });
 
     const login = (selectedIdentity?: Identity) => {
@@ -100,6 +119,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }));
     };
 
+    const setCurrentArchive = (id: string) => {
+        setState(prev => ({ ...prev, currentArchiveId: id }));
+    };
+
     return (
         <AppContext.Provider value={{
             state,
@@ -109,6 +132,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setCurrentIdentity,
             setIdentities,
             setProjects,
+            setCurrentArchive,
         }}>
             {children}
         </AppContext.Provider>

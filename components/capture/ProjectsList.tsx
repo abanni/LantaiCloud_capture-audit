@@ -81,7 +81,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({
 
     // Simulated commitment signature & approval workflow
     const handleStartSigning = (p: Project) => {
-        navigate('/dashboard', { state: { activeModal: 'archive', resumeProjectId: p.id } });
+        navigate('/newproject', { state: { resumeProjectId: p.id } });
     };
 
     const handleApproveCommitment = () => {
