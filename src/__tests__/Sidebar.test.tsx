@@ -18,7 +18,7 @@ describe('Sidebar', () => {
     identity: {
       id: 'identity-1',
       user: { id: 'u1', name: '测试用户', role: 'admin', email: 'test@test.com', avatarBg: '#1890ff', joinDate: '2026-01-01', status: 'active' as const },
-      organization: { id: 'org_test', name: '无无科技', type: 'ENTERPRISE' as const },
+            organization: { id: 'org_test', name: '无无科技', type: 'ENTERPRISE' as const },
       role: '管理员'
     },
     onSwitchIdentity: vi.fn(),

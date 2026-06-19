@@ -8,7 +8,7 @@ import {
     Clock, RefreshCw, Zap, Headphones, Sparkles, AlertTriangle,
     Eye, EyeOff, Link, Lock, ArrowLeftRight, FolderTree, Layers, Settings, FileText as FileTextIcon
 } from 'lucide-react';
-import { TeamMember, Identity, Organization } from '../../types';
+import { TeamMember, Identity, Organizations } from '../../types';
 import UserSwitcher from '../common/UserSwitcher';
 import BasicInfoTab from './enterprise-tabs/BasicInfoTab';
 import TeamTab from './enterprise-tabs/TeamTab';
@@ -59,7 +59,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
         );
     }
 
-    const isArchiveMode = identity.role === '审核人员';
+    const isArchiveMode = !!identity.archiveOrg;
 
     const [activeTab, setActiveTab] = useState<'basic' | 'team' | 'security' | 'current-version' | 'version' | 'orders' | 'archives'>('basic');
     const [activeArchiveTab, setActiveArchiveTab] = useState<'archive-info' | 'archive-template' | 'audit-flow' | 'project-type-config' | 'engineering-type' | 'project-type-tree'>('archive-info');
@@ -259,7 +259,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
         if (!newPhone.trim()) { triggerToast('请输入法定代表人手机！', 'error'); return; }
         if (!newSms.trim() || newSms !== '123456') { triggerToast('请输入正确的验证码！(默认：123456)', 'error'); return; }
 
-        const newOrg: Organization = {
+        const newOrg: Organizations = {
             id: `org_new_${Date.now()}`, name: newName, shortName: newShortName,
             type: 'ENTERPRISE', code: newCode, licenceFileName: uploadedLicense.name,
             legalRep: newLegal, legalRepPhone: newPhone
@@ -347,7 +347,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                                         <MenuLink active={activeTab === 'security'} onClick={() => setActiveTab('security')} label="安全管理" icon={<Shield className="w-4 h-4" />} />
                                     </div>
 
-                                    {!isArchiveMode && identity.organization?.type === 'ENTERPRISE' && (
+                                    {!isArchiveMode && !!identity.organization && (
                                         <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200 p-3.5 space-y-3">
                                             <div className="px-1 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                                 <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -444,7 +444,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                                             showOrdersOnly={true}
                                         />
                                     )}
-                                    {activeTab === 'archives' && identity.organization?.type === 'ENTERPRISE' && (
+                                    {activeTab === 'archives' && !!identity.organization && (
                                         <ExternalArchivesTab
                                             associatedArchives={associatedArchives}
                                             isAddingArchive={isAddingArchive}

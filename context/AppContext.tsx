@@ -65,9 +65,9 @@ const INITIAL_IDENTITIES: Identity[] = [
     {
         id: 'id_5',
         user: { id: 'u3', name: '徐琴', role: '审核人员', email: '0512****5678', avatarBg: 'bg-rose-600', joinDate: '2025-03-01', status: 'active' },
-        organization: {
-            id: 'org_ks', name: '昆山市城建档案馆', shortName: '昆山城建档案馆', type: 'GOVERNMENT',
-            code: '12320583MB1A12345X'
+        archiveOrg: {
+            id: 'org_ks', name: '昆山市城建档案馆', shortName: '昆山城建档案馆', region: '昆山',
+            code: '12320583MB1A12345X', responsiblePerson: '徐琴'
         },
         role: '审核人员', department: '档案审核科'
     }

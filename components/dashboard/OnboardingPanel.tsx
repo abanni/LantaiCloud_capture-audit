@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Users, CheckCircle2, ChevronRight, Archive } from 'lucide-react';
-import { Identity, Organization, Project } from '../types';
+import { Identity, Organizations, Project } from '../types';
 
 interface UserMessage {
     id: string;
@@ -217,7 +217,7 @@ const OnboardingPanel: React.FC<OnboardingPanelProps> = ({
                                     setIsRegLoading(true);
                                     setTimeout(() => {
                                         setIsRegLoading(false);
-                                        const newOrg: Organization = {
+                                        const newOrg: Organizations = {
                                             id: `org_auto_${Date.now()}`,
                                             name: regName,
                                             shortName: regName.slice(0, 4) || '江苏诚泰',

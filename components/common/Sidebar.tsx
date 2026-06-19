@@ -19,7 +19,7 @@ interface SidebarProps {
     onSwitchIdentity: () => void;
 }
 
-const isAuditor = (identity: Identity) => identity.role === '审核人员';
+const isAuditor = (identity: Identity) => !!identity.archiveOrg;
 
 const Sidebar: React.FC<SidebarProps> = ({ identity, onSwitchIdentity }) => {
     const navigate = useNavigate();
@@ -96,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ identity, onSwitchIdentity }) => {
                         <Building2 className="w-3.5 h-3.5" />
                     </div>
                     <span className="flex-1 text-left truncate">
-                        {auditor ? '昆山城建档案馆' : (identity.organization?.shortName || identity.organization?.name || '独立用户')}
+                        {auditor ? (identity.archiveOrg?.shortName || identity.archiveOrg?.name) : (identity.organization?.shortName || identity.organization?.name || '独立用户')}
                     </span>
                     <ChevronRight className="w-3 h-3 shrink-0" />
                 </button>

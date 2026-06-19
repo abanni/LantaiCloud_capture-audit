@@ -181,7 +181,7 @@ const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                 ];
             } else {
                 // Default fallback
-                const initialArchive = EXTERNAL_ARCHIVES.find(e => e.name === identity?.archive?.name || e.id === identity?.archive?.id) || EXTERNAL_ARCHIVES[0];
+                const initialArchive = EXTERNAL_ARCHIVES[0];
                 list = [
                     {
                         associationId: 'assoc_fallback',
@@ -211,18 +211,18 @@ const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                 defaultId = matched.id;
             }
         } else {
-            const matched = list.find(a => a.archiveName === identity?.archive?.name || a.archiveId === identity?.archive?.id);
+            const matched = list.find(a => a.archiveName === identity?.archiveOrg?.name || a.archiveId === identity?.archiveOrg?.id);
             if (matched) {
                 defaultId = matched.archiveId;
             }
         }
         setSelectedAssociatedId(defaultId);
-    }, [identity?.organization?.id, identity?.archive?.id, resumeProject]);
+    }, [identity?.organization?.id, identity?.archiveOrg?.id, resumeProject]);
 
     const activeTargetArchive = EXTERNAL_ARCHIVES.find(a => a.id === selectedAssociatedId) || {
         id: selectedAssociatedId || 'unknown',
-        name: identity?.archive?.name || '未知档案馆',
-        region: identity?.archive?.region || '其他',
+        name: identity?.archiveOrg?.name || currentArchiveId === 'kunshan' ? '昆山市城建档案馆' : '未知档案馆',
+        region: identity?.archiveOrg?.region || currentArchiveId === 'kunshan' ? '昆山' : '其他',
         code: '320583',
         reviewer: '昆山/徐琴'
     };

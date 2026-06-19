@@ -6,35 +6,45 @@ export enum PageRoute {
     WORKSPACE = 'workspace'
 }
 
-// Level 1 Tenant: The Archive Authority (e.g., Kunshan Archives)
-export interface ArchiveTenant {
+// Enterprise Organization (e.g., Construction Company)
+export interface Organizations {
     id: string;
     name: string;
-    region: string; // e.g., 'Kunshan', 'Shanghai'
-    logo?: string;
-    themeColor?: string;
+    shortName?: string;
+    type: 'ENTERPRISE';
+    code?: string;
+    licenceFileName?: string;
+    legalRep?: string;
+    legalRepPhone?: string;
 }
 
-// Level 2 Tenant: The Enterprise (e.g., Construction Company)
-export interface Organization {
+// Archive Institution (e.g., Kunshan City Construction Archives)
+export interface Archives {
     id: string;
     name: string;
-    shortName?: string; // Enterprise short name (displayed in sidebar, max 6 Chinese characters)
-    type: 'ENTERPRISE' | 'GOVERNMENT' | 'AGENCY'; 
-    code?: string; // Social Credit Code / Organization Code
-    licenceFileName?: string; // Business License filename
-    legalRep?: string; // Legal Representative name
-    legalRepPhone?: string; // Legal Representative phone number
+    shortName?: string;
+    region: string;
+    code?: string;
+    responsiblePerson?: string;
 }
 
-// The connection between User and Org
+// The connection between User and Org/Archive
 export interface Identity {
     id: string;
     user: User;
-    archive?: ArchiveTenant;    // Optional, deprecated Level 1 Tenant
-    organization?: Organization;// Context: Who are we acting as?
-    role: string;               // 法定代表人, 管理员, 成员
+    organization?: Organizations;  // Enterprise context for recording staff
+    archiveOrg?: Archives;        // Archive context for auditors
+    role: string;
     department?: string;
+}
+
+// Archive tenant for TopBar switcher (working context)
+export interface ArchiveTenant {
+    id: string;
+    name: string;
+    region: string;
+    logo?: string;
+    themeColor?: string;
 }
 
 export interface ProjectMember {

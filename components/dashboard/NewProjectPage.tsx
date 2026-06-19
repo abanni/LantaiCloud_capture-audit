@@ -8,7 +8,8 @@ const NewProjectPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { state, setProjects } = useApp();
-    const { identity, projects } = state;
+    const { currentIdentity, projects } = state;
+    const identity = currentIdentity;
 
     const [resumingProject, setResumingProject] = useState<Project | undefined>(undefined);
 

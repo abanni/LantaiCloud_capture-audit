@@ -164,7 +164,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             '/dashboard': '数智档案云端工作台',
             '/capture-dashboard': '著录工作台',
             '/newproject': '新建档案',
-            '/enterprise': identity?.role === '审核人员' ? '档案馆管理' : '企业管理',
+            '/enterprise': identity?.archiveOrg ? '档案馆管理' : '企业管理',
             '/projects': '我的档案',
             '/settings': '个人设置',
             '/audit-dashboard': '审核工作台',
