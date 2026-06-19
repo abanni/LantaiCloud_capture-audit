@@ -23,6 +23,11 @@ export const INITIAL_PROJECTS: Project[] = [
         units: [
             { id: 'u-1-1', name: '1号标准轻钢车间', code: 'KS-2025-ZP01', volumes: [], stage: '整理中', progress: 10 },
             { id: 'u-1-2', name: '2号高架综合研发楼', code: 'KS-2025-ZP02', volumes: [], stage: '整理中', progress: 5 }
+        ],
+        members: [
+            { id: 'pm1', name: '张三', email: 'zhangsan@wuwu.tech', avatarBg: 'bg-primary', role: 'admin', source: 'internal', department: '工程部', joinedAt: '2026-05-20' },
+            { id: 'pm2', name: '王钢', email: '138****8888', avatarBg: 'bg-amber-600', role: 'participant', source: 'internal', department: '总经办', joinedAt: '2026-05-20' },
+            { id: 'pm3', name: '徐琴', email: 'xuqin@kunshan-archives.cn', avatarBg: 'bg-rose-600', role: 'observer', source: 'external', department: '昆山市城建档案馆', joinedAt: '2026-06-01' },
         ]
     },
     {
@@ -47,6 +52,11 @@ export const INITIAL_PROJECTS: Project[] = [
             { id: 'u-2-1', name: '地下二层重型防空掩蔽站', code: 'KS-CSGC-DX01', volumes: [], stage: '审核中', progress: 90 },
             { id: 'u-2-2', name: '城市地下管廊及换乘通道', code: 'KS-CSGC-DX02', volumes: [], stage: '管理中', progress: 80 },
             { id: 'u-2-3', name: '地下一期商用抗震抗水框架', code: 'KS-CSGC-DX03', volumes: [], stage: '已入库', progress: 100 }
+        ],
+        members: [
+            { id: 'pm4', name: '丁宇宇', email: 'ding@lantai.com', avatarBg: 'bg-orange-500', role: 'admin', source: 'internal', department: '工程部', joinedAt: '2026-04-15' },
+            { id: 'pm5', name: '张三', email: 'zhangsan@wuwu.tech', avatarBg: 'bg-primary', role: 'participant', source: 'internal', department: '工程部', joinedAt: '2026-05-20' },
+            { id: 'pm6', name: '阮峰', email: 'ruanfeng@kunshan-archives.cn', avatarBg: 'bg-sky-600', role: 'observer', source: 'external', department: '昆山市城建档案馆', joinedAt: '2026-05-28' },
         ]
     },
     {
@@ -91,6 +101,10 @@ export const INITIAL_PROJECTS: Project[] = [
         licenceNo: '320583202509180742',
         units: [
             { id: 'u-5-1', name: '检测中心主楼', code: 'KS-GX-01', volumes: [], stage: '整理中', progress: 30 }
+        ],
+        members: [
+            { id: 'pm7', name: '张三', email: 'zhangsan@wuwu.tech', avatarBg: 'bg-primary', role: 'admin', source: 'internal', department: '工程部', joinedAt: '2026-05-20' },
+            { id: 'pm8', name: '冯建超', email: '158****1234', avatarBg: 'bg-amber-600', role: 'participant', source: 'internal', department: '董事会', joinedAt: '2026-06-10' },
         ]
     },
     {

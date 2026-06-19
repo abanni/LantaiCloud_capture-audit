@@ -109,9 +109,13 @@ const AppInner: React.FC = () => {
     }
 
     if (!state.currentIdentity) {
+        const firstUser = state.identities[0]?.user.id;
+        const filteredIdentities = firstUser
+            ? state.identities.filter(id => id.user.id === firstUser)
+            : state.identities;
         return (
             <IdentitySelector
-                identities={state.identities}
+                identities={filteredIdentities}
                 onSelect={setCurrentIdentity}
                 onLogout={logout}
             />

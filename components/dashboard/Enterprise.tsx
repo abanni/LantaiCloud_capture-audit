@@ -419,8 +419,8 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                             ) : (
                                 <>
                                     {activeTab === 'basic' && <BasicInfoTab identity={identity} />}
-                                    {activeTab === 'team' && <TeamTab teamMembers={teamMembers} />}
-                                    {activeTab === 'security' && <SecurityTab />}
+{activeTab === 'team' && <TeamTab identity={identity} teamMembers={teamMembers} />}
+                            {activeTab === 'security' && <SecurityTab identity={identity} />}
                                     {activeTab === 'current-version' && (
                                         <CurrentVersionTab
                                             currentVersion={currentVersion}

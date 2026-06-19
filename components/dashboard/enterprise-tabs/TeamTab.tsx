@@ -1,8 +1,9 @@
 import React from 'react';
-import { TeamMember } from '../../../types';
+import { TeamMember, Identity } from '../../../types';
 import { CheckCircle, ExternalLink } from 'lucide-react';
 
 interface TeamTabProps {
+    identity: Identity;
     teamMembers: TeamMember[];
     onConfigUser?: (userName: string) => void;
     onInvite?: () => void;
@@ -20,7 +21,9 @@ const getRoleTagColor = (role: string) => {
     }
 };
 
-const TeamTab: React.FC<TeamTabProps> = ({ teamMembers, onConfigUser, onInvite }) => {
+const canManageTeam = (role: string) => ['法定代表人', '管理员', '拥有者'].includes(role);
+
+const TeamTab: React.FC<TeamTabProps> = ({ identity, teamMembers, onConfigUser, onInvite }) => {
     return (
         <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
             <div className="flex justify-between items-center mb-6 flex-wrap gap-2">
@@ -28,12 +31,14 @@ const TeamTab: React.FC<TeamTabProps> = ({ teamMembers, onConfigUser, onInvite }
                     <h3 className="text-base font-bold text-slate-800">成员管辖清单 ({teamMembers.length}人)</h3>
                     <p className="text-xs text-slate-400 mt-1">系统中设计三种角色：法定代表人、管理员、成员</p>
                 </div>
-                <button
-                    onClick={() => onInvite?.()}
-                    className="px-4 py-2 bg-primary text-white rounded text-sm hover:bg-primary-hover shadow-sm"
-                >
-                    + 邀请成员
-                </button>
+                {canManageTeam(identity.role) && (
+                    <button
+                        onClick={() => onInvite?.()}
+                        className="px-4 py-2 bg-primary text-white rounded text-sm hover:bg-primary-hover shadow-sm"
+                    >
+                        + 邀请成员
+                    </button>
+                )}
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">

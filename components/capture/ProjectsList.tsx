@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { 
     Folder, FolderOpen, Search, Building2, UserCheck, X, Users,
     PenTool, CheckSquare, Trash2, ArrowLeft, ExternalLink, 
-    CheckCircle2, Clock, ShieldAlert, Sparkles, BookOpen, AlertCircle,
+    CheckCircle2, Clock, ShieldAlert, Sparkles, BookOpen, AlertCircle, Shield,
     ChevronDown, ChevronRight, Plus, Edit3, Send, CheckCircle, RefreshCw
 } from 'lucide-react';
-import { Project, Identity, ArchiveEngineering } from '../../types';
+import { Project, Identity, ArchiveEngineering, ProjectMember } from '../../types';
 import UserSwitcher from '../common/UserSwitcher';
 import CommitmentSigningModal from './modals/CommitmentSigningModal';
 import DeleteProjectModal from './modals/DeleteProjectModal';
 import UnitEngineeringManager from './modals/UnitEngineeringManager';
+import ProjectMemberManager from './modals/ProjectMemberManager';
 
 interface ProjectsListProps {
     identity: Identity;
@@ -39,6 +40,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({
 
     // UI state for managing units (单位工程) via a Unified Dialog Popup
     const [managingUnitsProject, setManagingUnitsProject] = useState<Project | null>(null);
+
+    // UI state for project member management
+    const [managingMembersProject, setManagingMembersProject] = useState<Project | null>(null);
 
     // Active project units sync mechanism
     const currentManagingProject = projects.find(p => p.id === managingUnitsProject?.id);
@@ -116,6 +120,15 @@ const ProjectsList: React.FC<ProjectsListProps> = ({
                     ...p,
                     units: [...(p.units || []), newUnit]
                 };
+            }
+            return p;
+        }));
+    };
+
+    const handleUpdateMembers = (projectId: string, members: ProjectMember[]) => {
+        setProjects(prev => prev.map(p => {
+            if (p.id === projectId) {
+                return { ...p, members, memberCount: members.length };
             }
             return p;
         }));
@@ -298,6 +311,18 @@ const ProjectsList: React.FC<ProjectsListProps> = ({
                                                                 <Folder className="w-3 h-3" />
                                                                 整理著录
                                                             </button>
+                                                            <button
+                                                                onClick={() => setManagingMembersProject(p)}
+                                                                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${
+                                                                    p.isManaged
+                                                                        ? 'bg-primary text-white shadow-sm hover:bg-primary-hover'
+                                                                        : 'border border-slate-200 text-slate-500 hover:bg-slate-100'
+                                                                }`}
+                                                                title={p.isManaged ? '管理项目 · 成员管理' : '参与项目 · 成员查看'}
+                                                            >
+                                                                {p.isManaged ? <Shield className="w-3.5 h-3.5" /> : <Users className="w-3.5 h-3.5" />}
+                                                                <span className="text-[10px] font-semibold">{p.members?.length || p.memberCount || 1}</span>
+                                                            </button>
                                                             {!isApproved && (
                                                                 <button
                                                                     onClick={() => setDeletingProject(p)}
@@ -352,6 +377,16 @@ const ProjectsList: React.FC<ProjectsListProps> = ({
                     onClose={() => setManagingUnitsProject(null)}
                     onAddUnit={handleAddUnitFromModal}
                     onEditUnit={handleEditUnitFromModal}
+                />
+            )}
+
+            {/* MODAL 4: Project Member Management */}
+            {managingMembersProject && (
+                <ProjectMemberManager
+                    project={managingMembersProject}
+                    identity={identity}
+                    onClose={() => setManagingMembersProject(null)}
+                    onUpdateMembers={handleUpdateMembers}
                 />
             )}
 

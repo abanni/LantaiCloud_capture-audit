@@ -74,39 +74,47 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                         <div className="grid grid-cols-3 gap-2.5">
                             {[
                                 { key: 'zs' as const, label: '张三', desc: '多组织管理员', icon: User },
-                                { key: 'xq' as const, label: '徐琴', desc: '档案馆审核人员', icon: UserCheck },
                                 { key: 'lj' as const, label: '李进', desc: '个人体验用户', icon: UserPlus },
-                            ].map(({ key, label, desc, icon: Icon }) => (
+                                { key: 'xq' as const, label: '徐琴', desc: '档案馆审核人员', icon: UserCheck, audit: true },
+                            ].map(({ key, label, desc, icon: Icon, audit }) => {
+                                const isActive = activeTab === key;
+                                const activeBg = audit ? 'bg-rose-600' : 'bg-primary';
+                                const hoverBg = audit ? 'hover:bg-rose-50' : 'hover:bg-slate-100';
+                                return (
                                 <button
                                     key={key}
                                     onClick={() => setActiveTab(key)}
                                     className={`relative py-3 px-3.5 rounded-xl text-xs font-semibold text-left flex items-center gap-3 cursor-pointer transition-all ${
-                                        activeTab === key
-                                            ? 'bg-primary text-white shadow-xs'
-                                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                                        isActive
+                                            ? `${activeBg} text-white shadow-xs`
+                                            : `bg-slate-50 text-slate-600 ${hoverBg}`
                                     }`}
                                 >
                                     <Icon className="w-4 h-4 shrink-0" />
                                     <div>
                                         <div>{label}</div>
-                                        <div className={`text-[9px] font-normal ${activeTab === key ? 'text-white/70' : 'text-slate-400'}`}>{desc}</div>
+                                        <div className={`text-[9px] font-normal ${isActive ? 'text-white/70' : 'text-slate-400'}`}>{desc}</div>
                                     </div>
-                                    {activeTab === key && (
+                                    {audit && !isActive && (
+                                        <span className="ml-auto text-[8px] font-bold text-rose-500 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">审核端</span>
+                                    )}
+                                    {isActive && (
                                         <svg className="ml-auto w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
                                         </svg>
                                     )}
                                 </button>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* Info card */}
                         <div className={`p-3.5 rounded-xl text-xs leading-relaxed ${
-                            activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-rose-50' : 'bg-emerald-50'
+                            activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-rose-50 border border-rose-200' : 'bg-emerald-50'
                         }`}>
-                            <p className="text-slate-600">
+                            <p className={activeTab === 'xq' ? 'text-rose-800' : 'text-slate-600'}>
                                 {activeTab === 'zs' && <><strong className="text-text-primary">张三</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>}
-                                {activeTab === 'xq' && <><strong className="text-text-primary">徐琴</strong>（0512****5678）是<strong>昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
+                                {activeTab === 'xq' && <><strong className="text-rose-900">徐琴</strong>（0512****5678）是<strong className="text-rose-900">昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
                                 {activeTab === 'lj' && <><strong className="text-text-primary">李进</strong>（177****8899）是新注册个人用户，暂未挂靠组织，登录后可直接体验组织入驻流程。</>}
                             </p>
                         </div>
@@ -125,7 +133,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-white bg-primary hover:bg-primary-hover transition-all disabled:opacity-60"
+                                className={`w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-white transition-all disabled:opacity-60 ${
+                                    activeTab === 'xq' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-primary hover:bg-primary-hover'
+                                }`}
                             >
                                 {isLoading ? (
                                     <span className="flex items-center gap-2">

@@ -37,6 +37,17 @@ export interface Identity {
     department?: string;
 }
 
+export interface ProjectMember {
+    id: string;
+    name: string;
+    email: string;
+    avatarBg: string;
+    role: 'admin' | 'participant' | 'observer';
+    source: 'internal' | 'external';
+    department?: string;
+    joinedAt: string;
+}
+
 export interface Project {
     id: string;
     name: string;
@@ -49,6 +60,7 @@ export interface Project {
     archiveType?: string;
     organizationId?: string; // Associated Organization
     memberCount?: number;     // Number of participants in the project
+    members?: ProjectMember[]; // Project member list with roles
     isManaged?: boolean;      // Whether 'I' manage this project
     units?: ArchiveEngineering[]; // Units/Single sub-projects (单位工程)
     isCommitmentSigned?: boolean;
