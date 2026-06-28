@@ -15,9 +15,9 @@ import { ArchiveNode, NodeStatus, WorkflowStage, ProjectFilterCriteria, ArchiveI
 export const StatusBadge = ({ stage }: { stage: WorkflowStage }) => {
     const map: Record<WorkflowStage, { label: string, color: string }> = {
         "REGISTER": { label: "待登记", color: "bg-slate-100 text-slate-600 border-slate-200" },
-        "FIRST_REVIEW": { label: "初审中", color: "bg-blue-100 text-blue-700 border-blue-200" },
+        "FIRST_REVIEW": { label: "初审中", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
         "ACCEPTANCE_PRINT": { label: "待打意见", color: "bg-yellow-100 text-yellow-700 border-yellow-250" },
-        "SECOND_REVIEW": { label: "复审中", color: "bg-indigo-100 text-primary border-primary/20" },
+        "SECOND_REVIEW": { label: "复审中", color: "bg-emerald-50 text-emerald-600 border-emerald-200" },
         "RECEIPT_PRINT": { label: "待打凭证", color: "bg-orange-100 text-orange-700 border-orange-200" },
         "ARCHIVING": { label: "待入库", color: "bg-purple-100 text-purple-700 border-purple-200" },
         "COMPLETED": { label: "已归档", color: "bg-emerald-100 text-emerald-700 border-emerald-200" }
@@ -86,7 +86,7 @@ export const TreeNode: React.FC<{
     const fileCount = React.useMemo(() => getFileCount(node), [node]);
 
     const getIconColor = () => {
-        if (isSelected) return 'text-blue-600'; 
+        if (isSelected) return 'text-emerald-600'; 
         if (node.type === "FILE") {
             const isPdfOrOfd = node.name.toLowerCase().endsWith('.pdf') || node.name.toLowerCase().endsWith('.ofd');
             if (isPdfOrOfd) {
@@ -109,7 +109,7 @@ export const TreeNode: React.FC<{
                 }}
                 className={`
                     flex items-center gap-2 py-1.5 px-2 rounded-md cursor-pointer transition-colors text-sm relative group
-                    ${isSelected ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-slate-100 text-slate-705'}
+                    ${isSelected ? 'bg-emerald-50 text-emerald-700 font-medium' : 'hover:bg-slate-100 text-slate-705'}
                 `}
                 style={{ paddingLeft: depth * 14 + 8 }}
             >
@@ -120,7 +120,7 @@ export const TreeNode: React.FC<{
                 </div>
 
                 {node.type === "FOLDER" ? (
-                    <Folder size={16} className={`shrink-0 ${isSelected ? 'text-blue-500 fill-blue-50' : 'text-slate-400'}`} />
+                    <Folder size={16} className={`shrink-0 ${isSelected ? 'text-emerald-500 fill-emerald-50' : 'text-slate-400'}`} />
                 ) : (
                     <FileText size={16} className={`shrink-0 ${getIconColor()}`} />
                 )}
@@ -218,11 +218,11 @@ export const TreeNodeWithMemos: React.FC<{
     const fileCount = React.useMemo(() => getFileCount(node), [node]);
 
     const getIconColor = () => {
-        if (isSelected) return 'text-blue-600'; 
+        if (isSelected) return 'text-emerald-600'; 
         if (node.type === "FILE") {
             const isPdfOrOfd = node.name.toLowerCase().endsWith('.pdf') || node.name.toLowerCase().endsWith('.ofd');
             if (isPdfOrOfd) {
-                if (node.layerType === 'dual') return 'text-blue-500'; // Dual layer -> Blue
+                if (node.layerType === 'dual') return 'text-emerald-500'; // Dual layer -> Emerald
                 if (node.layerType === 'single') return 'text-orange-500'; // Single layer -> Orange
             }
         }
@@ -241,7 +241,7 @@ export const TreeNodeWithMemos: React.FC<{
                 }}
                 className={`
                     flex items-center gap-2 py-1.5 px-2 rounded-md cursor-pointer transition-colors text-xs relative
-                    ${isSelected ? 'bg-blue-50 text-blue-700 font-semibold' : 'hover:bg-slate-100 text-slate-700'}
+                    ${isSelected ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'hover:bg-slate-100 text-slate-700'}
                 `}
                 style={{ paddingLeft: depth * 14 + 8 }}
             >
@@ -252,7 +252,7 @@ export const TreeNodeWithMemos: React.FC<{
                 </div>
 
                 {node.type === "FOLDER" ? (
-                    <Folder size={16} className={`shrink-0 ${isSelected ? 'text-blue-600 fill-blue-50' : 'text-slate-400'}`} />
+                    <Folder size={16} className={`shrink-0 ${isSelected ? 'text-emerald-600 fill-emerald-50' : 'text-slate-400'}`} />
                 ) : (
                     <FileText size={16} className={`shrink-0 ${getIconColor()}`} />
                 )}
@@ -325,7 +325,7 @@ export const TimelineItem = ({
 }) => (
     <div className="relative pl-6 pb-6 border-l border-slate-200 last:border-0 last:pb-0">
         <div className={`absolute -left-[5.5px] top-1 w-2.5 h-2.5 rounded-full border-2 
-            ${status === "COMPLETED" ? "border-blue-500 bg-blue-500" : status === "CURRENT" ? "border-primary bg-white" : "border-slate-200 bg-white"}`}
+            ${status === "COMPLETED" ? "border-emerald-500 bg-emerald-500" : status === "CURRENT" ? "border-emerald-500 bg-white" : "border-slate-200 bg-white"}`}
         ></div>
         <div>
             <div className="flex items-center justify-between mb-1">
@@ -368,7 +368,7 @@ export const ProjectFilter = ({ onFilter, onReset, className }: ProjectFilterPro
                     <label className="text-xs text-slate-500 font-semibold whitespace-nowrap w-20 text-right">项目名称</label>
                     <input 
                         type="text" 
-                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none text-slate-800" 
+                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800" 
                         placeholder="请输入项目名称"
                         value={criteria.projectName || ''}
                         onChange={(e) => handleChange('projectName', e.target.value)}
@@ -378,7 +378,7 @@ export const ProjectFilter = ({ onFilter, onReset, className }: ProjectFilterPro
                     <label className="text-xs text-slate-500 font-semibold whitespace-nowrap w-20 text-right">许可证号</label>
                     <input 
                         type="text" 
-                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none text-slate-800" 
+                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800" 
                         placeholder="请输入施工许可证"
                         value={criteria.permitNumber || ''}
                         onChange={(e) => handleChange('permitNumber', e.target.value)}
@@ -388,7 +388,7 @@ export const ProjectFilter = ({ onFilter, onReset, className }: ProjectFilterPro
                     <label className="text-xs text-slate-500 font-semibold whitespace-nowrap w-20 text-right">质监注册号</label>
                     <input 
                         type="text" 
-                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none text-slate-800" 
+                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800" 
                         placeholder="请输入质监号"
                         value={criteria.qualityNumber || ''}
                         onChange={(e) => handleChange('qualityNumber', e.target.value)}
@@ -398,7 +398,7 @@ export const ProjectFilter = ({ onFilter, onReset, className }: ProjectFilterPro
                     <label className="text-xs text-slate-500 font-semibold whitespace-nowrap w-20 text-right">建设主体</label>
                     <input 
                         type="text" 
-                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none text-slate-800" 
+                        className="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800" 
                         placeholder="建设单位关键字"
                         value={criteria.constructionUnit || ''}
                         onChange={(e) => handleChange('constructionUnit', e.target.value)}
@@ -409,7 +409,7 @@ export const ProjectFilter = ({ onFilter, onReset, className }: ProjectFilterPro
             <div className="flex justify-end gap-3 border-t border-slate-100 pt-3">
                 <button 
                     onClick={handleSubmit}
-                    className="flex items-center gap-1.5 px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+                    className="flex items-center gap-1.5 px-5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
                 >
                     <Search size={14} /> 搜索
                 </button>

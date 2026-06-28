@@ -49,7 +49,7 @@ interface TreeNodeProps {
 const TreeNode: React.FC<TreeNodeProps> = ({ label, icon: Icon, children, depth = 0 }) => (
     <div>
         <div className={`flex items-center gap-2 px-2 py-1.5 rounded hover:bg-slate-50 cursor-pointer group ${depth > 0 ? 'ml-6' : ''}`}>
-            <Icon className={`w-3.5 h-3.5 ${depth === 0 ? 'text-rose-500' : 'text-slate-400'}`} />
+            <Icon className={`w-3.5 h-3.5 ${depth === 0 ? 'text-emerald-500' : 'text-slate-400'}`} />
             <span className="text-xs text-slate-700 font-medium">{label}</span>
             {depth === 0 && (
                 <button className="ml-auto opacity-0 group-hover:opacity-100 text-primary hover:text-primary-hover">

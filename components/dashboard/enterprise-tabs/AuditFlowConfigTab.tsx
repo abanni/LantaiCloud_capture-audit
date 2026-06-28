@@ -47,15 +47,15 @@ const AuditFlowConfigTab: React.FC = () => {
                 <h3 className="text-sm font-bold text-slate-700 mb-2">审核规则</h3>
                 <div className="space-y-1.5 text-xs text-slate-600">
                     <div className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
                         <span>初审通过后自动进入复审环节，不可跳过</span>
                     </div>
                     <div className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
                         <span>复审不通过退回至企业著录阶段，并记录审核意见</span>
                     </div>
                     <div className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
                         <span>归档入库后档案状态锁定，仅可查阅不可修改</span>
                     </div>
                 </div>

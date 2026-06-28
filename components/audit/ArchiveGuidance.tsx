@@ -3,12 +3,12 @@ import { BookOpen, FileText, HelpCircle, CheckCircle } from 'lucide-react';
 
 export const ArchiveGuidance = () => {
     return (
-        <div className="p-6 max-w-5xl mx-auto overflow-y-auto h-full custom-scrollbar">
-            
+        <div className="flex flex-col h-full bg-slate-50">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 className="text-sm font-bold mb-4 text-slate-800 flex items-center gap-2">
-                        <FileText size={16} className="text-primary"/>
+                        <FileText size={16} className="text-emerald-600"/>
                         国家标准移交组卷基本标准汇总
                     </h3>
                     <ul className="space-y-4 text-slate-650 text-xs leading-relaxed">
@@ -43,6 +43,7 @@ export const ArchiveGuidance = () => {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     );

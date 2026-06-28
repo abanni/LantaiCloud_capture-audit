@@ -25,7 +25,7 @@ const ArchiveTemplateTab: React.FC = () => {
             <div className="border border-slate-200 rounded-lg divide-y divide-slate-100">
                 {templates.map((t, i) => (
                     <div key={i} className="flex items-center gap-4 px-4 py-3 hover:bg-slate-50 transition-colors">
-                        <div className="w-8 h-8 bg-rose-50 text-rose-600 rounded flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 bg-emerald-50 text-emerald-600 rounded flex items-center justify-center shrink-0">
                             <FileText className="w-4 h-4" />
                         </div>
                         <div className="flex-1 min-w-0">

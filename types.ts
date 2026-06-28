@@ -79,6 +79,8 @@ export interface Project {
     assignedReviewer?: string;
     archiveName?: string;
     licenceNo?: string;
+    location?: string;        // 项目地点
+    qualityNumber?: string;   // 质监号
 }
 
 export interface FileItem {

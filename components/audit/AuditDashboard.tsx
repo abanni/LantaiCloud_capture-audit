@@ -26,7 +26,7 @@ const QuickActionCard = ({ icon, label, desc, onClick, color }: any) => (
         onClick={onClick}
         className="flex flex-col items-start p-4 bg-white rounded-2xl hover:shadow-lg hover:bg-slate-50 transition-all duration-200 group text-left w-full cursor-pointer border border-slate-100/50"
     >
-        <div className={`p-2.5 rounded-xl bg-blue-50 text-blue-600 mb-3 group-hover:scale-105 transition-transform`}>
+        <div className={`p-2.5 rounded-xl bg-emerald-50 text-emerald-600 mb-3 group-hover:scale-105 transition-transform`}>
             {icon}
         </div>
         <h4 className="font-bold text-slate-800 text-xs mb-1">{label}</h4>
@@ -34,13 +34,13 @@ const QuickActionCard = ({ icon, label, desc, onClick, color }: any) => (
     </button>
 );
 
-const StatMiniCard = ({ label, value, icon, color = 'blue' }: any) => (
+const StatMiniCard = ({ label, value, icon, color = 'emerald' }: any) => (
     <div className="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm border border-slate-100/50">
         <div>
             <p className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest mb-1">{label}</p>
             <p className="text-2xl font-black text-slate-800 tracking-tight">{value}</p>
         </div>
-        <div className={`p-3 rounded-lg bg-blue-50/50 text-blue-600`}>
+        <div className={`p-3 rounded-lg bg-emerald-50/50 text-emerald-600`}>
             {icon}
         </div>
     </div>
@@ -162,10 +162,9 @@ export const AuditDashboard = ({
     ];
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-slate-50">
             {/* Scroll view wrapper */}
-            <div className="flex-1 p-6 space-y-6">
-                <div className="max-w-6xl mx-auto">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
                     
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                         
@@ -182,7 +181,7 @@ export const AuditDashboard = ({
 
                             {/* Monthly trend diagram */}
                             <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100/50">
-                                <h3 className="font-extrabold text-xs text-slate-800 uppercase tracking-widest pl-2 mb-6 border-l-4 border-blue-500 flex items-center justify-between">
+                                <h3 className="font-extrabold text-xs text-slate-800 uppercase tracking-widest pl-2 mb-6 border-l-4 border-emerald-500 flex items-center justify-between">
                                     <span>数字档案移交入库环比增长态势</span>
                                     <span className="text-[10px] text-slate-400 font-mono normal-case">单位/件数</span>
                                 </h3>
@@ -197,7 +196,7 @@ export const AuditDashboard = ({
                                     </h3>
                                     <button 
                                         onClick={() => onNavigate("audit")}
-                                        className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-0.5"
+                                        className="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-0.5"
                                     >
                                         处理待办 <ArrowRight size={13} />
                                     </button>
@@ -207,7 +206,7 @@ export const AuditDashboard = ({
                                         pendingReview.slice(0, 4).map(item => (
                                             <div key={item.id} className="p-4 hover:bg-slate-50 flex items-center justify-between group transition-colors">
                                                 <div className="flex items-center gap-3">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                     <div>
                                                         <h4 className="font-bold text-slate-800 mb-0.5 truncate max-w-[280px] md:max-w-xs">{item.projectInfo.projectName}</h4>
                                                         <p className="text-[10px] text-slate-400">
@@ -219,7 +218,7 @@ export const AuditDashboard = ({
                                                     <StatusBadge stage={item.stage} />
                                                     <button 
                                                         onClick={() => onNavigate("audit-projects", item.projectInfo.id)}
-                                                        className="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-blue-700 hover:shadow shadow-blue-100 text-[10px] cursor-pointer"
+                                                        className="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-emerald-700 hover:shadow shadow-emerald-100 text-[10px] cursor-pointer"
                                                     >
                                                         档案审核
                                                     </button>
@@ -264,7 +263,7 @@ export const AuditDashboard = ({
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-100/50 p-5">
                                 <div className="flex items-center justify-between border-b border-slate-50 pb-2 mb-3">
                                     <h3 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider">系统要目公告</h3>
-                                    <span className="text-[10px] text-blue-600 hover:underline cursor-pointer">更多</span>
+                                    <span className="text-[10px] text-emerald-600 hover:underline cursor-pointer">更多</span>
                                 </div>
                                 <div className="space-y-0.5">
                                     <NoticeItem tag="重大" title="关于开展数字双层PDF红外套色数字签名核算标准的通知" date="06-03" />
@@ -275,8 +274,6 @@ export const AuditDashboard = ({
 
                         </div>
                     </div>
-
-                </div>
             </div>
         </div>
     );

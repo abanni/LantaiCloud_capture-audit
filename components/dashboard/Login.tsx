@@ -78,8 +78,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                                 { key: 'xq' as const, label: '徐琴', desc: '档案馆审核人员', icon: UserCheck, audit: true },
                             ].map(({ key, label, desc, icon: Icon, audit }) => {
                                 const isActive = activeTab === key;
-                                const activeBg = audit ? 'bg-rose-600' : 'bg-primary';
-                                const hoverBg = audit ? 'hover:bg-rose-50' : 'hover:bg-slate-100';
+                                const activeBg = audit ? 'bg-emerald-600' : 'bg-primary';
+                                const hoverBg = audit ? 'hover:bg-emerald-50' : 'hover:bg-slate-100';
                                 return (
                                 <button
                                     key={key}
@@ -95,9 +95,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                                         <div>{label}</div>
                                         <div className={`text-[9px] font-normal ${isActive ? 'text-white/70' : 'text-slate-400'}`}>{desc}</div>
                                     </div>
-                                    {audit && !isActive && (
-                                        <span className="ml-auto text-[8px] font-bold text-rose-500 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">审核端</span>
-                                    )}
+
                                     {isActive && (
                                         <svg className="ml-auto w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
@@ -110,11 +108,11 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
 
                         {/* Info card */}
                         <div className={`p-3.5 rounded-xl text-xs leading-relaxed ${
-                            activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-rose-50 border border-rose-200' : 'bg-emerald-50'
+                            activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-emerald-50 border border-emerald-200' : 'bg-emerald-50'
                         }`}>
-                            <p className={activeTab === 'xq' ? 'text-rose-800' : 'text-slate-600'}>
+                            <p className={activeTab === 'xq' ? 'text-emerald-800' : 'text-slate-600'}>
                                 {activeTab === 'zs' && <><strong className="text-text-primary">张三</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>}
-                                {activeTab === 'xq' && <><strong className="text-rose-900">徐琴</strong>（0512****5678）是<strong className="text-rose-900">昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
+                                {activeTab === 'xq' && <><strong className="text-emerald-900">徐琴</strong>（0512****5678）是<strong className="text-emerald-900">昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
                                 {activeTab === 'lj' && <><strong className="text-text-primary">李进</strong>（177****8899）是新注册个人用户，暂未挂靠组织，登录后可直接体验组织入驻流程。</>}
                             </p>
                         </div>
@@ -134,7 +132,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                                 type="submit"
                                 disabled={isLoading}
                                 className={`w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-white transition-all disabled:opacity-60 ${
-                                    activeTab === 'xq' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-primary hover:bg-primary-hover'
+                                    activeTab === 'xq' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-primary hover:bg-primary-hover'
                                 }`}
                             >
                                 {isLoading ? (

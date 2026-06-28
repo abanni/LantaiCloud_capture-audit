@@ -81,7 +81,7 @@ export const ArchiveTree: React.FC<ArchiveTreeProps> = ({
                         {stage === 'FIRST_REVIEW' && (
                             <button
                                 onClick={onAcceptanceClick}
-                                className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
+                                className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
                             >
                                 <CheckCircle size={13} /> 通过初审
                             </button>
@@ -100,7 +100,7 @@ export const ArchiveTree: React.FC<ArchiveTreeProps> = ({
                         {stage === 'SECOND_REVIEW' && (
                             <button
                                 onClick={onReceiptClick}
-                                className="flex items-center gap-1 px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold hover:bg-indigo-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
+                                className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
                             >
                                 <CheckCircle size={13} /> 通过复审
                             </button>
@@ -144,7 +144,7 @@ export const ArchiveTree: React.FC<ArchiveTreeProps> = ({
                         onClick={() => setActiveLeftTab(tab.id)}
                         className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border-b-2 ${
                             activeLeftTab === tab.id
-                                ? 'border-blue-600 text-blue-600 bg-blue-50/50'
+                                ? 'border-emerald-600 text-emerald-600 bg-emerald-50/50'
                                 : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                         }`}
                     >
@@ -159,7 +159,7 @@ export const ArchiveTree: React.FC<ArchiveTreeProps> = ({
                     <div className="p-3 pb-8">
                         <div className="mb-4">
                             <div className="px-2.5 py-1.5 bg-slate-50 rounded-lg mb-2 font-bold text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-1.5 border border-slate-100">
-                                <Folder className="text-blue-500 shrink-0" size={13} /> 单体或组卷案卷
+                                <Folder className="text-emerald-500 shrink-0" size={13} /> 单体或组卷案卷
                             </div>
                             <div className="pl-1">
                                 {archive.archiveDataPackage.length > 0 ? (

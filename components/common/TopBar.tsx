@@ -33,11 +33,13 @@ const TopBar: React.FC<TopBarProps> = ({
         <header className="h-14 bg-white border-b border-border flex items-center justify-between px-5 shrink-0 sticky top-0 z-10">
             <h1 className="text-sm font-bold text-text-primary">{title}</h1>
             <div className="flex items-center gap-2">
-                <ArchiveSwitcher
-                    archives={archives}
-                    currentArchiveId={currentArchiveId}
-                    onSwitch={onArchiveSwitch || (() => {})}
-                />
+                {!identity.archiveOrg && (
+                    <ArchiveSwitcher
+                        archives={archives}
+                        currentArchiveId={currentArchiveId}
+                        onSwitch={onArchiveSwitch || (() => {})}
+                    />
+                )}
                 {showNotification && (
                     <button
                         onClick={onNotificationClick}

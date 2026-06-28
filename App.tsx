@@ -11,16 +11,17 @@ import IdentitySelector from './components/dashboard/IdentitySelector';
 import ProjectsList from './components/capture/ProjectsList';
 import PersonalSettings from './components/dashboard/PersonalSettings';
 import NewProjectPage from './components/dashboard/NewProjectPage';
+import ArchiveManagement from './components/dashboard/ArchiveManagement';
 import { Project, Identity } from './types';
 import { useApp, AppProvider } from './context/AppContext';
 
 // Auditing additions:
-import { 
-    INITIAL_ARCHIVES, 
-    ArchiveItem, 
-    ArchiveNode, 
-    NodeStatus, 
-    WorkflowStage 
+import {
+    INITIAL_ARCHIVES,
+    ArchiveItem,
+    ArchiveNode,
+    NodeStatus,
+    WorkflowStage
 } from './components/audit/auditTypes';
 import { AuditDashboard } from './components/audit/AuditDashboard';
 import { AuditRegistrationView } from './components/audit/AuditRegistrationView';
@@ -29,6 +30,9 @@ import { AuditProjectInfoView } from './components/audit/AuditProjectInfoView';
 import { ArchiveGuidance } from './components/audit/ArchiveGuidance';
 import { StatisticsView } from './components/audit/StatisticsView';
 import { ArchiveExplorer } from './components/audit/ArchiveExplorer';
+import { PrintPage } from './components/print/PrintPage';
+import { AcceptanceOpinionPage } from './components/print/AcceptanceOpinionPage';
+import { ReceiptCertificatePage } from './components/print/ReceiptCertificatePage';
 
 const AuditWorkspaceContainer: React.FC<{
     archives: ArchiveItem[];
@@ -154,17 +158,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
     // Determine if we should show the main sidebar
     const isMainLayout = [
-        '/dashboard', '/capture-dashboard', '/newproject', '/enterprise', '/projects', '/settings',
+        '/dashboard', '/capture-dashboard', '/newproject', '/enterprise', '/archive-mgmt', '/projects', '/settings',
         '/audit-dashboard', '/audit-registration', '/audit-projects',
-        '/audit-project-info', '/audit-guidance', '/audit-statistics'
-    ].includes(location.pathname) || location.pathname === '/';
+        '/audit-project-info', '/audit-guidance', '/audit-statistics',
+        '/print',
+    ].includes(location.pathname) || location.pathname === '/' || location.pathname.startsWith('/print/');
 
     const getPageTitle = (pathname: string, identity: Identity | null): string => {
         const titles: Record<string, string> = {
             '/dashboard': '数智档案云端工作台',
             '/capture-dashboard': '著录工作台',
             '/newproject': '新建档案',
-            '/enterprise': identity?.archiveOrg ? '档案馆管理' : '企业管理',
+            '/enterprise': '企业管理',
+            '/archive-mgmt': '档案馆管理',
             '/projects': '我的档案',
             '/settings': '个人设置',
             '/audit-dashboard': '审核工作台',
@@ -173,8 +179,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             '/audit-project-info': '项目信息',
             '/audit-guidance': '档案指导',
             '/audit-statistics': '审核统计分析',
+            '/print': '打印',
+            '/print/acceptance-opinion': '打印 - 验收意见书',
+            '/print/receipt-certificate': '打印 - 接收凭证',
         };
-        return titles[pathname] || '数智档案云端工作台';
+        return titles[pathname] || getPrintSubTitle(pathname) || '数智档案云端工作台';
+    };
+
+    const getPrintSubTitle = (pathname: string): string | undefined => {
+        if (pathname.startsWith('/print/')) return '打印';
+        return undefined;
     };
 
     if (isMainLayout) {
@@ -192,7 +206,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                         onArchiveSwitch={setCurrentArchive}
                     />
                     <Routes>
-                        <Route path="/" element={<Navigate to="/capture-dashboard" replace />} />
+                        <Route path="/" element={<Navigate to={currentIdentity?.archiveOrg ? '/audit-dashboard' : '/capture-dashboard'} replace />} />
                         <Route
                             path="/capture-dashboard"
                             element={<Dashboard identity={currentIdentity!} identities={identities} setIdentities={setIdentities} setCurrentIdentity={setCurrentIdentity} projects={projects} setProjects={setProjects} />}
@@ -200,6 +214,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                         <Route
                             path="/newproject"
                             element={<NewProjectPage />}
+                        />
+                        <Route
+                            path="/archive-mgmt"
+                            element={<ArchiveManagement identity={currentIdentity!} />}
                         />
                         <Route
                             path="/dashboard"
@@ -235,6 +253,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                         <Route path="/audit-project-info" element={<AuditProjectInfoView archives={archives} />} />
                         <Route path="/audit-guidance" element={<ArchiveGuidance />} />
                         <Route path="/audit-statistics" element={<StatisticsView />} />
+                        {/* Print section */}
+                        <Route path="/print" element={<PrintPage />}>
+                            <Route path="acceptance-opinion" element={<AcceptanceOpinionPage />} />
+                            <Route path="receipt-certificate" element={<ReceiptCertificatePage />} />
+                            <Route index element={<AcceptanceOpinionPage />} />
+                        </Route>
                     </Routes>
                 </div>
             </div>

@@ -134,7 +134,7 @@ export const AuditRegistrationView = ({
                                         <td className="p-4 text-right">
                                             <button 
                                                 onClick={() => openRegister(a)}
-                                                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition-all shadow shadow-blue-100 cursor-pointer"
+                                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition-all shadow shadow-emerald-100 cursor-pointer"
                                             >
                                                 登记分配审查
                                             </button>
@@ -171,7 +171,7 @@ export const AuditRegistrationView = ({
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
                             
                             <section>
-                                <h4 className="text-xs font-black text-slate-700 border-l-4 border-blue-600 pl-2.5 mb-4 uppercase tracking-wider">
+                                <h4 className="text-xs font-black text-slate-700 border-l-4 border-emerald-600 pl-2.5 mb-4 uppercase tracking-wider">
                                     项目基本信息
                                 </h4>
                                 <div className="border border-slate-200 rounded-xl overflow-hidden grid grid-cols-2 bg-white shadow-sm font-sans">
@@ -219,7 +219,7 @@ export const AuditRegistrationView = ({
                                      <label className="block text-[10px] font-extrabold text-slate-500 uppercase mb-1.5">
                                         选择分管审核人
                                      </label>
-                                     <select className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:ring-1 focus:ring-blue-500 font-semibold outline-none text-slate-800 shadow-inner" title="分管审核人">
+                                     <select className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:ring-1 focus:ring-emerald-500 font-semibold outline-none text-slate-800 shadow-inner" title="分管审核人">
                                          <option>张三 (6)</option>
                                          <option>李四 (3)</option>
                                          <option>徐琴 (2)</option>
@@ -231,7 +231,7 @@ export const AuditRegistrationView = ({
                                         修改意见
                                      </label>
                                      <textarea
-                                         className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none text-slate-800 shadow-inner resize-none"
+                                         className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800 shadow-inner resize-none"
                                          rows={2}
                                          placeholder="请输入修改意见（选填）"
                                          title="修改意见"
@@ -254,7 +254,7 @@ export const AuditRegistrationView = ({
                                 </button>
                                 <button 
                                     onClick={submitRegister}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow shadow-blue-100 transition cursor-pointer"
+                                    className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 shadow shadow-emerald-100 transition cursor-pointer"
                                 >
                                     准予登记
                                 </button>

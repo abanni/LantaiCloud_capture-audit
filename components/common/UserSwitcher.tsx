@@ -168,7 +168,7 @@ const UserSwitcher: React.FC<UserSwitcherProps> = ({
                         {identity.user.name}
                     </span>
                     <span className="text-[9px] text-slate-400 font-bold truncate w-full">
-                        {identity.organization?.shortName || '未授权企业'}
+                        {identity.archiveOrg?.shortName || identity.archiveOrg?.name || identity.organization?.shortName || '未授权企业'}
                     </span>
                 </div>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />

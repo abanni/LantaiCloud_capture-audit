@@ -373,7 +373,7 @@ export const ArchiveExplorer = ({
                             {archive.stage === "FIRST_REVIEW" && (
                                 <button 
                                     onClick={() => { setNumberInput(`YS-${new Date().getFullYear()}-${Math.floor(Math.random()*9000 + 1000)}`); setShowAcceptanceModal(true); }}
-                                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
                                 >
                                     <CheckCircle size={13} /> 通过初审
                                 </button>
@@ -389,7 +389,7 @@ export const ArchiveExplorer = ({
                             {archive.stage === "SECOND_REVIEW" && (
                                 <button 
                                     onClick={() => { setNumberInput(`REC-${new Date().getFullYear()}-${Math.floor(Math.random()*9000 + 1000)}`); setShowReceiptModal(true); }}
-                                    className="flex items-center gap-1 px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold hover:bg-indigo-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-sm whitespace-nowrap cursor-pointer transition-all"
                                 >
                                     <CheckCircle size={13} /> 通过复审
                                 </button>
@@ -426,7 +426,7 @@ export const ArchiveExplorer = ({
                             onClick={() => setActiveLeftTab(tab.id as any)}
                             className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border-b-2 ${
                                 activeLeftTab === tab.id 
-                                ? 'border-blue-600 text-blue-600 bg-blue-50/50' 
+                                ? 'border-emerald-600 text-emerald-600 bg-emerald-50/50' 
                                 : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                             }`}
                         >
@@ -531,7 +531,7 @@ export const ArchiveExplorer = ({
                             <div className="bg-slate-100 p-0.5 rounded-lg flex items-center shrink-0">
                                 <button 
                                     onClick={() => setViewMode('FILE')}
-                                    className={`px-3 py-1 text-xs font-bold rounded-md transition-all flex items-center gap-1.5 ${viewMode === 'FILE' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`px-3 py-1 text-xs font-bold rounded-md transition-all flex items-center gap-1.5 ${viewMode === 'FILE' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                                 >
                                     <FileText size={13} /> 文件预览
                                 </button>
@@ -546,7 +546,7 @@ export const ArchiveExplorer = ({
                             {/* Download */}
                             <button
                                 onClick={() => handleDownload(selectedNode)}
-                                className="p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                                className="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                                 title="本地导出文件"
                             >
                                 <Download size={14} />
@@ -614,7 +614,7 @@ export const ArchiveExplorer = ({
                                 <button 
                                     onClick={handleAIAnalysis}
                                     disabled={loadingAI}
-                                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-650 text-white rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-indigo-100/40 opacity-90 hover:opacity-100 disabled:opacity-50 transition-all cursor-pointer"
+                                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-emerald-100/40 opacity-90 hover:opacity-100 disabled:opacity-50 transition-all cursor-pointer"
                                 >
                                     <Sparkles size={13} /> {loadingAI ? "正在调用智审底座..." : "AI 智审报告"}
                                 </button>
@@ -647,8 +647,8 @@ export const ArchiveExplorer = ({
                                                 
                                                 {/* AI Suggested Response bubble overlay */}
                                                 {aiSuggestion && (
-                                                    <div className="mt-6 bg-white p-4 rounded-xl shadow-lg border border-primary/20 text-left animate-in zoom-in-95 duration-150">
-                                                        <h5 className="text-xs font-extrabold text-blue-700 uppercase mb-2 flex items-center gap-1">
+                                                    <div className="mt-6 bg-white p-4 rounded-xl shadow-lg border border-emerald-200 text-left animate-in zoom-in-95 duration-150">
+                                                        <h5 className="text-xs font-extrabold text-emerald-700 uppercase mb-2 flex items-center gap-1">
                                                             <Sparkles size={13}/> 兰台云大模型工程审核核定书
                                                         </h5>
                                                         <p className="text-[11px] text-slate-705 leading-relaxed whitespace-pre-wrap font-sans">
@@ -690,13 +690,13 @@ export const ArchiveExplorer = ({
                     </div>
                     <button 
                         onClick={() => { handleDownload(contextMenu.node); setContextMenu(null); }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2 transition"
+                        className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 flex items-center gap-2 transition"
                     >
                         <Download size={13} /> 导出下载
                     </button>
                     <button 
                         onClick={handleAddMemoClick}
-                        className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2 transition"
+                        className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 flex items-center gap-2 transition"
                     >
                         <StickyNote size={13} /> 添加备忘批注
                     </button>
@@ -714,12 +714,12 @@ export const ArchiveExplorer = ({
                             value={memoInput}
                             onChange={(e) => setMemoInput(e.target.value)}
                             placeholder="在此书写该类竣工文献组卷时，需要建设施工单位额外留意的疑点..."
-                            className="w-full h-28 border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-none mb-4 text-slate-800"
+                            className="w-full h-28 border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none resize-none mb-4 text-slate-800"
                             autoFocus
                         />
                         <div className="flex justify-end gap-2 text-xs">
                             <button onClick={() => setShowMemoDialog(false)} className="px-3.5 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-bold">取消</button>
-                            <button onClick={saveMemo} className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow shadow-blue-100">保存修改</button>
+                            <button onClick={saveMemo} className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow shadow-emerald-100">保存修改</button>
                         </div>
                     </div>
                 </div>
@@ -793,7 +793,7 @@ export const ArchiveExplorer = ({
                                 type="text"
                                 value={numberInput}
                                 onChange={(e) => setNumberInput(e.target.value)}
-                                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono text-slate-800 bg-slate-50 focus:ring-1 focus:ring-blue-500 outline-none font-bold"
+                                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono text-slate-800 bg-slate-50 focus:ring-1 focus:ring-emerald-500 outline-none font-bold"
                                 title="编号输入"
                                 placeholder="请输入编号"
                             />
@@ -807,7 +807,7 @@ export const ArchiveExplorer = ({
                             </button>
                             <button
                                 onClick={showAcceptanceModal ? confirmAcceptance : confirmReceipt}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow shadow-blue-100 cursor-pointer"
+                                className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow shadow-emerald-100 cursor-pointer"
                             >
                                 打引批复件
                             </button>

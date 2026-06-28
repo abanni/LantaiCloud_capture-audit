@@ -47,7 +47,7 @@ export const BatchImportModal: React.FC<BatchImportModalProps> = ({
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-slate-200">
                     <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                        <Upload size={16} className="text-blue-500" /> 批量导入节点
+                        <Upload size={16} className="text-emerald-500" /> 批量导入节点
                     </h3>
                     <button
                         onClick={onClose}
@@ -78,7 +78,7 @@ export const BatchImportModal: React.FC<BatchImportModalProps> = ({
                         }}
                         className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
                             dragOver
-                                ? 'border-blue-400 bg-blue-50'
+                                ? 'border-emerald-400 bg-emerald-50'
                                 : 'border-slate-200 bg-slate-50'
                         }`}
                     >
@@ -97,7 +97,7 @@ export const BatchImportModal: React.FC<BatchImportModalProps> = ({
                         onChange={(e) => setBatchNames(e.target.value)}
                         placeholder={`文件立项申请.pdf\n施工图会审记录.pdf\n竣工验收报告.pdf`}
                         rows={5}
-                        className="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-none text-slate-800"
+                        className="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none resize-none text-slate-800"
                     />
 
                     {/* Preview list */}
@@ -149,7 +149,7 @@ export const BatchImportModal: React.FC<BatchImportModalProps> = ({
                     <button
                         onClick={handlePasteImport}
                         disabled={!batchNames.trim()}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed shadow shadow-blue-100"
+                        className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed shadow shadow-emerald-100"
                     >
                         确认导入
                     </button>

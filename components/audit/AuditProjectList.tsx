@@ -97,7 +97,7 @@ export const AuditProjectList: React.FC<AuditProjectListProps> = ({ archives, on
                                             <div className="flex items-center justify-center gap-1.5">
                                                 <button
                                                     onClick={() => setDetailItem(item)}
-                                                    className="inline-flex items-center gap-1 text-slate-500 hover:text-blue-600 text-[10px] font-bold px-2 py-1.5 bg-slate-50 rounded-lg hover:bg-blue-50 transition-all cursor-pointer border border-slate-200 hover:border-blue-200"
+                                                    className="inline-flex items-center gap-1 text-slate-500 hover:text-emerald-600 text-[10px] font-bold px-2 py-1.5 bg-slate-50 rounded-lg hover:bg-emerald-50 transition-all cursor-pointer border border-slate-200 hover:border-emerald-200"
                                                     title="查看项目元数据"
                                                 >
                                                     <Info size={11} /> 详情
@@ -110,7 +110,7 @@ export const AuditProjectList: React.FC<AuditProjectListProps> = ({ archives, on
                                                 </button>
                                                 <button
                                                     onClick={() => onSelect(item.id)}
-                                                    className="inline-flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 text-[10px] font-bold px-2 py-1.5 rounded-lg transition-all cursor-pointer shadow-xs"
+                                                    className="inline-flex items-center gap-1 text-white bg-emerald-600 hover:bg-emerald-700 text-[10px] font-bold px-2 py-1.5 rounded-lg transition-all cursor-pointer shadow-xs"
                                                 >
                                                     <Edit3 size={11} /> 节点审核
                                                 </button>
@@ -142,7 +142,7 @@ export const AuditProjectList: React.FC<AuditProjectListProps> = ({ archives, on
                     >
                         <ChevronLeft size={14} />
                     </button>
-                    <span className="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg">{currentPage} / {totalPages}</span>
+                    <span className="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg">{currentPage} / {totalPages}</span>
                     <button
                         disabled={currentPage === totalPages || totalPages === 0}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
@@ -160,7 +160,7 @@ export const AuditProjectList: React.FC<AuditProjectListProps> = ({ archives, on
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto border border-slate-200" onClick={e => e.stopPropagation()}>
                         <div className="flex items-center justify-between p-5 border-b border-slate-100">
                             <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                                <Info size={16} className="text-blue-500" />
+                                <Info size={16} className="text-emerald-500" />
                                 项目元数据
                             </h3>
                             <button onClick={() => setDetailItem(null)} className="p-1.5 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors" title="关闭">
@@ -190,7 +190,7 @@ export const AuditProjectList: React.FC<AuditProjectListProps> = ({ archives, on
                         <div className="p-5 border-t border-slate-100 flex justify-end">
                             <button
                                 onClick={() => { setDetailItem(null); onSelect(detailItem.id); }}
-                                className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg text-xs hover:bg-blue-700 transition-colors cursor-pointer"
+                                className="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg text-xs hover:bg-emerald-700 transition-colors cursor-pointer"
                             >
                                 进入节点审核
                             </button>

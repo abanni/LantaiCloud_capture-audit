@@ -190,7 +190,7 @@ export const NodeDetail: React.FC<NodeDetailProps> = ({
                                 onClick={() => setViewMode('FILE')}
                                 className={`px-3 py-1 text-xs font-bold rounded-md transition-all flex items-center gap-1.5 ${
                                     viewMode === 'FILE'
-                                        ? 'bg-white text-blue-600 shadow-sm'
+                                        ? 'bg-white text-emerald-600 shadow-sm'
                                         : 'text-slate-500 hover:text-slate-700'
                                 }`}
                             >
@@ -211,7 +211,7 @@ export const NodeDetail: React.FC<NodeDetailProps> = ({
                         {/* Download */}
                         <button
                             onClick={() => onDownload(selectedNode)}
-                            className="p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                            className="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                             title="本地导出文件"
                         >
                             <Download size={14} />
@@ -275,7 +275,7 @@ export const NodeDetail: React.FC<NodeDetailProps> = ({
                             <button
                                 onClick={onAIAnalysis}
                                 disabled={loadingAI}
-                                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-650 text-white rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-indigo-100/40 opacity-90 hover:opacity-100 disabled:opacity-50 transition-all cursor-pointer"
+                                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-emerald-100/40 opacity-90 hover:opacity-100 disabled:opacity-50 transition-all cursor-pointer"
                             >
                                 <Sparkles size={13} />{' '}
                                 {loadingAI ? '正在调用智审底座...' : 'AI 智审报告'}
@@ -314,8 +314,8 @@ export const NodeDetail: React.FC<NodeDetailProps> = ({
 
                                             {/* AI Suggested Response bubble overlay */}
                                             {aiSuggestion && (
-                                                <div className="mt-6 bg-white p-4 rounded-xl shadow-lg border border-primary/20 text-left animate-in zoom-in-95 duration-150">
-                                                    <h5 className="text-xs font-extrabold text-blue-700 uppercase mb-2 flex items-center gap-1">
+                                                <div className="mt-6 bg-white p-4 rounded-xl shadow-lg border border-emerald-200 text-left animate-in zoom-in-95 duration-150">
+                                                    <h5 className="text-xs font-extrabold text-emerald-700 uppercase mb-2 flex items-center gap-1">
                                                         <Sparkles size={13} /> 兰台云大模型工程审核核定书
                                                     </h5>
                                                     <p className="text-[11px] text-slate-705 leading-relaxed whitespace-pre-wrap font-sans">

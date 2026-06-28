@@ -65,7 +65,7 @@ export const IssueDrawer: React.FC<IssueDrawerProps> = ({ open, issues, onRemove
                                     <span
                                         className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
                                             issue.source === 'AI'
-                                                ? 'bg-primary/10 text-primary border border-primary/20'
+                                                ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
                                                 : 'bg-orange-50 text-orange-600 border border-orange-100'
                                         }`}
                                     >

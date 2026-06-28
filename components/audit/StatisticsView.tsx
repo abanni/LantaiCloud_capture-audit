@@ -10,14 +10,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const StatCard = ({ title, value, subtext, icon, color }: any) => {
     return (
         <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full bg-blue-50/20 transition-transform group-hover:scale-110 opacity-70`}></div>
+            <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full bg-emerald-50/20 transition-transform group-hover:scale-110 opacity-70`}></div>
             <div className="relative z-10 flex items-start justify-between">
                 <div>
                     <p className="text-slate-450 text-[10px] font-extrabold uppercase tracking-wider mb-1">{title}</p>
                     <h3 className={`text-2xl font-black text-slate-800 tracking-tight`}>{value}</h3>
                     {subtext && <p className="text-[10px] mt-2 font-bold text-slate-400 bg-slate-50 inline-block px-1.5 py-0.5 rounded-md border border-slate-100">{subtext}</p>}
                 </div>
-                <div className={`p-3 rounded-xl bg-blue-50/50 text-blue-600 shadow-inner`}>
+                <div className={`p-3 rounded-xl bg-emerald-50/50 text-emerald-600 shadow-inner`}>
                     {icon}
                 </div>
             </div>
@@ -70,9 +70,9 @@ const MultiChartLine = () => {
 
 export const StatisticsView = () => {
     return (
-        <div className="flex flex-col h-full bg-slate-50 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-slate-50">
             {/* Scrollable contents */}
-            <div className="flex-1 p-6 md:p-8">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
                 
                 {/* 5 Indicator cards */}
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
@@ -86,7 +86,7 @@ export const StatisticsView = () => {
                 {/* Growth diagram */}
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest pl-2 border-l-4 border-blue-600">
+                        <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest pl-2 border-l-4 border-emerald-600">
                             登记、审核、入库阶段趋势
                         </h3>
                         <div className="flex items-center gap-4 text-[10px] font-bold text-slate-500 select-none">

@@ -316,7 +316,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                             {isArchiveMode ? (
                                 <>
                                     <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
-                                        <div className="px-5 py-3 bg-rose-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                        <div className="px-5 py-3 bg-emerald-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                             <Building2 className="w-3.5 h-3.5 text-slate-400" />
                                             <span>档案馆基础治理</span>
                                         </div>
@@ -326,7 +326,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                                     </div>
 
                                     <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
-                                        <div className="px-5 py-3 bg-rose-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                        <div className="px-5 py-3 bg-emerald-50/50 border-b border-slate-100 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                             <FolderTree className="w-3.5 h-3.5 text-slate-400" />
                                             <span>项目类型管理</span>
                                         </div>

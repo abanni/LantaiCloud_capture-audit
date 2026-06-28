@@ -20,6 +20,10 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/徐琴',
         licenceNo: '320583202508190204',
+        location: '昆山市',
+        qualityNumber: '250515',
+        location: '昆山市张浦镇德国工业园',
+        qualityNumber: '250500',
         units: [
             { id: 'u-1-1', name: '1号标准轻钢车间', code: 'KS-2025-ZP01', volumes: [], stage: '整理中', progress: 10 },
             { id: 'u-1-2', name: '2号高架综合研发楼', code: 'KS-2025-ZP02', volumes: [], stage: '整理中', progress: 5 }
@@ -48,6 +52,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202411120391',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-2-1', name: '地下二层重型防空掩蔽站', code: 'KS-CSGC-DX01', volumes: [], stage: '审核中', progress: 90 },
             { id: 'u-2-2', name: '城市地下管廊及换乘通道', code: 'KS-CSGC-DX02', volumes: [], stage: '管理中', progress: 80 },
@@ -77,6 +83,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/徐琴',
         licenceNo: '320583202512110291',
+        location: '昆山市巴城镇阳澄湖畔',
+        qualityNumber: '250502',
         units: [
             { id: 'u-3-3', name: '产业园服务中心', code: 'KS-BC-01', volumes: [], stage: '整理中', progress: 55 }
         ]
@@ -99,6 +107,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202509180742',
+        location: '昆山市高新区',
+        qualityNumber: '250503',
         units: [
             { id: 'u-5-1', name: '检测中心主楼', code: 'KS-GX-01', volumes: [], stage: '整理中', progress: 30 }
         ],
@@ -124,6 +134,8 @@ export const INITIAL_PROJECTS: Project[] = [
         constructionUnit: '上海未来芯球文化发展有限公司',
         assignedReviewer: '昆山/徐琴',
         licenceNo: '320583202502280144',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-3-1', name: '首层篮球主场馆精致钢架吊装', code: 'SH-WLXQ-01', volumes: [], stage: '审核中', progress: 95 },
             { id: 'u-3-2', name: '二层多功能体能训练室装潢', code: 'SH-WLXQ-02', volumes: [], stage: '整理中', progress: 60 }
@@ -146,6 +158,8 @@ export const INITIAL_PROJECTS: Project[] = [
         constructionUnit: '昆山市陆家镇人民政府',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202506010512',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-4-1', name: '教学主辅楼抗震加固与抹面', code: 'KS-LJ-001', volumes: [], stage: '已入库', progress: 100 },
             { id: 'u-4-2', name: '园区配套管网与彩色沥青铺设', code: 'KS-LJ-002', volumes: [], stage: '已入库', progress: 100 }
@@ -168,6 +182,8 @@ export const INITIAL_PROJECTS: Project[] = [
         constructionUnit: '苏州水网与工程建设计划局',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202501020473',
+        location: '昆山市淀山湖镇',
+        qualityNumber: '250505',
         units: []
     },
     {
@@ -187,6 +203,8 @@ export const INITIAL_PROJECTS: Project[] = [
         constructionUnit: '昆山市蓬朗镇文体中心管理处',
         assignedReviewer: '昆山/徐琴',
         licenceNo: '320583202410310852',
+        location: '昆山市蓬朗街道',
+        qualityNumber: '250506',
         units: []
     },
 
@@ -209,6 +227,8 @@ export const INITIAL_PROJECTS: Project[] = [
         assignedReviewer: '昆山/徐琴',
         archiveName: '昆山市城建档案馆',
         licenceNo: '320583202601200251',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-5-1', name: '二期电极成型车间扩建', code: 'QT-2Q-DC01', volumes: [], stage: '整理中', progress: 15 }
         ]
@@ -231,6 +251,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202410150882',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-6-1', name: '古镇水系整治及景观提升', code: 'ZZ-GZ-01', volumes: [], stage: '整理中', progress: 42 }
         ]
@@ -253,6 +275,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/徐琴',
         licenceNo: '320583202505051934',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-7-1', name: 'G区机电改造及消防升级', code: 'HQ-GZ-01', volumes: [], stage: '审核中', progress: 30 }
         ]
@@ -275,6 +299,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '昆山市城建档案馆',
         assignedReviewer: '昆山/阮峰',
         licenceNo: '320583202409090333',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-8-1', name: '东段景观绿化及步道工程', code: 'QD-LH-01', volumes: [], stage: '已入库', progress: 100 }
         ]
@@ -299,6 +325,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '常熟市城市建设档案馆',
         assignedReviewer: '常熟/袁翔',
         licenceNo: '320581202503200771',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-9-1', name: 'A区标准厂房及配套用房', code: 'CS-GX-01', volumes: [], stage: '整理中', progress: 65 }
         ]
@@ -321,6 +349,8 @@ export const INITIAL_PROJECTS: Project[] = [
         assignedReviewer: '常熟/张溢',
         archiveName: '常熟市城市建设档案馆',
         licenceNo: '320581202412151120',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-10-1', name: '二期住宅桩基及基坑支护', code: 'CS-SJB-01', volumes: [], stage: '整理中', progress: 45 }
         ]
@@ -343,6 +373,8 @@ export const INITIAL_PROJECTS: Project[] = [
         assignedReviewer: '常熟/袁翔',
         archiveName: '常熟市城市建设档案馆',
         licenceNo: '320581202506220556',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-11-1', name: '综合楼门诊及住院部改建', code: 'CS-HY-01', volumes: [], stage: '审核中', progress: 92 }
         ]
@@ -365,6 +397,8 @@ export const INITIAL_PROJECTS: Project[] = [
         archiveName: '常熟市城市建设档案馆',
         assignedReviewer: '常熟/张溢',
         licenceNo: '320581202410300911',
+        location: '昆山市',
+        qualityNumber: '250515',
         units: [
             { id: 'u-12-1', name: '教学楼抗震加固及消防改造', code: 'CS-QC-01', volumes: [], stage: '已入库', progress: 100 }
         ]
