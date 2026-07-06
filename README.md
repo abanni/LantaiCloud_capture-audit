@@ -42,15 +42,11 @@
 # 1. 安装依赖
 npm install
 
-# 2. 设置 Gemini API 密钥（当前仅用于编译时注入）
-cp .env.local.example .env.local
-# 编辑 .env.local 填入 GEMINI_API_KEY
-
-# 3. 启动开发服务器
+# 2. 启动开发服务器
 npm run dev
 # → http://localhost:3000
 
-# 4. 运行测试
+# 3. 运行测试
 npm test
 ```
 
