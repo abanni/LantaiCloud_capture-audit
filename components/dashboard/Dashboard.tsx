@@ -4,8 +4,9 @@ import {
     ChevronRight, Plus, Users, Folder, Briefcase, Hammer, 
     ShieldCheck, Network, Archive, HelpCircle, CheckCircle2, 
     MessageSquare, Inbox, Eye, CheckSquare, Square, Mail, MailOpen, Clock, X,
-    Building2
+    Building2, PlusCircle
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Project, Identity } from '../types';
 import NewProjectWizard from '../capture/wizards/NewProjectWizard';
 import ProjectCard from './ProjectCard';
@@ -165,7 +166,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         : [];
 
     return (
-        <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f0f2f5]">
+        <div className="flex-1 flex flex-col h-full overflow-hidden bg-bg">
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 {activeModal === 'archive' ? (
@@ -194,7 +195,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-10 h-10 bg-primary border border-primary/30 shadow-sm rounded-xl flex items-center justify-center text-white shrink-0">
-                                        <Building2 className="w-5 h-5" />
+                                        <Building2 className="w-5 h-5" aria-hidden="true" />
                                     </div>
                                     <div>
                                         <h2 className="text-base font-extrabold text-slate-800 tracking-tight">
@@ -205,86 +206,99 @@ const Dashboard: React.FC<DashboardProps> = ({
                                                 著录人员 ({identity.role})
                                             </span>
                                             <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.2 font-mono flex items-center gap-1">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
                                                 兰台云已存证
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-500 shrink-0">
-                                <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                            <div className="hidden sm:flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-500 shrink-0">
+                                <Building2 className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
                                 <span>12320583MB1A12345X</span>
                             </div>
                         </div>
 
-                        {/* Color Legend */}
-                        <div className="flex items-center gap-6 px-1 py-2">
-                            <span className="text-[11px] font-semibold text-slate-400 tracking-wide">状态图例</span>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
-                                <span className="text-xs text-slate-500">创建中</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                                <span className="text-xs text-slate-500">著录中</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                                <span className="text-xs text-slate-500">审核中</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                                <span className="text-xs text-slate-500">已入库</span>
-                            </div>
-                        </div>
-
-                        {/* Managed Projects */}
+                        {/* Managed Projects with animation */}
                         <div>
                             <div className="flex justify-between items-center mb-4">
                                 <div className="flex items-center gap-2">
                                     <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-                                        <Archive className="w-4 h-4" />
+                                        <Archive className="w-4 h-4" aria-hidden="true" />
                                     </div>
                                     <h3 className="font-bold text-slate-800 text-base">我的项目</h3>
                                     <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">{managedProjects.length}</span>
                                 </div>
-                                <button onClick={() => navigate('/projects')} className="text-xs text-primary hover:text-primary/80 font-bold flex items-center gap-0.5 bg-primary/5 hover:bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20 transition-all cursor-pointer">
-                                    更多 <ChevronRight className="w-3.5 h-3.5" />
+                                <button onClick={() => navigate('/projects')} className="text-xs text-white bg-primary hover:bg-primary-dark font-bold flex items-center gap-1 px-3 py-1.5 rounded-lg shadow-xs transition-all cursor-pointer">
+                                    查看全部 <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
                                 </button>
                             </div>
                             {managedProjects.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    {managedProjects.map((p, index) => <ProjectCard key={p.id} project={p} index={index} />)}
-                                </div>
+                                <motion.div
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
+                                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                                >
+                                    {managedProjects.map((p, index) => (
+                                        <motion.div
+                                            key={p.id}
+                                            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
+                                            transition={{ duration: 0.25 }}
+                                        >
+                                            <ProjectCard project={p} index={index} />
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
                             ) : (
-                                <div className="bg-white rounded-xl py-8 px-6 text-center border border-dashed border-slate-300">
-                                    <p className="text-xs text-slate-400">暂无管理的项目，请新建档案</p>
+                                <div className="bg-white rounded-xl py-10 px-6 text-center border border-dashed border-slate-300">
+                                    <Archive className="w-10 h-10 mx-auto mb-3 text-slate-300" aria-hidden="true" />
+                                    <p className="text-sm text-slate-500 mb-3">暂无管理的项目</p>
+                                    <button onClick={() => navigate('/newproject')}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-dark transition-all cursor-pointer shadow-xs"
+                                    >
+                                        <PlusCircle size={14} aria-hidden="true" /> 新建档案
+                                    </button>
                                 </div>
                             )}
                         </div>
 
-                        {/* Participated Projects */}
+                        {/* Participated Projects with animation */}
                         <div>
                             <div className="flex justify-between items-center mb-4">
                                 <div className="flex items-center gap-2">
                                     <div className="p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-slate-200">
-                                        <Users className="w-4 h-4" />
+                                        <Users className="w-4 h-4" aria-hidden="true" />
                                     </div>
                                     <h3 className="font-bold text-slate-800 text-base">我参与的项目</h3>
                                     <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">{participatedProjects.length}</span>
                                 </div>
-                                <button onClick={() => navigate('/projects')} className="text-xs text-slate-500 hover:text-slate-700 font-bold flex items-center gap-0.5 bg-slate-100 hover:bg-slate-150 px-2.5 py-1 rounded-lg border border-slate-200 transition-all cursor-pointer">
-                                    更多 <ChevronRight className="w-3.5 h-3.5" />
+                                <button onClick={() => navigate('/projects')} className="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200 font-bold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 transition-all cursor-pointer">
+                                    查看全部 <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
                                 </button>
                             </div>
                             {participatedProjects.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    {participatedProjects.map((p, index) => <ProjectCard key={p.id} project={p} index={index + 2} />)}
-                                </div>
+                                <motion.div
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
+                                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                                >
+                                    {participatedProjects.map((p, index) => (
+                                        <motion.div
+                                            key={p.id}
+                                            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
+                                            transition={{ duration: 0.25 }}
+                                        >
+                                            <ProjectCard project={p} index={index + 2} />
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
                             ) : (
-                                <div className="bg-white rounded-xl py-8 px-6 text-center border border-dashed border-slate-300">
-                                    <p className="text-xs text-slate-400">暂无您参与的项目。组织特聘或获邀加入后即可协作。</p>
+                                <div className="bg-white rounded-xl py-10 px-6 text-center border border-dashed border-slate-300">
+                                    <Users className="w-10 h-10 mx-auto mb-3 text-slate-300" aria-hidden="true" />
+                                    <p className="text-sm text-slate-500 mb-3">暂无您参与的项目</p>
+                                    <p className="text-xs text-slate-400">组织特聘或获邀加入后即可协作</p>
                                 </div>
                             )}
                         </div>
@@ -294,6 +308,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                             messages={orgMessages}
                             onMessagesChange={setMessages}
                             onNavigateToWorkspace={() => navigate('/workspace', { state: { step: 1 } })}
+                            onNavigateToProject={(projectName) => navigate('/projects')}
                         />
 
                     </div>

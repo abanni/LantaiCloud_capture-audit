@@ -195,7 +195,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         return (
             <div className="flex h-screen w-full overflow-hidden">
                 <Sidebar identity={currentIdentity!} onSwitchIdentity={() => setCurrentIdentity(null as any)} />
-                <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#f0f2f5]">
+                <div className="flex-1 flex flex-col h-full overflow-hidden bg-bg">
                     <TopBar
                         title={getPageTitle(location.pathname, currentIdentity)}
                         identity={currentIdentity!}

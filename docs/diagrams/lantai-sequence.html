@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>兰台云 — 签章时序图</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+:root{--bg:#f8fafc;--card-bg:#fff;--border:#e2e8f0;--text-primary:#0f172a;--text-muted:#64748b;--text-dim:#94a3b8;--c-frontend:#dbeafe;--c-frontend-border:#3b82f6;--c-backend:#e0f2fe;--c-backend-border:#0ea5e9;--c-messagebus:#d1fae5;--c-messagebus-border:#10b981;--c-security:#fce7f3;--c-security-border:#ec4899;--c-database:#fef3c7;--c-database-border:#f59e0b;--arrow-color:#94a3b8;--arrow-emphasis:#3b82f6;--arrow-return:#10b981}
+[data-theme=dark]{--bg:#0f172a;--card-bg:#1e293b;--border:#334155;--text-primary:#f1f5f9;--text-muted:#94a3b8;--text-dim:#64748b;--c-frontend:#1e3a5f;--c-frontend-border:#3b82f6;--c-backend:#0c4a6e;--c-backend-border:#0ea5e9;--c-messagebus:#064e3b;--c-messagebus-border:#10b981;--c-security:#500724;--c-security-border:#ec4899;--c-database:#451a03;--c-database-border:#f59e0b;--arrow-color:#64748b;--arrow-emphasis:#3b82f6;--arrow-return:#10b981}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text-primary);padding:20px}
+.toolbar{position:fixed;top:12px;right:12px;display:flex;gap:6px;z-index:100}
+.toolbar button{background:var(--card-bg);border:1px solid var(--border);color:var(--text-primary);padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit}
+.diagram-container{max-width:1000px;margin:40px auto;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:30px;overflow-x:auto}
+.title{text-align:center;margin-bottom:24px}.title h1{font-size:20px;font-weight:700}.title p{font-size:12px;color:var(--text-muted);margin-top:4px}
+svg text{font-family:'JetBrains Mono',monospace}
+.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}.legend-swatch{width:12px;height:12px;border-radius:3px;border:1.5px solid}
+</style></head>
+<body>
+<div class="toolbar"><button onclick="toggleTheme()">🌓 切换主题</button><button onclick="downloadSVG()">⬇ SVG</button><button onclick="downloadPNG()">⬇ PNG</button></div>
+<div class="diagram-container">
+<div class="title"><h1>兰台云 — 签章流程时序</h1><p>验收意见书 &amp; 接收凭证 签署交互</p></div>
+<svg viewBox="0 0 920 760" width="100%">
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-color)"/></marker>
+  <marker id="ah-e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-emphasis)"/></marker>
+  <marker id="ah-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-return)"/></marker>
+</defs>
+
+<!-- Lifelines -->
+<line x1="130" y1="40" x2="130" y2="680" stroke="var(--arrow-color)" stroke-width="1" stroke-dasharray="6,4"/>
+<line x1="310" y1="40" x2="310" y2="680" stroke="var(--arrow-color)" stroke-width="1" stroke-dasharray="6,4"/>
+<line x1="510" y1="40" x2="510" y2="680" stroke="var(--arrow-color)" stroke-width="1" stroke-dasharray="6,4"/>
+<line x1="730" y1="40" x2="730" y2="680" stroke="var(--arrow-color)" stroke-width="1" stroke-dasharray="6,4"/>
+
+<!-- Participants -->
+<g><rect x="55" y="8" width="150" height="30" rx="6" fill="var(--c-backend)" stroke="var(--c-backend-border)" stroke-width="1.5"/><text x="130" y="28" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">著录端 用户</text></g>
+<g><rect x="235" y="8" width="150" height="30" rx="6" fill="var(--c-frontend)" stroke="var(--c-frontend-border)" stroke-width="1.5"/><text x="310" y="28" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">我的档案</text></g>
+<g><rect x="435" y="8" width="150" height="30" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="510" y="28" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">审核端 用户</text></g>
+<g><rect x="655" y="8" width="150" height="30" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="730" y="28" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">签章系统</text></g>
+
+<!-- Segment: 验收意见书签署 -->
+<rect x="20" y="60" width="880" height="260" rx="6" fill="none" stroke="var(--c-frontend-border)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="30" y="78" font-size="9" font-weight="700" fill="var(--c-frontend-border)">验收意见书签署流程</text>
+
+<g><rect x="55" y="90" width="150" height="30" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="130" y="110" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">创建 / 编辑</text></g>
+<path d="M130,120 L130,135 L310,135" stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#ah-e)"/>
+<g><text x="180" y="130" font-size="8" fill="var(--text-muted)">保存</text></g>
+
+<g><rect x="435" y="140" width="150" height="30" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="510" y="160" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">发起电子签章</text></g>
+<path d="M510,170 L510,185 L730,185" stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#ah-e)"/>
+<g><text x="570" y="180" font-size="8" fill="var(--text-muted)">签章请求</text></g>
+
+<g><rect x="655" y="190" width="150" height="30" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/><text x="730" y="210" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">档案馆签章</text></g>
+<path d="M730,220 L730,235 L510,235" stroke="var(--arrow-return)" stroke-width="2" fill="none" marker-end="url(#ah-r)"/>
+<g><text x="580" y="230" font-size="8" fill="var(--arrow-return)">签章完成</text></g>
+
+<g><rect x="435" y="240" width="150" height="30" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="510" y="260" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">查看 / 下载</text></g>
+
+<!-- Segment: 接收凭证签署 -->
+<rect x="20" y="330" width="880" height="310" rx="6" fill="none" stroke="var(--c-database-border)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="30" y="348" font-size="9" font-weight="700" fill="var(--c-database-border)">接收凭证签署流程</text>
+
+<g><rect x="55" y="360" width="150" height="30" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="130" y="380" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">创建 / 编辑</text></g>
+<path d="M130,390 L130,405 L510,405" stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#ah-e)"/>
+<g><text x="280" y="400" font-size="8" fill="var(--text-muted)">保存</text></g>
+
+<g><rect x="435" y="410" width="150" height="30" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="510" y="430" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">发送至著录端签章</text></g>
+<path d="M510,440 L510,455 L310,455" stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#ah-e)"/>
+<g><text x="380" y="450" font-size="8" fill="var(--text-muted)">推送签章</text></g>
+
+<g><rect x="235" y="460" width="150" height="30" rx="6" fill="var(--c-waiting)" stroke="var(--c-waiting-border)" stroke-width="1.5"/><text x="310" y="480" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">建设单位签章</text></g>
+<path d="M310,490 L310,505 L510,505" stroke="var(--arrow-return)" stroke-width="2" fill="none" marker-end="url(#ah-r)"/>
+<g><text x="370" y="500" font-size="8" fill="var(--arrow-return)">著录端签章完成</text></g>
+
+<g><rect x="435" y="510" width="150" height="30" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/><text x="510" y="530" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">审核端签署确认</text></g>
+<path d="M510,540 L510,555 L730,555" stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#ah-e)"/>
+<g><text x="570" y="550" font-size="8" fill="var(--text-muted)">最终签署</text></g>
+
+<g><rect x="655" y="560" width="150" height="30" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/><text x="730" y="580" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">签章系统完成</text></g>
+<path d="M730,590 L730,605 L510,605" stroke="var(--arrow-return)" stroke-width="2" fill="none" marker-end="url(#ah-r)"/>
+<g><text x="580" y="600" font-size="8" fill="var(--arrow-return)">签署完成</text></g>
+
+<g><rect x="435" y="610" width="150" height="30" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="510" y="630" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text-primary)">查看 / 下载</text></g>
+
+<!-- Notifications to capture side -->
+<path d="M510,440 L520,455 L130,455 L130,470" stroke="var(--arrow-color)" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#ah)"/>
+<g><text x="320" y="470" font-size="8" fill="var(--text-muted)">消息通知: 待签章</text></g>
+
+<path d="M310,490 L130,490 L130,505" stroke="var(--arrow-color)" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#ah)"/>
+<g><text x="170" y="500" font-size="8" fill="var(--text-muted)">消息通知: 签章完成</text></g>
+
+<!-- Footer -->
+<text x="900" y="700" font-size="9" fill="var(--text-muted)" text-anchor="end">兰台云数智档案 © 2026</text>
+</svg>
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-backend);border-color:var(--c-backend-border)"></div>著录端</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-messagebus);border-color:var(--c-messagebus-border)"></div>审核端</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-database);border-color:var(--c-database-border)"></div>签章文档</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-security);border-color:var(--c-security-border)"></div>签章动作</div>
+  <div class="legend-item"><span style="color:var(--arrow-emphasis)">→</span>请求/发送</div>
+  <div class="legend-item"><span style="color:var(--arrow-return)">→</span>返回/完成</div>
+</div>
+</div>
+<script>
+function toggleTheme(){var d=document.documentElement;d.getAttribute('data-theme')==='light'?d.setAttribute('data-theme','dark'):d.setAttribute('data-theme','light')}
+function downloadSVG(){var s=document.querySelector('svg'),c=s.cloneNode(!0);c.removeAttribute('width');c.setAttribute('xmlns','http://www.w3.org/2000/svg');var r=document.documentElement.getAttribute('data-theme'),st='';document.querySelectorAll('style').forEach(function(e){st+=e.textContent});var h='<svg xmlns="http://www.w3.org/2000/svg" data-theme="'+r+'" viewBox="'+s.getAttribute('viewBox')+'"><style>'+st+'</style>'+c.innerHTML+'</svg>';var b=new Blob([h],{type:'image/svg+xml'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lantai-sequence.svg';a.click()}
+function downloadPNG(){var s=document.querySelector('svg'),r=2,c=document.createElement('canvas'),ctx=c.getContext('2d'),vb=s.getAttribute('viewBox').split(' ').map(Number),w=vb[2],h=vb[3];c.width=w*r;c.height=h*r;var x=new XMLSerializer().serializeToString(s);var i=new Image;i.onload=function(){ctx.scale(r,r);ctx.fillStyle='var(--bg)';ctx.fillRect(0,0,w,h);ctx.drawImage(i,0,0);c.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lantai-sequence.png';a.click()},'image/png')};i.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(x)))}
+</script>
+</body>
+</html>

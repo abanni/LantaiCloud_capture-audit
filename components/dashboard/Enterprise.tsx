@@ -309,7 +309,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 <div className="w-full">
-                    <div className="grid grid-cols-[240px_1fr] gap-6 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 items-start">
                         
                         {/* Left Panel */}
                         <div className="space-y-4">

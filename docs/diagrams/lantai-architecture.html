@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>兰台云 — 系统架构图</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+:root{--bg:#f8fafc;--card-bg:#fff;--border:#e2e8f0;--text-primary:#0f172a;--text-muted:#64748b;--text-dim:#94a3b8;--c-frontend:#dbeafe;--c-frontend-border:#3b82f6;--c-backend:#e0f2fe;--c-backend-border:#0ea5e9;--c-database:#fef3c7;--c-database-border:#f59e0b;--c-cloud:#ede9fe;--c-cloud-border:#8b5cf6;--c-security:#fce7f3;--c-security-border:#ec4899;--c-messagebus:#d1fae5;--c-messagebus-border:#10b981;--c-external:#f1f5f9;--c-external-border:#94a3b8;--c-region:rgba(139,92,246,0.08);--c-region-border:#8b5cf6;--c-security-group:rgba(236,72,153,0.08);--c-security-group-border:#ec4899;--arrow-color:#94a3b8;--arrow-emphasis:#3b82f6;--arrow-security:#ec4899}
+[data-theme=dark]{--bg:#0f172a;--card-bg:#1e293b;--border:#334155;--text-primary:#f1f5f9;--text-muted:#94a3b8;--text-dim:#64748b;--c-frontend:#1e3a5f;--c-frontend-border:#3b82f6;--c-backend:#0c4a6e;--c-backend-border:#0ea5e9;--c-database:#451a03;--c-database-border:#f59e0b;--c-cloud:#2e1065;--c-cloud-border:#8b5cf6;--c-security:#500724;--c-security-border:#ec4899;--c-messagebus:#064e3b;--c-messagebus-border:#10b981;--c-external:#1e293b;--c-external-border:#94a3b8;--c-region:rgba(139,92,246,0.15);--c-region-border:#8b5cf6;--c-security-group:rgba(236,72,153,0.15);--c-security-group-border:#ec4899;--arrow-color:#64748b;--arrow-emphasis:#3b82f6;--arrow-security:#ec4899}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text-primary);padding:20px;min-height:100vh}
+.toolbar{position:fixed;top:12px;right:12px;display:flex;gap:6px;z-index:100}
+.toolbar button{background:var(--card-bg);border:1px solid var(--border);color:var(--text-primary);padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit}
+.toolbar button:hover{background:var(--c-frontend)}
+.diagram-container{max-width:1200px;margin:40px auto;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:30px;overflow-x:auto}
+.title{text-align:center;margin-bottom:24px}
+.title h1{font-size:20px;font-weight:700}
+.title p{font-size:12px;color:var(--text-muted);margin-top:4px}
+svg text{font-family:'JetBrains Mono',monospace}
+.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
+.legend-swatch{width:12px;height:12px;border-radius:3px;border:1.5px solid}
+</style>
+</head>
+<body>
+<div class="toolbar">
+<button onclick="toggleTheme()">🌓 切换主题</button>
+<button onclick="downloadSVG()">⬇ SVG</button>
+<button onclick="downloadPNG()">⬇ PNG</button>
+</div>
+<div class="diagram-container">
+<div class="title"><h1>兰台云数智档案 — 系统架构</h1><p>React 19 SPA · 著录端 + 审核端</p></div>
+<svg viewBox="0 0 1100 780" width="100%" style="display:block">
+<defs>
+  <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-color)"/></marker>
+  <marker id="arrowhead-emphasis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-emphasis)"/></marker>
+  <marker id="arrowhead-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="var(--arrow-color)"/></marker>
+</defs>
+<!-- Arrows -->
+<g stroke="var(--arrow-color)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)">
+  <path d="M270,110 L270,155"/><path d="M410,110 L410,155"/><path d="M550,110 L550,155"/>
+  <path d="M270,290 L270,335"/><path d="M550,290 L550,335"/>
+  <path d="M90,430 L90,475"/><path d="M230,430 L230,475"/><path d="M370,430 L370,475"/><path d="M510,430 L510,475"/><path d="M650,430 L650,475"/><path d="M790,430 L790,475"/>
+  <path d="M90,570 L90,615"/><path d="M230,570 L230,615"/><path d="M370,570 L370,615"/><path d="M510,570 L510,615"/><path d="M650,570 L650,615"/>
+</g>
+<g stroke="var(--arrow-emphasis)" stroke-width="2" fill="none" marker-end="url(#arrowhead-emphasis)">
+  <path d="M550,290 C640,290 640,200 550,200" stroke-dasharray=""/><!-- auth flow -->
+  <!-- Login → capture/audit -->
+  <path d="M340,202 L340,220 L410,220 L410,240"/>
+  <path d="M340,202 L340,220 L550,220 L550,240"/>
+</g>
+<g stroke="var(--arrow-color)" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowhead-dashed)">
+  <path d="M410,570 L410,615"/><path d="M790,570 L790,615"/>
+</g>
+<!-- Region: Frontend Layer -->
+<rect x="30" y="60" width="680" height="210" rx="10" class="c-region" fill="var(--c-region)" stroke="var(--c-region-border)" stroke-dasharray="6,4" stroke-width="1.5"/>
+<text x="40" y="82" font-size="10" fill="var(--c-cloud-border)" font-weight="700">前端展现层 (React 19 + TypeScript 5.8)</text>
+<!-- Components -->
+<g transform="translate(0,0)">
+  <rect x="80" y="100" width="140" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="80" y="100" width="140" height="55" rx="6" fill="var(--c-frontend)" stroke="var(--c-frontend-border)" stroke-width="1.5"/>
+  <text x="150" y="123" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Sidebar</text>
+  <text x="150" y="138" text-anchor="middle" font-size="9" fill="var(--text-muted)">导航菜单</text>
+</g>
+<g transform="translate(0,0)">
+  <rect x="270" y="100" width="120" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="270" y="100" width="120" height="55" rx="6" fill="var(--c-frontend)" stroke="var(--c-frontend-border)" stroke-width="1.5"/>
+  <text x="330" y="123" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">TopBar</text>
+  <text x="330" y="138" text-anchor="middle" font-size="9" fill="var(--text-muted)">标题/档案馆切换</text>
+</g>
+<g transform="translate(0,0)">
+  <rect x="440" y="100" width="100" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="440" y="100" width="100" height="55" rx="6" fill="var(--c-frontend)" stroke="var(--c-frontend-border)" stroke-width="1.5"/>
+  <text x="490" y="123" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Routes</text>
+  <text x="490" y="138" text-anchor="middle" font-size="9" fill="var(--text-muted)">HashRouter</text>
+</g>
+<g transform="translate(0,0)">
+  <rect x="590" y="100" width="100" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="590" y="100" width="100" height="55" rx="6" fill="var(--c-frontend)" stroke="var(--c-frontend-border)" stroke-width="1.5"/>
+  <text x="640" y="123" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">AppContext</text>
+  <text x="640" y="138" text-anchor="middle" font-size="9" fill="var(--text-muted)">全局状态</text>
+</g>
+<!-- Auth -->
+<g transform="translate(0,0)">
+  <rect x="80" y="175" width="140" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="80" y="175" width="140" height="55" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/>
+  <text x="150" y="198" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Login</text>
+  <text x="150" y="213" text-anchor="middle" font-size="9" fill="var(--text-muted)">身份认证</text>
+</g>
+<g transform="translate(0,0)">
+  <rect x="270" y="175" width="120" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="270" y="175" width="120" height="55" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/>
+  <text x="330" y="198" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">IdentitySelector</text>
+  <text x="330" y="213" text-anchor="middle" font-size="9" fill="var(--text-muted)">多身份选择</text>
+</g>
+<g transform="translate(0,0)">
+  <rect x="440" y="175" width="100" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="440" y="175" width="100" height="55" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/>
+  <text x="490" y="198" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">ProtectedRoute</text>
+  <text x="490" y="213" text-anchor="middle" font-size="9" fill="var(--text-muted)">路由守卫</text>
+</g>
+<!-- Region: Capture Side -->
+<rect x="30" y="290" width="320" height="160" rx="10" fill="var(--c-region)" stroke="var(--c-region-border)" stroke-dasharray="6,4" stroke-width="1.5"/>
+<text x="40" y="312" font-size="10" fill="var(--c-cloud-border)" font-weight="700">著录端 (张三 / 李进)</text>
+<g><rect x="60" y="335" width="120" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="60" y="335" width="120" height="55" rx="6" fill="var(--c-backend)" stroke="var(--c-backend-border)" stroke-width="1.5"/><text x="120" y="358" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">著录工作台</text><text x="120" y="373" text-anchor="middle" font-size="9" fill="var(--text-muted)">项目卡片/消息</text></g>
+<g><rect x="200" y="335" width="120" height="55" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="200" y="335" width="120" height="55" rx="6" fill="var(--c-backend)" stroke="var(--c-backend-border)" stroke-width="1.5"/><text x="260" y="358" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">新建档案</text><text x="260" y="373" text-anchor="middle" font-size="9" fill="var(--text-muted)">分步向导</text></g>
+<g><rect x="60" y="400" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="60" y="400" width="120" height="40" rx="6" fill="var(--c-backend)" stroke="var(--c-backend-border)" stroke-width="1.5"/><text x="120" y="424" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">我的档案</text></g>
+<g><rect x="200" y="400" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="200" y="400" width="120" height="40" rx="6" fill="var(--c-backend)" stroke="var(--c-backend-border)" stroke-width="1.5"/><text x="260" y="424" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">企业管理</text></g>
+
+<!-- Region: Audit Side -->
+<rect x="390" y="290" width="320" height="160" rx="10" fill="var(--c-region)" stroke="var(--c-region-border)" stroke-dasharray="6,4" stroke-width="1.5"/>
+<text x="400" y="312" font-size="10" fill="var(--c-cloud-border)" font-weight="700">审核端 (徐琴)</text>
+<g><rect x="410" y="335" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="410" y="335" width="120" height="40" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="470" y="358" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">审核工作台</text></g>
+<g><rect x="550" y="335" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="550" y="335" width="120" height="40" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="610" y="358" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">档案登记</text></g>
+<g><rect x="410" y="385" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="410" y="385" width="120" height="40" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="470" y="409" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">档案审核</text></g>
+<g><rect x="550" y="385" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="550" y="385" width="120" height="40" rx="6" fill="var(--c-messagebus)" stroke="var(--c-messagebus-border)" stroke-width="1.5"/><text x="610" y="409" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">验收意见书</text></g>
+
+<!-- Region: Print & Sign -->
+<rect x="30" y="490" width="680" height="100" rx="10" fill="var(--c-region)" stroke="var(--c-region-border)" stroke-dasharray="6,4" stroke-width="1.5"/>
+<text x="40" y="512" font-size="10" fill="var(--c-cloud-border)" font-weight="700">打印 &amp; 签章模块</text>
+<g><rect x="50" y="530" width="100" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="50" y="530" width="100" height="40" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="100" y="554" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">验收意见书</text></g>
+<g><rect x="175" y="530" width="100" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="175" y="530" width="100" height="40" rx="6" fill="var(--c-database)" stroke="var(--c-database-border)" stroke-width="1.5"/><text x="225" y="554" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">接收凭证</text></g>
+<g><rect x="300" y="530" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="300" y="530" width="120" height="40" rx="6" fill="var(--c-security)" stroke="var(--c-security-border)" stroke-width="1.5"/><text x="360" y="554" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">电子签章</text></g>
+<!-- Data mock -->
+<g><rect x="450" y="530" width="120" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="450" y="530" width="120" height="40" rx="6" fill="var(--c-external)" stroke="var(--c-external-border)" stroke-width="1.5"/><text x="510" y="554" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Mock 数据</text></g>
+<g><rect x="600" y="530" width="80" height="40" rx="6" class="c-mask" fill="var(--card-bg)"/><rect x="600" y="530" width="80" height="40" rx="6" fill="var(--c-external)" stroke="var(--c-external-border)" stroke-width="1.5"/><text x="640" y="554" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">types.ts</text></g>
+
+<!-- Tech stack card -->
+<g transform="translate(0,0)">
+  <rect x="750" y="80" width="300" height="180" rx="8" class="c-mask" fill="var(--card-bg)"/>
+  <rect x="750" y="80" width="300" height="180" rx="8" fill="var(--card-bg)" stroke="var(--border)" stroke-width="1.5"/>
+  <text x="900" y="105" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-primary)">技术栈</text>
+  <text x="770" y="128" font-size="10" fill="var(--text-primary)">React 19 + TypeScript 5.8</text>
+  <text x="770" y="145" font-size="10" fill="var(--text-primary)">Vite 6 + Tailwind CSS 4</text>
+  <text x="770" y="162" font-size="10" fill="var(--text-primary)">React Router DOM 7</text>
+  <text x="770" y="179" font-size="10" fill="var(--text-primary)">Recharts 3 + Motion 12</text>
+  <text x="770" y="196" font-size="10" fill="var(--text-primary)">Lucide React 图标</text>
+  <text x="770" y="213" font-size="10" fill="var(--text-primary)">Vitest 4 + Testing Library</text>
+  <text x="770" y="235" font-size="9" fill="var(--text-muted)">演示用户: 张三/李进/徐琴</text>
+</g>
+</svg>
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-frontend);border-color:var(--c-frontend-border)"></div>前端组件</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-backend);border-color:var(--c-backend-border)"></div>著录端模块</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-messagebus);border-color:var(--c-messagebus-border)"></div>审核端模块</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-database);border-color:var(--c-database-border)"></div>打印签章</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-security);border-color:var(--c-security-border)"></div>认证/安全</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--c-external);border-color:var(--c-external-border)"></div>数据层</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-color:var(--c-region-border);border-style:dashed"></div>边界/区域</div>
+</div>
+</div>
+<script>
+function toggleTheme(){var d=document.documentElement;d.getAttribute('data-theme')==='light'?d.setAttribute('data-theme','dark'):d.setAttribute('data-theme','light')}
+function downloadSVG(){var s=document.querySelector('svg'),c=s.cloneNode(!0);c.removeAttribute('width');c.setAttribute('xmlns','http://www.w3.org/2000/svg');var r=document.documentElement.getAttribute('data-theme'),st='';document.querySelectorAll('style').forEach(function(e){st+=e.textContent});var h='<svg xmlns="http://www.w3.org/2000/svg" data-theme="'+r+'" viewBox="'+s.getAttribute('viewBox')+'"><style>'+st+'</style>'+c.innerHTML+'</svg>';var b=new Blob([h],{type:'image/svg+xml'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lantai-architecture.svg';a.click()}
+function downloadPNG(){var s=document.querySelector('svg'),r=2,c=document.createElement('canvas'),ctx=c.getContext('2d'),vb=s.getAttribute('viewBox').split(' ').map(Number),w=vb[2],h=vb[3];c.width=w*r;c.height=h*r;var x=new XMLSerializer().serializeToString(s);var i=new Image;i.onload=function(){ctx.scale(r,r);ctx.fillStyle='var(--bg)';ctx.fillRect(0,0,w,h);ctx.drawImage(i,0,0);c.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lantai-architecture.png';a.click()},'image/png')};i.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(x)))}
+</script>
+</body>
+</html>

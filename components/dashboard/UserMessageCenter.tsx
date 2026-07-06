@@ -19,12 +19,14 @@ interface UserMessageCenterProps {
     messages: UserMessage[];
     onMessagesChange?: React.Dispatch<React.SetStateAction<UserMessage[]>>;
     onNavigateToWorkspace?: () => void;
+    onNavigateToProject?: (projectName: string) => void;
 }
 
 const UserMessageCenter: React.FC<UserMessageCenterProps> = ({ 
     messages,
     onMessagesChange,
-    onNavigateToWorkspace
+    onNavigateToWorkspace,
+    onNavigateToProject
 }) => {
     // Multi-select and detail viewing state for user messages
     const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
@@ -224,10 +226,14 @@ const UserMessageCenter: React.FC<UserMessageCenterProps> = ({
 
                                             {/* Associated Project */}
                                             <td className="py-3 px-4 whitespace-nowrap text-slate-500 font-medium">
-                                                <div className="flex items-center gap-1 max-w-[220px] truncate" title={msg.projectName}>
-                                                    <Folder className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                <button
+                                                    onClick={() => onNavigateToProject?.(msg.projectName)}
+                                                    className="flex items-center gap-1 max-w-[220px] truncate hover:text-blue-600 transition-colors cursor-pointer"
+                                                    title={`查看项目: ${msg.projectName}`}
+                                                >
+                                                    <Folder className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
                                                     <span className="truncate">{msg.projectName}</span>
-                                                </div>
+                                                </button>
                                             </td>
 
                                             {/* Date */}
