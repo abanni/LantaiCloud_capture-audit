@@ -1,8 +1,8 @@
 import { Building2, Landmark, Video, BookOpen, Microscope, Calculator } from 'lucide-react';
 
 export const EXTERNAL_ARCHIVES = [
-    { id: 'ks-urban', name: '昆山市城建档案馆', reviewer: '昆山/徐琴', region: '昆山', code: '320583' },
-    { id: 'cs-urban', name: '常熟市城市建设档案馆', reviewer: '常熟/袁翔', region: '常熟', code: '320581' },
+    { id: 'ks-urban', name: '昆山市城建档案馆', reviewer: '昆山/李娜', region: '昆山', code: '320583' },
+    { id: 'cs-urban', name: '常熟市城市建设档案馆', reviewer: '常熟/许志平', region: '常熟', code: '320581' },
 ];
 
 export interface ArchiveType {

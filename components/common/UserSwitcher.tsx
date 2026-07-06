@@ -44,7 +44,7 @@ const UserSwitcher: React.FC<UserSwitcherProps> = ({
     const [activeTab, setActiveTab] = useState<'info' | 'password'>('info');
 
     const [personalInfo, setPersonalInfo] = useState({
-        name: identity.user.name || '张三',
+        name: identity.user.name || '张伟',
         idCard: '320583200001019999',
         phone: '15888888888',
         email: 'ry@163.com',

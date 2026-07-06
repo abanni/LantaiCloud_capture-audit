@@ -94,7 +94,7 @@ const OnboardingPanel: React.FC<OnboardingPanelProps> = ({
                                 <div className="grid grid-cols-1 gap-3">
                                     {[{ id: 'org_wuwu', name: '上海无无科技有限公司', label: '无无科技 - 王钢' },
                                       { id: 'org_qt', name: '苏州清陶动力科技', label: '清陶动力 - 冯建超' },
-                                      { id: 'org_cs', name: '常熟工程建设集团有限公司', label: '常熟建工 - 张三' }].map((org) => (
+                                      { id: 'org_cs', name: '常熟工程建设集团有限公司', label: '常熟建工 - 张伟' }].map((org) => (
                                         <div 
                                             key={org.id}
                                             onClick={() => setSelectedJoinOrg(org.id)}

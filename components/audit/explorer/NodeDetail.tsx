@@ -98,7 +98,7 @@ export const NodeDetail: React.FC<NodeDetailProps> = ({
 
             {/* Foot Contact */}
             <div className="mt-10 space-y-1 text-xs ml-4 text-slate-500 font-sans">
-                <p>承办人：阮峰</p>
+                <p>承办人：岑源</p>
                 <p>复查组电话：0512-52823076</p>
                 <p>综合监督单位：苏州市国家数字档案馆</p>
                 <p>备案地点：昆山市张浦综合楼大厅二号窗口</p>

@@ -31,7 +31,7 @@ const INITIAL_ARCHIVES: ArchiveTenant[] = [
 const INITIAL_IDENTITIES: Identity[] = [
     {
         id: 'id_1',
-        user: { id: 'u1', name: '张三', role: '管理员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
+        user: { id: 'u1', name: '张伟', role: '管理员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
         organization: {
             id: 'org_wuwu', name: '上海无无科技有限公司', shortName: '无无科技', type: 'ENTERPRISE',
             code: '91310230MAE9102L0D', licenceFileName: '营业执照.png', legalRep: '王钢', legalRepPhone: '13812345678'
@@ -40,7 +40,7 @@ const INITIAL_IDENTITIES: Identity[] = [
     },
     {
         id: 'id_2',
-        user: { id: 'u1', name: '张三', role: '成员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
+        user: { id: 'u1', name: '张伟', role: '成员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
         organization: {
             id: 'org_qt', name: '苏州清陶动力科技', shortName: '清陶动力', type: 'ENTERPRISE',
             code: '91320583MA1Y8L6D03', licenceFileName: '营业执照.pdf', legalRep: '冯建超', legalRepPhone: '15822341234'
@@ -49,10 +49,10 @@ const INITIAL_IDENTITIES: Identity[] = [
     },
     {
         id: 'id_3',
-        user: { id: 'u1', name: '张三', role: '法定代表人', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
+        user: { id: 'u1', name: '张伟', role: '法定代表人', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active' },
         organization: {
             id: 'org_cs', name: '常熟工程建设集团有限公司', shortName: '常熟建工', type: 'ENTERPRISE',
-            code: '91320581MA1U2U4X1N', licenceFileName: '营业执照.jpg', legalRep: '张三', legalRepPhone: '13988887777'
+            code: '91320581MA1U2U4X1N', licenceFileName: '营业执照.jpg', legalRep: '张伟', legalRepPhone: '13988887777'
         },
         role: '法定代表人', department: '总经理办公室'
     },
@@ -64,10 +64,10 @@ const INITIAL_IDENTITIES: Identity[] = [
     },
     {
         id: 'id_5',
-        user: { id: 'u3', name: '徐琴', role: '审核人员', email: '0512****5678', avatarBg: 'bg-rose-600', joinDate: '2025-03-01', status: 'active' },
+        user: { id: 'u3', name: '李娜', role: '审核人员', email: '0512****5678', avatarBg: 'bg-rose-600', joinDate: '2025-03-01', status: 'active' },
         archiveOrg: {
             id: 'org_ks', name: '昆山市城建档案馆', shortName: '昆山城建档案馆', region: '昆山',
-            code: '12320583MB1A12345X', responsiblePerson: '徐琴'
+            code: '12320583MB1A12345X', responsiblePerson: '李娜'
         },
         role: '审核人员', department: '档案审核科'
     }

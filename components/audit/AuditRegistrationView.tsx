@@ -220,9 +220,9 @@ export const AuditRegistrationView = ({
                                         选择分管审核人
                                      </label>
                                      <select className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:ring-1 focus:ring-emerald-500 font-semibold outline-none text-slate-800 shadow-inner" title="分管审核人">
-                                         <option>张三 (6)</option>
-                                         <option>李四 (3)</option>
-                                         <option>徐琴 (2)</option>
+                                         <option>张伟 (6)</option>
+                                         <option>彭勇 (3)</option>
+                                         <option>李娜 (2)</option>
                                      </select>
                                 </div>
                                 

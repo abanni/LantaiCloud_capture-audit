@@ -2,7 +2,7 @@
  * 验收意见书 — 数据类型定义
  */
 
-export type SignStatus = 'unsent' | 'pending' | 'signed' | 'rejected';
+export type SignStatus = 'unsent' | 'signed';
 
 /** 验收意见书文件记录（支持同一项目多次开具） */
 export interface AcceptanceOpinionFile {
@@ -140,7 +140,7 @@ export function makeDefaultAcceptanceOpinion(
     videoCount: 0,
     totalPageCount: 0,
     receiptRegisterCopies: 0,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'unsent',
     fileHistory: [],

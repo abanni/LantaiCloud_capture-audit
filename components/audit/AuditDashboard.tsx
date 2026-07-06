@@ -210,7 +210,7 @@ export const AuditDashboard = ({
                                                     <div>
                                                         <h4 className="font-bold text-slate-800 mb-0.5 truncate max-w-[280px] md:max-w-xs">{item.projectInfo.projectName}</h4>
                                                         <p className="text-[10px] text-slate-400">
-                                                            申报人: {item.projectInfo.operator || '阮峰'} · 提交挂载: {item.submissionDate}
+                                                            申报人: {item.projectInfo.operator || '岑源'} · 提交挂载: {item.submissionDate}
                                                         </p>
                                                     </div>
                                                 </div>

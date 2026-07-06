@@ -45,10 +45,10 @@ const Sidebar: React.FC<SidebarProps> = ({ identity, onSwitchIdentity }) => {
         { path: '/audit-guidance', label: '档案指导', icon: BookOpen },
         { path: '/audit-registration', label: '档案登记', icon: Files },
         { path: '/audit-projects', label: '档案审核', icon: ShieldCheck },
-        { path: '/audit-project-info', label: '项目信息', icon: Search },
-        { path: '/audit-statistics', label: '统计分析', icon: BarChart2 },
         { path: '/print/acceptance-opinion', label: '验收意见书', icon: ClipboardCheck },
         { path: '/print/receipt-certificate', label: '接收凭证', icon: ScrollText },
+        { path: '/audit-project-info', label: '项目信息', icon: Search },
+        { path: '/audit-statistics', label: '统计分析', icon: BarChart2 },
     ];
 
     const isActive = (path: string) => active === path;

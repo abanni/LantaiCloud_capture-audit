@@ -242,7 +242,7 @@ export const ArchiveTree: React.FC<ArchiveTreeProps> = ({
                             <TimelineItem
                                 title="前置登记及建档"
                                 date={archive.submissionDate}
-                                desc={`经办人 [${info.operator || '阮峰'}] 完成数字挂载分配`}
+                                desc={`经办人 [${info.operator || '岑源'}] 完成数字挂载分配`}
                                 status="COMPLETED"
                             />
                             <TimelineItem

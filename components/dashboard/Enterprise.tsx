@@ -96,7 +96,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                 associationId: 'assoc_1', archiveId: 'ks-urban',
                 archiveName: '昆山市城市建设档案馆', archiveCode: '320583', region: '昆山',
                 fileTypes: ['城市建设档案', '竣工验收检测报告', '监理日志与安全卷宗'],
-                liaison: '昆山/徐琴', syncFrequency: '实时自动上报',
+                liaison: '昆山/李娜', syncFrequency: '实时自动上报',
                 token: 'LT-TOK-KS-98321-G9', associatedDate: '2026-05-10',
                 protocolVersion: 'GB50328-2014 (2019变动版规范)', status: 'active',
                 remarks: '企业启用的主要关联通道，用于城建配套和综合审批数据上报'
@@ -106,7 +106,7 @@ const Enterprise: React.FC<EnterpriseProps> = ({
                 associationId: 'assoc_2', archiveId: 'cs-urban',
                 archiveName: '常熟市国家级城建档案馆', archiveCode: '320581', region: '常熟',
                 fileTypes: ['建筑工程档案', '竣工验收检测报告'],
-                liaison: '常熟/袁翔', syncFrequency: '每日自动上报',
+                liaison: '常熟/许志平', syncFrequency: '每日自动上报',
                 token: 'LT-TOK-CS-38291-B3', associatedDate: '2026-05-24',
                 protocolVersion: 'GB50328-2014 (2019变动版规范)', status: 'active',
                 remarks: '常熟地区单体建设项目的主要申报入口'
@@ -129,14 +129,14 @@ const Enterprise: React.FC<EnterpriseProps> = ({
     const [orders, setOrders] = useState<any[]>([
         { id: 'LT202605012543', time: '2026-05-01 10:14', creator: '王钢', amount: 2980, desc: '专业版 - 年度订阅', status: '已支付' },
         { id: 'LT202604128912', time: '2026-04-12 16:45', creator: '丁宇宇', amount: 596, desc: '增购账号 (2个专业版协作账号)', status: '已支付' },
-        { id: 'LT202606041009', time: '2026-06-04 15:40', creator: '张三', amount: 12800, desc: '企业版 - 年度订阅安全升级', status: '未支付' }
+        { id: 'LT202606041009', time: '2026-06-04 15:40', creator: '张伟', amount: 12800, desc: '企业版 - 年度订阅安全升级', status: '未支付' }
     ]);
 
     const handleChangeVersion = (newVersion: 'free' | 'team' | 'pro' | 'enterprise', price: number, desc: string) => {
         const newOrder = {
             id: `LT20260604${Math.floor(1000 + Math.random() * 9000)}`,
             time: new Date().toISOString().replace('T', ' ').substring(0, 16),
-            creator: '张三',
+            creator: '张伟',
             amount: price,
             desc: desc,
             status: '已支付'
@@ -182,17 +182,17 @@ const Enterprise: React.FC<EnterpriseProps> = ({
             setTeamMembers([
                 { id: 'm1', name: '王钢', role: '法定代表人', email: '138****8888', avatarBg: 'bg-amber-600', joinDate: '2024-01-01', status: 'active', department: '总经办' },
                 { id: 'm2', name: '丁宇宇', role: '管理员', email: 'ding@lantai.com', avatarBg: 'bg-orange-500', joinDate: '2024-03-15', status: 'active', department: '工程部' },
-                { id: 'm3', name: '张三', role: '管理员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active', department: '工程部' },
+                { id: 'm3', name: '张伟', role: '管理员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-05-20', status: 'active', department: '工程部' },
             ]);
         } else if (identity.organization.id === 'org_qt') {
             setTeamMembers([
                 { id: 'm4', name: '冯建超', role: '法定代表人', email: '158****1234', avatarBg: 'bg-amber-600', joinDate: '2024-02-10', status: 'active', department: '董事会' },
-                { id: 'm5', name: '张三', role: '成员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-06-01', status: 'active', department: '综合办' },
+                { id: 'm5', name: '张伟', role: '成员', email: '139****1234', avatarBg: 'bg-primary', joinDate: '2024-06-01', status: 'active', department: '综合办' },
             ]);
         } else if (identity.organization.id === 'org_cs') {
             setTeamMembers([
-                { id: 'm6', name: '张三', role: '法定代表人', email: '139****1234', avatarBg: 'bg-amber-600', joinDate: '2024-05-20', status: 'active', department: '总经理办公室' },
-                { id: 'm7', name: '李四', role: '管理员', email: 'li4@lantai.com', avatarBg: 'bg-green-600', joinDate: '2024-06-02', status: 'active', department: '总工办' },
+                { id: 'm6', name: '张伟', role: '法定代表人', email: '139****1234', avatarBg: 'bg-amber-600', joinDate: '2024-05-20', status: 'active', department: '总经理办公室' },
+                { id: 'm7', name: '彭勇', role: '管理员', email: 'li4@lantai.com', avatarBg: 'bg-green-600', joinDate: '2024-06-02', status: 'active', department: '总工办' },
             ]);
         } else {
             setTeamMembers([{

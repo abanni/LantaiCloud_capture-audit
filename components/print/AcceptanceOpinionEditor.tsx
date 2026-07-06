@@ -223,21 +223,16 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
           <div className="flex items-center gap-3">
             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
               <Printer size={16} className="text-blue-600" />
-              验收意见书 预览
+              验收意见书
             </h3>
             {opinion.signStatus === 'signed' && (
               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full border border-emerald-200 flex items-center gap-1">
                 <CheckCircle size={11} /> 已签章
               </span>
             )}
-            {opinion.signStatus === 'pending' && (
-              <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full border border-amber-200 flex items-center gap-1">
-                <Loader2 size={11} className="animate-spin" /> 签章中
-              </span>
-            )}
-            {opinion.signStatus === 'rejected' && (
-              <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded-full border border-red-200 flex items-center gap-1">
-                <AlertCircle size={11} /> 已退回
+            {opinion.signStatus === 'unsent' && (
+              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-full border border-slate-200 flex items-center gap-1">
+                未签章
               </span>
             )}
           </div>
@@ -446,10 +441,10 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
                   value={opinion.projectReceiver || ''}
                   placeholder="选择项目接收人"
                   options={[
-                    { label: '徐琴', value: '徐琴' },
-                    { label: '阮峰', value: '阮峰' },
-                    { label: '张溢', value: '张溢' },
-                    { label: '袁翔', value: '袁翔' },
+                    { label: '李娜', value: '李娜' },
+                    { label: '岑源', value: '岑源' },
+                    { label: '谢林', value: '谢林' },
+                    { label: '许志平', value: '许志平' },
                   ]}
                   onChange={v => updateField('projectReceiver', v)}
                 />
@@ -507,8 +502,8 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
               )}
             </div>
 
-            {/* Right: action buttons — 取消在最右 */}
-            <div className="flex items-center gap-3 text-xs font-bold">
+            {/* Right: action buttons */}
+            <div className="flex items-center gap-2 text-xs font-bold">
               <button
                 onClick={handleDownload}
                 className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition cursor-pointer flex items-center gap-1.5"
@@ -520,18 +515,8 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
                 onClick={handlePreviewOpinion}
                 className="px-4 py-2 bg-white border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition cursor-pointer flex items-center gap-1.5"
               >
-                <Eye size={13} /> 预览审核意见书
+                <Eye size={13} /> 预览
               </button>
-
-              {/* 查看 — only when signed */}
-              {opinion.signStatus === 'signed' && (
-                <button
-                  onClick={() => alert(`正在打开已签章文件：${opinion.approvalOpinionNo}`)}
-                  className="px-4 py-2 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 transition cursor-pointer flex items-center gap-1.5"
-                >
-                  <Eye size={13} /> 查看
-                </button>
-              )}
 
               <button
                 onClick={handleSave}
@@ -548,11 +533,11 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
                 {saving ? '保存中...' : saveSuccess ? '已保存' : '保存'}
               </button>
 
-              {/* 电子签章 button — only when not already signed */}
-              {opinion.signStatus !== 'signed' && (
+              {/* 电子签章 — only when unsent */}
+              {opinion.signStatus === 'unsent' && (
                 <button
                   onClick={handleSign}
-                  disabled={signing || opinion.signStatus === 'pending'}
+                  disabled={signing}
                   className="px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition cursor-pointer flex items-center gap-1.5 shadow-sm disabled:opacity-60"
                 >
                   {signing ? (
@@ -562,13 +547,17 @@ export const AcceptanceOpinionEditor: React.FC<AcceptanceOpinionEditorProps> = (
                   ) : (
                     <FileSignature size={14} />
                   )}
-                  {signing
-                    ? '签章中...'
-                    : signSuccess
-                      ? '签章成功'
-                      : opinion.signStatus === 'pending'
-                        ? '签章中'
-                        : '电子签章'}
+                  {signing ? '签章中...' : signSuccess ? '签章成功' : '电子签章'}
+                </button>
+              )}
+
+              {/* 查看 — only when signed */}
+              {opinion.signStatus === 'signed' && (
+                <button
+                  onClick={() => alert(`正在打开已签章文件：${opinion.approvalOpinionNo}`)}
+                  className="px-4 py-2 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 transition cursor-pointer flex items-center gap-1.5"
+                >
+                  <Eye size={13} /> 查看
                 </button>
               )}
 

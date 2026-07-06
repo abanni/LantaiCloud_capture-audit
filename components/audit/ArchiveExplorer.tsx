@@ -57,7 +57,7 @@ const getAIAnalysis = async (nodeName: string, projectContext: ProjectInfo) => {
                 advice = "已自动匹配人防工程规划标准，建议直接予以通过。";
             } else if (!isCompliant) {
                 reason = "标题中包含禁止字词（如'草稿'），不满足工程资料正式竣工备案规范。一类档案必须完备正式印花签章。";
-                advice = "建议联系项目的编制人员（阮峰 / 15850024951）退还该单体材料，上传加盖电子签章的正式受控版本。";
+                advice = "建议联系项目的编制人员（岑源 / 15850024951）退还该单体材料，上传加盖电子签章的正式受控版本。";
             } else if (nodeName.includes("规划")) {
                 reason = "核准报备面积、容积率、四至拐点界限坐标完备清晰。";
                 advice = "通过格式及防伪哈希校验，无须纠偏。";
@@ -111,7 +111,7 @@ const SimulatedAdministrativeLicensePDF = () => {
 
             {/* Foot Contact */}
             <div className="mt-10 space-y-1 text-xs ml-4 text-slate-500 font-sans">
-                <p>承办人：阮峰</p>
+                <p>承办人：岑源</p>
                 <p>复查组电话：0512-52823076</p>
                 <p>综合监督单位：苏州市国家数字档案馆</p>
                 <p>备案地点：昆山市张浦综合楼大厅二号窗口</p>
@@ -509,7 +509,7 @@ export const ArchiveExplorer = ({
                         <div className="p-4">
                             <h4 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-4">审阅流传节点跟踪</h4>
                             <div className="space-y-6 ml-2">
-                                <TimelineItem title="前置登记及建档" date={archive.submissionDate} desc={`经办人 [${info.operator || '阮峰'}] 完成数字挂载分配`} status="COMPLETED" />
+                                <TimelineItem title="前置登记及建档" date={archive.submissionDate} desc={`经办人 [${info.operator || '岑源'}] 完成数字挂载分配`} status="COMPLETED" />
                                 <TimelineItem title="窗口初审 (当前阶段)" date="进行中" desc="主要对各阶段文件的完整性、签章完备度、以及双层PDF规范进行自动AI质检评估。" status={archive.stage === "FIRST_REVIEW" ? "CURRENT" : "COMPLETED"} />
                                 <TimelineItem title="打印验收意见书" date="--" desc="科室窗口打字盖章" status={["SECOND_REVIEW","RECEIPT_PRINT","ARCHIVING","COMPLETED"].includes(archive.stage) ? "COMPLETED" : "PENDING"} />
                                 <TimelineItem title="接收复核复审" date="--" desc="专家及二级档案室最终签字" status={["RECEIPT_PRINT","ARCHIVING","COMPLETED"].includes(archive.stage) ? "COMPLETED" : "PENDING"} />

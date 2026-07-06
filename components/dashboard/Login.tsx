@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
             if (activeTab === 'zs') {
                 onLoginSuccess(undefined);
             } else if (activeTab === 'xq') {
-                onLoginSuccess(identities.find(id => id.user.name === '徐琴'));
+                onLoginSuccess(identities.find(id => id.user.name === '李娜'));
             } else {
                 onLoginSuccess(identities.find(id => id.user.name === '李进'));
             }
@@ -73,9 +73,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                         {/* Persona selector */}
                         <div className="grid grid-cols-3 gap-2.5">
                             {[
-                                { key: 'zs' as const, label: '张三', desc: '多组织管理员', icon: User },
+                                { key: 'zs' as const, label: '张伟', desc: '多组织管理员', icon: User },
                                 { key: 'lj' as const, label: '李进', desc: '个人体验用户', icon: UserPlus },
-                                { key: 'xq' as const, label: '徐琴', desc: '档案馆审核人员', icon: UserCheck, audit: true },
+                                { key: 'xq' as const, label: '李娜', desc: '档案馆审核人员', icon: UserCheck, audit: true },
                             ].map(({ key, label, desc, icon: Icon, audit }) => {
                                 const isActive = activeTab === key;
                                 const activeBg = audit ? 'bg-emerald-600' : 'bg-primary';
@@ -111,8 +111,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, identities }) => {
                             activeTab === 'zs' ? 'bg-blue-50' : activeTab === 'xq' ? 'bg-emerald-50 border border-emerald-200' : 'bg-emerald-50'
                         }`}>
                             <p className={activeTab === 'xq' ? 'text-emerald-800' : 'text-slate-600'}>
-                                {activeTab === 'zs' && <><strong className="text-text-primary">张三</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>}
-                                {activeTab === 'xq' && <><strong className="text-emerald-900">徐琴</strong>（0512****5678）是<strong className="text-emerald-900">昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
+                                {activeTab === 'zs' && <><strong className="text-text-primary">张伟</strong>（139****1234）是资深工程档案管理员，关联<strong>无无科技</strong>、<strong>清陶动力</strong>、<strong>常熟建工</strong>三个组织，登录后可选身份进入对应工作台。</>}
+                                {activeTab === 'xq' && <><strong className="text-emerald-900">李娜</strong>（0512****5678）是<strong className="text-emerald-900">昆山市城建档案馆</strong>审核人员，登录后可进行档案审核、登记、指导等操作。</>}
                                 {activeTab === 'lj' && <><strong className="text-text-primary">李进</strong>（177****8899）是新注册个人用户，暂未挂靠组织，登录后可直接体验组织入驻流程。</>}
                             </p>
                         </div>

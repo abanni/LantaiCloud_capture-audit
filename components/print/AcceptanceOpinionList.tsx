@@ -7,7 +7,6 @@ import {
   RotateCcw,
   ChevronUp,
   ChevronDown,
-  History,
   FileText,
   X,
 } from 'lucide-react';
@@ -21,9 +20,7 @@ interface AcceptanceOpinionListProps {
 
 const signStatusLabel: Record<SignStatus, { label: string; color: string }> = {
   unsent: { label: '未签章', color: 'bg-slate-100 text-slate-600 border-slate-200' },
-  pending: { label: '签章中', color: 'bg-amber-100 text-amber-700 border-amber-200' },
   signed: { label: '已签章', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-  rejected: { label: '已退回', color: 'bg-red-100 text-red-700 border-red-200' },
 };
 
 type SortField = 'receiptRegistrationNo' | 'id';
@@ -79,10 +76,9 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
     );
   };
 
-  const handleViewHistory = (item: AcceptanceOpinionListItem) => {
+  const handleViewFiles = (item: AcceptanceOpinionListItem) => {
     const opinion = getOpinionById(item.id);
     if (opinion?.fileHistory && opinion.fileHistory.length > 0) {
-      // 按创建时间倒序排列
       const sorted = [...opinion.fileHistory].sort(
         (a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime()
       );
@@ -90,6 +86,10 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
       setHistoryProjectName(item.projectName);
       setShowHistoryModal(true);
     }
+  };
+
+  const hasFiles = (item: AcceptanceOpinionListItem) => {
+    return (item.fileCount || 0) > 0;
   };
 
   return (
@@ -135,34 +135,20 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
                 <th className="p-4 w-40">项目地点</th>
                 <th className="p-4 w-40">施工许可证号</th>
                 <th className="p-4 w-28">质监号</th>
-                <th className="p-4 w-22">签章状态</th>
-                <th className="p-4 w-44 text-center">操作</th>
+                <th className="p-4 w-36 text-center">操作</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length > 0 ? (
                 filtered.map(item => {
-                  const ss = signStatusLabel[item.signStatus];
-                  const isSigned = item.signStatus === 'signed';
-                  const hasMultipleFiles = (item.fileCount || 1) > 1;
+                  const itemHasFiles = hasFiles(item);
                   return (
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors group border-t border-slate-100">
                       <td className="p-4 font-mono font-bold text-emerald-700">
                         {item.receiptRegistrationNo || '-'}
                       </td>
                       <td className="p-4 font-bold text-slate-800 max-w-[240px] truncate" title={item.projectName}>
-                        <div className="flex items-center gap-2">
-                          {item.projectName}
-                          {hasMultipleFiles && (
-                            <button
-                              onClick={() => handleViewHistory(item)}
-                              className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 bg-amber-50 text-amber-700 rounded border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer"
-                              title="查看历史文件"
-                            >
-                              <History size={10} /> {item.fileCount}份
-                            </button>
-                          )}
-                        </div>
+                        {item.projectName}
                       </td>
                       <td className="p-4 text-slate-600 truncate max-w-[160px]" title={item.constructionUnit}>
                         {item.constructionUnit}
@@ -177,12 +163,7 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
                         {item.qualityNumber || '-'}
                       </td>
                       <td className="p-4">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${ss.color}`}>
-                          {ss.label}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center justify-center gap-1.5">
+                        <div className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                           <button
                             onClick={() => onCreate(item.id)}
                             className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 text-[11px] font-bold px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 rounded-lg border border-emerald-200/60 transition-all cursor-pointer"
@@ -190,16 +171,21 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
                             <Plus size={12} /> 创建
                           </button>
                           <button
-                            onClick={() => onView(item.id)}
-                            disabled={!isSigned}
+                            onClick={() => handleViewFiles(item)}
+                            disabled={!itemHasFiles}
                             className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg border transition-all cursor-pointer ${
-                              isSigned
+                              itemHasFiles
                                 ? 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border-emerald-200/60'
                                 : 'text-slate-400 bg-slate-50 border-slate-200 cursor-not-allowed opacity-50'
                             }`}
-                            title={isSigned ? '查看已签章文件' : '尚未签章'}
+                            title={itemHasFiles ? '查看所有文件' : '暂无文件'}
                           >
                             <Eye size={12} /> 查看
+                            {itemHasFiles && (
+                              <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-200 text-emerald-800">
+                                {item.fileCount}
+                              </span>
+                            )}
                           </button>
                         </div>
                       </td>
@@ -208,7 +194,7 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="p-12 text-center text-slate-400 font-semibold">
+                  <td colSpan={7} className="p-12 text-center text-slate-400 font-semibold">
                     <ClipboardCheck size={32} className="mx-auto mb-2 text-slate-300" />
                     暂无匹配的验收意见书记录
                   </td>
@@ -228,12 +214,10 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
         <span className="flex items-center gap-3">
           {(() => {
             const signed = filtered.filter(i => i.signStatus === 'signed').length;
-            const pending = filtered.filter(i => i.signStatus === 'pending').length;
             const unsent = filtered.filter(i => i.signStatus === 'unsent').length;
             return (
               <>
                 <span className="text-emerald-600 font-semibold">已签章 {signed}</span>
-                <span className="text-amber-600 font-semibold">签章中 {pending}</span>
                 <span className="text-slate-500">未签章 {unsent}</span>
               </>
             );
@@ -248,7 +232,7 @@ export const AcceptanceOpinionList: React.FC<AcceptanceOpinionListProps> = ({ on
             {/* Header */}
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0 rounded-t-2xl">
               <div>
-                <h3 className="text-sm font-bold text-slate-800">历史文件列表</h3>
+                <h3 className="text-sm font-bold text-slate-800">文件列表</h3>
                 <p className="text-[11px] text-slate-500 mt-0.5 truncate max-w-[400px]" title={historyProjectName}>
                   {historyProjectName}
                 </p>

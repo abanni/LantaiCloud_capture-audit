@@ -36,7 +36,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 0,
     totalPageCount: 0,
     receiptRegisterCopies: 0,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'unsent',
     fileHistory: [
@@ -83,10 +83,9 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 0,
     totalPageCount: 45,
     receiptRegisterCopies: 2,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
-    signStatus: 'pending',
-    signedAt: '2026-06-18 09:30:00',
+    signStatus: 'unsent',
     fileHistory: [
       {
         id: 'arc_audit_2_v1',
@@ -100,10 +99,9 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
       {
         id: 'arc_audit_2_v2',
         approvalOpinionNo: '2026-4550-R1',
-        signStatus: 'pending',
-        signedAt: '2026-06-18 09:30:00',
+        signStatus: 'unsent',
         createTime: '2026-06-18 09:00:00',
-        modifyTime: '2026-06-18 09:30:00',
+        modifyTime: '2026-06-18 09:00:00',
         remarks: '补正重开',
       },
     ],
@@ -137,7 +135,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 2,
     totalPageCount: 320,
     receiptRegisterCopies: 3,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'signed',
     signedAt: '2026-06-17 14:00:00',
@@ -191,7 +189,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 1,
     totalPageCount: 180,
     receiptRegisterCopies: 2,
-    projectReceiver: '阮峰',
+    projectReceiver: '岑源',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'unsent',
     fileHistory: [
@@ -235,7 +233,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 3,
     totalPageCount: 560,
     receiptRegisterCopies: 4,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'unsent',
     fileHistory: [
@@ -250,11 +248,11 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
       {
         id: 'arc_audit_5_v1',
         approvalOpinionNo: '2026-4548',
-        signStatus: 'rejected',
+        signStatus: 'signed',
         signedAt: '2026-06-16 11:00:00',
         createTime: '2026-06-13 09:00:00',
         modifyTime: '2026-06-16 11:00:00',
-        remarks: '初始开具，审核退回',
+        remarks: '初始开具（已作废）',
       },
     ],
     createTime: '2026-06-13 09:00:00',
@@ -288,7 +286,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 0,
     totalPageCount: 88,
     receiptRegisterCopies: 2,
-    projectReceiver: '阮峰',
+    projectReceiver: '岑源',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'signed',
     signedAt: '2026-06-25 16:30:00',
@@ -351,7 +349,7 @@ export const MOCK_ACCEPTANCE_OPINIONS: AcceptanceOpinion[] = [
     videoCount: 0,
     totalPageCount: 35,
     receiptRegisterCopies: 1,
-    projectReceiver: '徐琴',
+    projectReceiver: '李娜',
     receivingUnitName: '昆山市城建档案馆',
     signStatus: 'unsent',
     fileHistory: [
@@ -382,7 +380,7 @@ export function getOpinionListItems(): AcceptanceOpinionListItem[] {
     receiptRegistrationNo: o.receiptRegistrationNo,
     signStatus: o.signStatus,
     signedFileUrl: o.signStatus === 'signed' ? `/files/opinion-${o.id}.pdf` : undefined,
-    fileCount: o.fileHistory?.length || 1,
+    fileCount: o.fileHistory?.filter(f => f.signStatus === 'signed').length || 0,
     latestCreateTime: o.fileHistory?.[0]?.createTime || o.createTime,
   }));
 }

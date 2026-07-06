@@ -22,7 +22,7 @@ interface VersionTabProps {
 
 const VersionTab: React.FC<VersionTabProps> = ({ currentVersion, onChangeVersion, orders, teamMemberCount = 0, showOrdersOnly = false }) => {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
-    const [paymentPayer, setPaymentPayer] = useState('张三');
+    const [paymentPayer, setPaymentPayer] = useState('张伟');
     const [paymentDetails, setPaymentDetails] = useState<{
         version: 'free' | 'team' | 'pro' | 'enterprise';
         price: number;

@@ -17,7 +17,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: false,
         isCommitmentApproved: false,
         constructionUnit: '上海无无科技有限公司',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202508190204',
         units: [
             { id: 'u-1-1', name: '1号标准轻钢车间', code: 'KS-2025-ZP01', volumes: [], stage: '整理中', progress: 10 },
@@ -39,7 +39,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山城市发展投资有限公司',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202411120391',
         units: [
             { id: 'u-2-1', name: '地下二层重型防空掩蔽站', code: 'KS-CSGC-DX01', volumes: [], stage: '审核中', progress: 90 },
@@ -62,7 +62,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山市巴城镇投资开发有限公司',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202512110291',
         units: []
     },
@@ -81,7 +81,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山高新技术产业开发区管理委员会',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202509180742',
         units: []
     },
@@ -100,7 +100,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '上海未来芯球文化发展有限公司',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202502280144',
         units: [
             { id: 'u-3-1', name: '首层篮球主场馆精致钢架吊装', code: 'SH-WLXQ-01', volumes: [], stage: '审核中', progress: 95 },
@@ -122,7 +122,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山市陆家镇人民政府',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202506010512',
         units: [
             { id: 'u-4-1', name: '教学主辅楼抗震加固与抹面', code: 'KS-LJ-001', volumes: [], stage: '已入库', progress: 100 },
@@ -144,7 +144,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '苏州水网与工程建设计划局',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202501020473',
         units: []
     },
@@ -163,7 +163,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山市蓬朗镇文体中心管理处',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202410310852',
         units: []
     },
@@ -184,7 +184,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: false, // Signed but not approved by archive
         constructionUnit: '苏州清陶新能源科技有限公司',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202601200251'
     },
     {
@@ -202,7 +202,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '周庄水乡置业发展有限公司',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202410150882'
     },
     {
@@ -220,7 +220,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '花桥国际商务城开发建设有限公司',
-        assignedReviewer: '昆山/徐琴',
+        assignedReviewer: '昆山/李娜',
         licenceNo: '320583202505051934'
     },
     {
@@ -238,7 +238,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '昆山市千灯镇农业服务中心',
-        assignedReviewer: '昆山/阮峰',
+        assignedReviewer: '昆山/岑源',
         licenceNo: '320583202409090333'
     },
 
@@ -258,7 +258,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: false,
         isCommitmentApproved: false,
         constructionUnit: '常熟东南经济开发投资有限公司',
-        assignedReviewer: '常熟/袁翔',
+        assignedReviewer: '常熟/许志平',
         licenceNo: '320581202503200771'
     },
     {
@@ -276,7 +276,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '中冶建工集团沙家浜地产',
-        assignedReviewer: '常熟/张溢',
+        assignedReviewer: '常熟/谢林',
         licenceNo: '320581202412151120'
     },
     {
@@ -294,7 +294,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '常熟市海虞镇卫生院',
-        assignedReviewer: '常熟/袁翔',
+        assignedReviewer: '常熟/许志平',
         licenceNo: '320581202506220556'
     },
     {
@@ -312,7 +312,7 @@ export const INITIAL_PROJECTS: Project[] = [
         isCommitmentSigned: true,
         isCommitmentApproved: true,
         constructionUnit: '常熟市人民政府琴川街道办事处',
-        assignedReviewer: '常熟/张溢',
+        assignedReviewer: '常熟/谢林',
         licenceNo: '320581202410300911'
     }
 ];

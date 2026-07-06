@@ -341,8 +341,8 @@ export const ReceiptCertificateEditor: React.FC<ReceiptCertificateEditorProps> =
             <div className="space-y-4">
               <SelectField label="项目接收人" value={receipt.projectReceiver || ''} placeholder="选择项目接收人"
                 options={[
-                  { label: '徐琴', value: '徐琴' }, { label: '阮峰', value: '阮峰' },
-                  { label: '张溢', value: '张溢' }, { label: '袁翔', value: '袁翔' },
+                  { label: '李娜', value: '李娜' }, { label: '岑源', value: '岑源' },
+                  { label: '谢林', value: '谢林' }, { label: '许志平', value: '许志平' },
                 ]}
                 onChange={v => updateField('projectReceiver', v)}
               />

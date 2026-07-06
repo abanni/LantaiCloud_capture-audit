@@ -53,7 +53,7 @@ const AccountsTab: React.FC<AccountsTabProps> = ({ onToast }) => {
                 id: 'b_' + Math.random().toString(36).substring(2, 7),
                 platform: 'yqt',
                 avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80',
-                nickname: '虞企通用户_张三',
+                nickname: '虞企通用户_张伟',
                 systemAccount: '1861986' + Math.floor(Math.random() * 90000000000),
                 bindTime: formattedTime
             };

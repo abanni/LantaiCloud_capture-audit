@@ -28,7 +28,7 @@ const ArchiveInfoTab: React.FC = () => {
                 <FormRow label="机构名称" value="昆山市城建档案馆" />
                 <FormRow label="统一代码" value="12320583MB1A12345X" />
                 <FormRow label="所在地区" value="江苏省苏州市昆山市" />
-                <FormRow label="负责人" value="徐琴" />
+                <FormRow label="负责人" value="李娜" />
                 <FormRow label="联系电话" value="0512-56788888" />
                 <FormRow label="成立日期" value="2005-03-15" />
             </div>

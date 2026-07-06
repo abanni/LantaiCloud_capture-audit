@@ -180,8 +180,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             '/audit-guidance': '档案指导',
             '/audit-statistics': '审核统计分析',
             '/print': '打印',
-            '/print/acceptance-opinion': '打印 - 验收意见书',
-            '/print/receipt-certificate': '打印 - 接收凭证',
+            '/print/acceptance-opinion': '验收意见书',
+            '/print/receipt-certificate': '接收凭证',
         };
         return titles[pathname] || getPrintSubTitle(pathname) || '数智档案云端工作台';
     };

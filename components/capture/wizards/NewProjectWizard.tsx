@@ -9,8 +9,8 @@ import {
 import { Project, Identity } from '../../../types';
 
 const EXTERNAL_ARCHIVES = [
-    { id: 'ks-urban', name: '昆山市城建档案馆', reviewer: '昆山/徐琴', region: '昆山', code: '320583' },
-    { id: 'cs-urban', name: '常熟市城市建设档案馆', reviewer: '常熟/袁翔', region: '常熟', code: '320581' },
+    { id: 'ks-urban', name: '昆山市城建档案馆', reviewer: '昆山/李娜', region: '昆山', code: '320583' },
+    { id: 'cs-urban', name: '常熟市城市建设档案馆', reviewer: '常熟/许志平', region: '常熟', code: '320581' },
 ];
 
 interface WizardProps {
@@ -154,7 +154,7 @@ const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                         archiveCode: '320583',
                         region: '昆山',
                         fileTypes: ['城市建设档案', '竣工验收检测报告', '监理日志与安全卷宗'],
-                        liaison: '昆山/徐琴',
+                        liaison: '昆山/李娜',
                         syncFrequency: '实时自动上报',
                         token: 'LT-TOK-KS-98321-G9',
                         associatedDate: '2026-05-10',
@@ -171,7 +171,7 @@ const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
                         archiveCode: '320581',
                         region: '常熟',
                         fileTypes: ['建筑工程档案', '竣工验收检测报告'],
-                        liaison: '常熟/袁翔',
+                        liaison: '常熟/许志平',
                         syncFrequency: '每日自动上报',
                         token: 'LT-TOK-CS-38291-B3',
                         associatedDate: '2026-05-24',
@@ -224,7 +224,7 @@ const NewProjectWizard: React.FC<WizardProps> = ({ onClose, onFinish, identity, 
         name: identity?.archiveOrg?.name || currentArchiveId === 'kunshan' ? '昆山市城建档案馆' : '未知档案馆',
         region: identity?.archiveOrg?.region || currentArchiveId === 'kunshan' ? '昆山' : '其他',
         code: '320583',
-        reviewer: '昆山/徐琴'
+        reviewer: '昆山/李娜'
     };
 
     const archiveRegion = useExternalArchive ? activeTargetArchive.region : '本地库区';
